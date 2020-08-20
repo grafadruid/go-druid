@@ -49,9 +49,9 @@ type clientOptions struct {
 	retryMax     int
 }
 
-type clientOption func(*clientOptions)
+type ClientOption func(*clientOptions)
 
-func NewClient(baseURL string, options ...clientOption) (*Client, error) {
+func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	opts := &clientOptions{
 		httpClient:   defaultHTTPClient(),
 		backoff:      defaultBackoff,
@@ -178,44 +178,44 @@ func (c *Client) Query() *QueryService {
 	return &QueryService{client: c}
 }
 
-func WithBasicAuth(username, password string) clientOption {
+func WithBasicAuth(username, password string) ClientOption {
 	return func(opts *clientOptions) {
 		opts.username = username
 		opts.password = password
 	}
 }
 
-func WithCustomBackoff(backoff retryablehttp.Backoff) clientOption {
+func WithCustomBackoff(backoff retryablehttp.Backoff) ClientOption {
 	return func(opts *clientOptions) {
 		opts.backoff = backoff
 	}
 }
 
-func WithCustomRetry(retry retryablehttp.CheckRetry) clientOption {
+func WithCustomRetry(retry retryablehttp.CheckRetry) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retry = retry
 	}
 }
 
-func WithHTTPClient(httpClient *http.Client) clientOption {
+func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(opts *clientOptions) {
 		opts.httpClient = httpClient
 	}
 }
 
-func WithRetryWaitMin(retryWaitMin time.Duration) clientOption {
+func WithRetryWaitMin(retryWaitMin time.Duration) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retryWaitMin = retryWaitMin
 	}
 }
 
-func WithRetryWaitMax(retryWaitMax time.Duration) clientOption {
+func WithRetryWaitMax(retryWaitMax time.Duration) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retryWaitMax = retryWaitMax
 	}
 }
 
-func WithRetryMax(retryMax int) clientOption {
+func WithRetryMax(retryMax int) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retryMax = retryMax
 	}
