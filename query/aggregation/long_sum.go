@@ -1,7 +1,7 @@
 package aggregation
 
 type LongSum struct {
-	*Base
+	Base
 	FieldName  string `json:"fieldName"`
 	Expression string `json:"expression,omitempty"`
 }

@@ -1,7 +1,7 @@
 package filter
 
 type F struct {
-	*Base
+	Base
 }
 
 func NewF() *F {

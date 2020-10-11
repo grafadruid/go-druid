@@ -1,6 +1,9 @@
 package druid
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"github.com/grafadruid/go-druid/query"
+	base "github.com/grafadruid/go-druid/query/query"
+)
 
 const (
 	NativeQueryEndpoint = "druid/v2"
@@ -33,3 +36,7 @@ func (q *QueryService) Execute(qry query.Query, result interface{}) (*Response, 
 //func (q *QueryService) Cancel(query query.Query) () {}
 
 //func (q *QueryService) Candidates(query query.Query, result interface{}) (*Response, error) {}
+
+func (q *QueryService) Load(qry []byte) (query.Query, error) {
+	return base.Load(qry)
+}

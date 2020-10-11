@@ -1,7 +1,7 @@
 package extractionfn
 
 type Strlen struct {
-	*Base
+	Base
 }
 
 func NewStrlen() *Strlen {

@@ -1,7 +1,7 @@
 package postaggregation
 
 type Constant struct {
-	*Base
+	Base
 	Value float64 `json:"value"`
 }
 

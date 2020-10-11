@@ -19,7 +19,7 @@ const (
 )
 
 type SegmentMetadata struct {
-	*Base
+	Base
 	ToInclude              string         `json:"toInclude"`
 	Merge                  bool           `json:"merge"`
 	AnalysisTypes          []AnalysisType `json:"analysisTypes"`

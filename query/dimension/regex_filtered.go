@@ -6,7 +6,7 @@ import (
 )
 
 type RegexFiltered struct {
-	*Base
+	Base
 	Delegate query.Dimension `json:"delegate"`
 	Pattern  string          `json:"pattern"`
 }

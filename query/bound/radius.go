@@ -1,7 +1,7 @@
 package bound
 
 type Radius struct {
-	*Base
+	Base
 	Coords []float64 `json:"coords"`
 	Radius float64   `json:"radius"`
 }

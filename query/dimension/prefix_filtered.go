@@ -6,7 +6,7 @@ import (
 )
 
 type PrefixFiltered struct {
-	*Base
+	Base
 	Delegate query.Dimension `json:"delegate"`
 	Prefix   string          `json:"prefix"`
 }

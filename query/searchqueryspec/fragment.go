@@ -1,7 +1,7 @@
 package searchqueryspec
 
 type Fragment struct {
-	*Base
+	Base
 	Value         string `json:"value"`
 	CaseSensitive bool   `json:"caseSensitive"`
 }

@@ -1,7 +1,7 @@
 package extractionfn
 
 type Regex struct {
-	*Base
+	Base
 	Expr                    string `json:"expr"`
 	Index                   int64  `json:"index"`
 	ReplaceMissingValue     bool   `json:"replaceMissingValue"`

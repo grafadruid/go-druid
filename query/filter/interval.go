@@ -6,7 +6,7 @@ import (
 )
 
 type Interval struct {
-	*Base
+	Base
 	Dimension    string             `json:"dimension"`
 	Intervals    []*types.Interval  `json:"intervals"`
 	ExtractionFn query.ExtractionFn `json:"extractionFn,omitempty"`

@@ -6,7 +6,7 @@ import (
 )
 
 type Extraction struct {
-	*Base
+	Base
 	ExtractionFn query.ExtractionFn `json:"extractionFn"`
 }
 

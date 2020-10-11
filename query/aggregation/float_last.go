@@ -1,7 +1,7 @@
 package aggregation
 
 type FloatLast struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

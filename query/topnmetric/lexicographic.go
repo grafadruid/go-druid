@@ -1,7 +1,7 @@
 package topnmetric
 
 type Lexicographic struct {
-	*Base
+	Base
 	PreviousStop string `json:"previousStop"`
 }
 

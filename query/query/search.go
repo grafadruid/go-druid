@@ -10,7 +10,7 @@ type SearchSortSpec struct {
 }
 
 type Search struct {
-	*Base
+	Base
 	Filter           query.Filter          `json:"filter"`
 	Granularity      query.Granularity     `json:"granularity"`
 	Limit            int64                 `json:"limit"`

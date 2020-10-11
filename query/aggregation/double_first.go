@@ -1,7 +1,7 @@
 package aggregation
 
 type DoubleFirst struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

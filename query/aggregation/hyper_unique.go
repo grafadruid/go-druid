@@ -1,7 +1,7 @@
 package aggregation
 
 type HyperUnique struct {
-	*Base
+	Base
 	FieldName          string `json:"fieldName"`
 	IsInputHyperUnique bool   `json:"isInputHyperUnique"`
 	Round              bool   `json:"round"`

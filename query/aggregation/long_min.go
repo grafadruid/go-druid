@@ -1,7 +1,7 @@
 package aggregation
 
 type LongMin struct {
-	*Base
+	Base
 	FieldName  string `json:"fieldName"`
 	Expression string `json:"expression,omitempty"`
 }

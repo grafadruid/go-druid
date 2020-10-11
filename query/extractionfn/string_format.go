@@ -5,7 +5,7 @@ import (
 )
 
 type StringFormat struct {
-	*Base
+	Base
 	Format       string             `json:"format"`
 	NullHandling types.NullHandling `json:"nullHandling"`
 }

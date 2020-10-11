@@ -1,7 +1,7 @@
 package extractionfn
 
 type Substring struct {
-	*Base
+	Base
 	Index  int64 `json:"index,omitempty"`
 	Length int64 `json:"length"`
 }

@@ -6,7 +6,7 @@ import (
 )
 
 type Bound struct {
-	*Base
+	Base
 	Dimension    string                 `json:"dimension"`
 	Lower        string                 `json:"lower,omitempty"`
 	Upper        string                 `json:"upper,omitempty"`

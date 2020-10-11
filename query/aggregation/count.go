@@ -1,7 +1,7 @@
 package aggregation
 
 type Count struct {
-	*Base
+	Base
 }
 
 func NewCount() *Count {

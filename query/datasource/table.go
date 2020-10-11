@@ -1,7 +1,7 @@
 package datasource
 
 type Table struct {
-	*Base
+	Base
 	Name string `json:"name"`
 }
 

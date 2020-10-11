@@ -14,9 +14,9 @@ const (
 )
 
 type Scan struct {
-	*Base
+	Base
 	VirtualColumns []query.VirtualColumn `json:"virtualColumns"`
-	ResultFormat   types.ResultFormat    `json:"resultFormat"`
+	ResultFormat   string                `json:"resultFormat"`
 	BatchSize      int64                 `json:"batchSize"`
 	Limit          int64                 `json:"limit"`
 	Order          Order                 `json:"order"`
@@ -27,7 +27,7 @@ type Scan struct {
 
 func NewScan() *Scan {
 	s := &Scan{}
-	s.SetQueryType("scan")
+	s.Base.SetQueryType("scan")
 	return s
 }
 
@@ -51,7 +51,7 @@ func (s *Scan) SetVirtualColumns(virtualColumns []query.VirtualColumn) *Scan {
 	return s
 }
 
-func (s *Scan) SetResultFormat(resultFormat types.ResultFormat) *Scan {
+func (s *Scan) SetResultFormat(resultFormat string) *Scan {
 	s.ResultFormat = resultFormat
 	return s
 }

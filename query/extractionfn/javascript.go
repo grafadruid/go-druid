@@ -1,7 +1,7 @@
 package extractionfn
 
 type Javascript struct {
-	*Base
+	Base
 	Function  string `json:"function"`
 	Injective bool   `json:"injective"`
 }

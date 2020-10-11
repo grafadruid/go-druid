@@ -1,7 +1,7 @@
 package extractionfn
 
 type Lower struct {
-	*Base
+	Base
 	Locale string `json:"locale"`
 }
 

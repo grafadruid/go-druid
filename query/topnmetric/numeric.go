@@ -1,7 +1,7 @@
 package topnmetric
 
 type Numeric struct {
-	*Base
+	Base
 	Metric string `json:"metric"`
 }
 

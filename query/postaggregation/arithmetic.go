@@ -3,7 +3,7 @@ package postaggregation
 import "github.com/grafadruid/go-druid/query"
 
 type Arithmetic struct {
-	*Base
+	Base
 	Fn       string                 `json:"fn"`
 	Fields   []query.PostAggregator `json:"fields"`
 	Ordering string                 `json:"ordering"`

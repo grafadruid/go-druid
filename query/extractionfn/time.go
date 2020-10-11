@@ -1,12 +1,10 @@
 package extractionfn
 
-import "github.com/grafadruid/go-druid/query/types"
-
 type Time struct {
-	*Base
-	TimeFormat   string             `json:"timeFormat"`
-	ResultFormat types.ResultFormat `json:"resultFormat"`
-	Joda         bool               `json:"joda"`
+	Base
+	TimeFormat   string `json:"timeFormat"`
+	ResultFormat string `json:"resultFormat"`
+	Joda         bool   `json:"joda"`
 }
 
 func NewTime() *Time {
@@ -20,7 +18,7 @@ func (t *Time) SetTimeFormat(timeFormat string) *Time {
 	return t
 }
 
-func (t *Time) SetResultFormat(resultFormat types.ResultFormat) *Time {
+func (t *Time) SetResultFormat(resultFormat string) *Time {
 	t.ResultFormat = resultFormat
 	return t
 }

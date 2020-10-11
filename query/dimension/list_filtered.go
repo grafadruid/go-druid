@@ -6,7 +6,7 @@ import (
 )
 
 type ListFiltered struct {
-	*Base
+	Base
 	Delegate    query.Dimension `json:"delegate"`
 	Values      []string        `json:"values"`
 	IsWhiteList bool            `json:"isWhiteList"`

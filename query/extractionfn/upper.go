@@ -1,7 +1,7 @@
 package extractionfn
 
 type Upper struct {
-	*Base
+	Base
 	Locale string `json:"locale"`
 }
 

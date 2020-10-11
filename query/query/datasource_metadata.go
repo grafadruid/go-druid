@@ -6,7 +6,7 @@ import (
 )
 
 type DataSourceMetadata struct {
-	*Base
+	Base
 }
 
 func NewDataSourceMetadata() *DataSourceMetadata {

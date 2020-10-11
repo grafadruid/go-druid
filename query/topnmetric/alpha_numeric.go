@@ -1,7 +1,7 @@
 package topnmetric
 
 type AlphaNumeric struct {
-	*Base
+	Base
 	PreviousStop string `json:"previousStop"`
 }
 

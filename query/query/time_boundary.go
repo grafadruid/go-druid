@@ -6,7 +6,7 @@ import (
 )
 
 type TimeBoundary struct {
-	*Base
+	Base
 	Bound  string       `json:"bound"`
 	Filter query.Filter `json:"filter"`
 }

@@ -3,7 +3,7 @@ package extractionfn
 import "github.com/grafadruid/go-druid/query"
 
 type Lookup struct {
-	*Base
+	Base
 	Lookup                  query.LookupExtractor `json:"lookup"`
 	RetainMissingValue      bool                  `json:"retainMissingValue"`
 	ReplaceMissingValueWith string                `json:"replaceMissingValueWith,omitempty"`

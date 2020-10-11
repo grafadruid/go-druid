@@ -3,7 +3,7 @@ package dimension
 import "github.com/grafadruid/go-druid/query/types"
 
 type Def struct {
-	*Base
+	Base
 }
 
 func NewDef() *Def {

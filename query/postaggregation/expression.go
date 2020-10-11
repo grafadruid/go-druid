@@ -1,7 +1,7 @@
 package postaggregation
 
 type Expression struct {
-	*Base
+	Base
 	Expression string `json:"expression"`
 	Ordering   string `json:"ordering"`
 }

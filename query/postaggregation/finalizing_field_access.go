@@ -1,7 +1,7 @@
 package postaggregation
 
 type FinalizingField struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

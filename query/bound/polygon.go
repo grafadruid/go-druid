@@ -1,7 +1,7 @@
 package bound
 
 type Polygon struct {
-	*Base
+	Base
 	Abscissa []float64 `json:"abscissa"`
 	Ordinate []float64 `json:"ordinate"`
 }

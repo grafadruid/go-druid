@@ -6,7 +6,7 @@ import (
 )
 
 type Timeseries struct {
-	*Base
+	Base
 	Descending       bool                   `json:"descending"`
 	VirtualColumns   []query.VirtualColumn  `json:"virtualColumns"`
 	Filter           query.Filter           `json:"filter"`

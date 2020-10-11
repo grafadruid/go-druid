@@ -7,7 +7,7 @@ import (
 )
 
 type Period struct {
-	*Base
+	Base
 	Period   time.Duration      `json:"period"`
 	Origin   time.Time          `json:"origin"`
 	TimeZone types.DateTimeZone `json:"timeZone"`

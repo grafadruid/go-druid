@@ -1,7 +1,7 @@
 package aggregation
 
 type DoubleMean struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

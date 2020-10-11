@@ -6,10 +6,10 @@ import (
 )
 
 type TimeFormat struct {
-	*Base
+	Base
 	Format      string             `json:"format"`
 	TimeZone    types.DateTimeZone `json:"timeZone"`
-	Locale      string             `json:"string"`
+	Locale      string             `json:"locale"`
 	Granularity query.Granularity  `json:"granularity"`
 	AsMillis    bool               `json:"asMillis"`
 }

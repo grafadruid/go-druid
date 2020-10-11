@@ -3,7 +3,7 @@ package filter
 import "github.com/grafadruid/go-druid/query"
 
 type Like struct {
-	*Base
+	Base
 	Dimension    string             `json:"dimension"`
 	Pattern      string             `json:"pattern"`
 	Escape       string             `json:"escapte,omitempty"`

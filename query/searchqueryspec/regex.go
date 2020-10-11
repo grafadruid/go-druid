@@ -1,7 +1,7 @@
 package searchqueryspec
 
 type Regex struct {
-	*Base
+	Base
 	Pattern string `json:"pattern"`
 }
 
