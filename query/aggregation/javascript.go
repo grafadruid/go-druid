@@ -1,7 +1,7 @@
 package aggregation
 
 type Javascript struct {
-	*Base
+	Base
 	FieldNames  []string `json:"fieldNames"`
 	FnAggregate string   `json:"fnAggregate"`
 	FnReset     string   `json:"fnReset"`

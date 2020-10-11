@@ -3,7 +3,7 @@ package dimension
 import "github.com/grafadruid/go-druid/query"
 
 type MapLookup struct {
-	*Base
+	Base
 	ReplaceMissingValueWith string                `json:"replaceMissingValueWith"`
 	RetainMissingValue      bool                  `json:"retainMissingValue"`
 	Lookup                  query.LookupExtractor `json:"lookup"`
@@ -11,6 +11,6 @@ type MapLookup struct {
 }
 
 type RegisteredLookup struct {
-	*Base
+	Base
 	Name string `json:"name"`
 }

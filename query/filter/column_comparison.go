@@ -3,7 +3,7 @@ package filter
 import "github.com/grafadruid/go-druid/query"
 
 type ColumnComparison struct {
-	*Base
+	Base
 	Dimensions []query.Dimension `json:"dimensions"`
 }
 

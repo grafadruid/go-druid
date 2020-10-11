@@ -3,7 +3,7 @@ package extractionfn
 import "github.com/grafadruid/go-druid/query"
 
 type Cascade struct {
-	*Base
+	Base
 	ExtractionFns []query.ExtractionFn `json:"extractionFns"`
 }
 

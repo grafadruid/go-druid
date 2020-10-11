@@ -1,7 +1,7 @@
 package postaggregation
 
 type FieldAccess struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

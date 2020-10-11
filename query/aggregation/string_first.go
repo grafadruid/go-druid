@@ -1,7 +1,7 @@
 package aggregation
 
 type StringFirst struct {
-	*Base
+	Base
 	FieldName      string `json:"fieldName"`
 	MaxStringBytes int64  `json:"maxStringBytes"`
 }

@@ -6,7 +6,7 @@ import (
 )
 
 type GroupBy struct {
-	*Base
+	Base
 	VirtualColumns   []query.VirtualColumn  `json:"virtualColumns"`
 	Filter           query.Filter           `json:"filter"`
 	Granularity      query.Granularity      `json:"granularity"`

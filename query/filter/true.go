@@ -1,7 +1,7 @@
 package filter
 
 type T struct {
-	*Base
+	Base
 }
 
 func NewT() *T {

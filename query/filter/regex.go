@@ -3,7 +3,7 @@ package filter
 import "github.com/grafadruid/go-druid/query"
 
 type Regex struct {
-	*Base
+	Base
 	Dimension    string             `json:"dimension"`
 	Pattern      string             `json:"pattern"`
 	ExtractionFn query.ExtractionFn `json:"extractionFn,omitempty"`

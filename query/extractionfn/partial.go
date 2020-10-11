@@ -1,7 +1,7 @@
 package extractionfn
 
 type Partial struct {
-	*Base
+	Base
 	Expr string `json:"expr"`
 }
 

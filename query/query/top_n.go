@@ -6,7 +6,7 @@ import (
 )
 
 type TopN struct {
-	*Base
+	Base
 	VirtualColumns   []query.VirtualColumn  `json:"virtualColumns"`
 	Dimension        query.Dimension        `json:"dimension"`
 	Metric           query.TopNMetric       `json:"metric"`

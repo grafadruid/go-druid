@@ -3,7 +3,7 @@ package postaggregation
 import "github.com/grafadruid/go-druid/query"
 
 type DoubleLeast struct {
-	*Base
+	Base
 	Fields []query.PostAggregator `json:"fields"`
 }
 

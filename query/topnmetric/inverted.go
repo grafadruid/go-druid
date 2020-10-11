@@ -3,7 +3,7 @@ package topnmetric
 import "github.com/grafadruid/go-druid/query"
 
 type Inverted struct {
-	*Base
+	Base
 	Metric query.TopNMetric `json:"metric"`
 }
 

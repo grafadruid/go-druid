@@ -1,7 +1,7 @@
 package extractionfn
 
 type Identity struct {
-	*Base
+	Base
 }
 
 func NewIdentity() *Identity {

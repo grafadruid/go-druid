@@ -3,7 +3,7 @@ package topnmetric
 import "github.com/grafadruid/go-druid/query/types"
 
 type Dimension struct {
-	*Base
+	Base
 	PreviousStop string                 `json:"previousStop"`
 	Ordering     types.StringComparator `json:"ordering"`
 }

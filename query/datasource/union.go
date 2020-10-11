@@ -1,7 +1,7 @@
 package datasource
 
 type Union struct {
-	*Base
+	Base
 	DataSources []string `json:"dataSources"`
 }
 

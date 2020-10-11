@@ -1,6 +1,11 @@
 package query
 
+import (
+        "github.com/grafadruid/go-druid/query"
+)
+
 type SQLQuery struct {
+	Base
 	Query        string              `json:"query"`
 	ResultFormat string              `json:"resultFormat"`
 	Header       bool                `json:"header"`
@@ -48,6 +53,6 @@ func (s *SQLQuery) SetParameters(parameters []SQLQueryParameter) *SQLQuery {
 	return s
 }
 
-func (s *SQLQuery) Language() QueryLanguage {
-	return SQLLanguage
+func (s *SQLQuery) Language() query.QueryLanguage {
+	return query.SQLLanguage
 }

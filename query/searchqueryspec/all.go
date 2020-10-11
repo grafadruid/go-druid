@@ -1,7 +1,7 @@
 package searchqueryspec
 
 type All struct {
-	*Base
+	Base
 }
 
 func NewAll() *All {

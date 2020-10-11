@@ -1,7 +1,7 @@
 package searchqueryspec
 
 type Contains struct {
-	*Base
+	Base
 	Value         string `json:"value"`
 	CaseSensitive bool   `json:"caseSensitive"`
 }

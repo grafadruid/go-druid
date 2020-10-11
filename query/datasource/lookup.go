@@ -1,7 +1,7 @@
 package datasource
 
 type Lookup struct {
-	*Base
+	Base
 	Lookup string `json:"lookup"`
 }
 

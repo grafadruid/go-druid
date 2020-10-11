@@ -3,7 +3,7 @@ package filter
 import "github.com/grafadruid/go-druid/query"
 
 type Spatial struct {
-	*Base
+	Base
 	Dimension    string        `json:"dimension"`
 	Bound        query.Bound   `json:"bound"`
 	FilterTuning *FilterTuning `json:"filterTuning,omitempty"`

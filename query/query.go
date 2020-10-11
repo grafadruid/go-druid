@@ -8,7 +8,6 @@ const (
 )
 
 type Query interface {
-	ID() string
 	Language() QueryLanguage
 }
 

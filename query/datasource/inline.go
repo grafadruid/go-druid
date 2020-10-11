@@ -1,7 +1,7 @@
 package datasource
 
 type Inline struct {
-	*Base
+	Base
 	ColumnNames []string   `json:"columnNames"`
 	ColumnTypes []string   `json:"columnTypes"`
 	Rows        [][]string `json:"rows"`

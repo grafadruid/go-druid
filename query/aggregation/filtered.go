@@ -1,7 +1,7 @@
 package aggregation
 
 type Filtered struct {
-	*Base
+	Base
 	Aggregator string
 	Filter     string
 }

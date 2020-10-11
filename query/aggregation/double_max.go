@@ -1,7 +1,7 @@
 package aggregation
 
 type DoubleMax struct {
-	*Base
+	Base
 	FieldName  string `json:"fieldName"`
 	Expression string `json:"expression,omitempty"`
 }

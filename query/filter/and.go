@@ -1,7 +1,7 @@
 package filter
 
 type And struct {
-	*Base
+	Base
 	Fields []string `json:"fields"`
 }
 

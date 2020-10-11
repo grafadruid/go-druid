@@ -1,7 +1,7 @@
 package aggregation
 
 type FloatFirst struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

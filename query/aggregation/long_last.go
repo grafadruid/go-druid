@@ -1,7 +1,7 @@
 package aggregation
 
 type LongLast struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

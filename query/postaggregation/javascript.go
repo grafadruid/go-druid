@@ -1,7 +1,7 @@
 package postaggregation
 
 type Javascript struct {
-	*Base
+	Base
 	FieldNames []string `json:"fieldNames"`
 	Function   string   `json:"function"`
 }

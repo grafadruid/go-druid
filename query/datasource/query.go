@@ -3,7 +3,7 @@ package datasource
 import "github.com/grafadruid/go-druid/query"
 
 type Query struct {
-	*Base
+	Base
 	Query query.Query
 }
 

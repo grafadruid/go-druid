@@ -5,7 +5,7 @@ import (
 )
 
 type Duration struct {
-	*Base
+	Base
 	Duration time.Duration `json:"duration"`
 	Origin   time.Time     `json:"origin"`
 }

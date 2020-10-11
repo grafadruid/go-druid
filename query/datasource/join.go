@@ -6,7 +6,7 @@ import (
 )
 
 type Join struct {
-	*Base
+	Base
 	Left        query.DataSource `json:"left"`
 	Right       query.DataSource `json:"right"`
 	RightPrefix string           `json:"rightPrefix"`

@@ -1,7 +1,7 @@
 package aggregation
 
 type Cardinality struct {
-	*Base
+	Base
 	Fields []string `json:"fields"`
 	ByRow  bool     `json:"byRow"`
 	Round  bool     `json:"round"`

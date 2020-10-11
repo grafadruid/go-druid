@@ -1,7 +1,7 @@
 package postaggregation
 
 type HyperUniqueFinalizing struct {
-	*Base
+	Base
 	FieldName string `json:"fieldName"`
 }
 

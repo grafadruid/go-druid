@@ -1,7 +1,7 @@
 package extractionfn
 
 type Bucket struct {
-	*Base
+	Base
 	Size   float64 `json:"size,omitempty"`
 	Offset float64 `json:"offset,omitempty"`
 }

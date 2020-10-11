@@ -1,7 +1,7 @@
 package searchqueryspec
 
 type InsensitiveContains struct {
-	*Base
+	Base
 	Value string `json:"value"`
 }
 

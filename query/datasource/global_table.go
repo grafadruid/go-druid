@@ -1,7 +1,7 @@
 package datasource
 
 type GlobalTable struct {
-	*Base
+	Base
 	Name string `json:"name"`
 }
 
