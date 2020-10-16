@@ -1,7 +1,10 @@
 package query
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/filter"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -76,4 +79,43 @@ func (g *GroupBy) SetLimitSpec(limitSpec query.LimitSpec) *GroupBy {
 func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 	g.SubtotalsSpec = subtotalsSpec
 	return g
+}
+
+func (s *Scan) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
+		Filter           json.RawMessage   `json:"filter"`
+		Granularity      json.RawMessage   `json:"granularity"`
+		Aggregations     []json.RawMessage `json:"aggregations"`
+		PostAggregations []json.RawMessage `json:"postAggregations"`
+		Having           json.RawMessage   `json:"having"`
+		LimitSpec        json.RawMessage   `json:"limitSpec"`
+		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	//var vv []query.VirtualColumns
+	//for j := range c.VirtualColumns {
+	//vv = append(vv, virtualcolumns.Load(j))
+	//}
+	var aa []query.Aggregation
+	for j = range c.Aggregations {
+
+	}
+	f, err := filter.Load(tmp.Filter)
+	if err != nil {
+		return err
+	}
+	s.Base = tmp.Base
+	s.ResultFormat = tmp.ResultFormat
+	s.BatchSize = tmp.BatchSize
+	s.Limit = tmp.Limit
+	s.Columns = tmp.Columns
+	s.Legacy = tmp.Legacy
+	s.Order = tmp.Order
+	s.SetFilter(f)
+	//s.SetVirtualColumns(vv)
+	return nil
 }
