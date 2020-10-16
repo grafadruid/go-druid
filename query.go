@@ -37,6 +37,6 @@ func (q *QueryService) Execute(qry query.Query, result interface{}) (*Response, 
 
 //func (q *QueryService) Candidates(query query.Query, result interface{}) (*Response, error) {}
 
-func (q *QueryService) Load(qry []byte) (query.Query, error) {
-	return base.Load(qry)
+func (q *QueryService) Load(data []byte) (query.Query, error) {
+	return base.Load(data)
 }
