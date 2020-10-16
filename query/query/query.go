@@ -50,18 +50,33 @@ func (b *Base) Language() query.QueryLanguage {
 	return query.NativeLanguage
 }
 
-func Load(qry []byte) (query.Query, error) {
-	var b Base
-	if err := json.Unmarshal(qry, &b); err != nil {
+func Load(data []byte) (query.Query, error) {
+	var t struct {
+		Typ string `json:"queryType"`
+	}
+	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
 	var q query.Query
-	switch b.QueryType {
+	switch t.Typ {
+	case "datasourceMetadata":
+		q = NewDataSourceMetadata()
+	case "groupBy":
+		q = NewGroupBy()
 	case "scan":
 		q = NewScan()
+	case "search":
+		q = NewSearchSearch()
+	case "segmentMetadata":
+		q = NewSegmentMetadata()
 	case "sql":
 		q = NewSQLQuery()
+	case "timeBoundary":
+		q = NewTimeBoundary()
+	case "timeseries":
+		q = NewTimeseries()
+	case "topN":
+		q = NewTopN()
 	}
-	json.Unmarshal(qry, &q)
-	return q, nil
+	return q, json.Unmarshal(data, &q)
 }

@@ -1,6 +1,11 @@
 package dimension
 
-import "github.com/grafadruid/go-druid/query/types"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/types"
+)
 
 type Base struct {
 	Type       string           `json:"type"`
@@ -32,4 +37,29 @@ func (b *Base) SetOutputName(outputName string) *Base {
 func (b *Base) SetOutputType(outputType types.OutputType) *Base {
 	b.OutputType = outputType
 	return b
+}
+
+func Load(data []byte) (query.Dimension, error) {
+	var t struct {
+		Typ string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &t); err != nil {
+		return nil, err
+	}
+	var d query.Dimension
+	switch t.Typ {
+	case "default":
+		d = NewDefault()
+	case "extraction":
+		d = NewExtraction()
+	case "listFiltered":
+		d = NewListFiltered()
+	case "lookup":
+		d = NewLookup()
+	case "prefixFiltered":
+		d = NewPrefixFiltered()
+	case "regexFiltered":
+		d = NewRegexFiltered()
+	}
+	return d, json.Unmarshal(data, &d)
 }

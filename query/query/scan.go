@@ -1,7 +1,10 @@
 package query
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/filter"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -84,4 +87,39 @@ func (s *Scan) SetColumns(columns []string) *Scan {
 func (s *Scan) SetLegacy(legacy bool) *Scan {
 	s.Legacy = legacy
 	return s
+}
+
+func (s *Scan) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		ResultFormat string   `json:"resultFormat"`
+		BatchSize    int64    `json:"batchSize"`
+		Limit        int64    `json:"limit"`
+		Columns      []string `json:"columns"`
+		Legacy       bool     `json:"legacy"`
+		Order        Order    `json:"order"`
+		//VirtualColumns []json.RawMessage `json:"virtualColumns"`
+		Filter json.RawMessage `json:"filter"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	//var vv []query.VirtualColumns
+	//for j := range c.VirtualColumns {
+	//vv = append(vv, virtualcolumns.Load(j))
+	//}
+	f, err := filter.Load(tmp.Filter)
+	if err != nil {
+		return err
+	}
+	s.Base = tmp.Base
+	s.ResultFormat = tmp.ResultFormat
+	s.BatchSize = tmp.BatchSize
+	s.Limit = tmp.Limit
+	s.Columns = tmp.Columns
+	s.Legacy = tmp.Legacy
+	s.Order = tmp.Order
+	s.SetFilter(f)
+	//s.SetVirtualColumns(vv)
+	return nil
 }

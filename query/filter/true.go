@@ -1,11 +1,11 @@
 package filter
 
-type T struct {
+type True struct {
 	Base
 }
 
-func NewT() *T {
-	t := &T{}
-	t.SetType("t")
+func NewTrue() *True {
+	t := &True{}
+	t.SetType("true")
 	return t
 }

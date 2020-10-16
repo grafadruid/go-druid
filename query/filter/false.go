@@ -1,11 +1,11 @@
 package filter
 
-type F struct {
+type False struct {
 	Base
 }
 
-func NewF() *F {
-	f := &F{}
-	f.SetType("f")
+func NewFalse() *False {
+	f := &False{}
+	f.SetType("false")
 	return f
 }
