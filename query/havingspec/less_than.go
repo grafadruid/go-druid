@@ -1,0 +1,23 @@
+package havingspec
+
+type LessThan struct {
+	Base
+	Aggregation string  `json:"aggregation"`
+	Value       float64 `json:"value"`
+}
+
+func NewLessThan() *LessThan {
+	l := &LessThan{}
+	l.SetType("lessThan")
+	return l
+}
+
+func (l *LessThan) SetAggregation(aggregation string) *LessThan {
+	l.Aggregation = aggregation
+	return l
+}
+
+func (l *LessThan) SetValue(value float64) *LessThan {
+	l.Value = value
+	return l
+}

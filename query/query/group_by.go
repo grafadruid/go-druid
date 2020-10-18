@@ -4,8 +4,14 @@ import (
 	"encoding/json"
 
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/aggregation"
 	"github.com/grafadruid/go-druid/query/filter"
+	"github.com/grafadruid/go-druid/query/granularity"
+	"github.com/grafadruid/go-druid/query/havingspec"
+	"github.com/grafadruid/go-druid/query/limitspec"
+	"github.com/grafadruid/go-druid/query/postaggregation"
 	"github.com/grafadruid/go-druid/query/types"
+	"github.com/grafadruid/go-druid/query/virtualcolumn"
 )
 
 type GroupBy struct {
@@ -81,41 +87,70 @@ func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 	return g
 }
 
-func (s *Scan) UnmarshalJSON(data []byte) error {
+func (g *GroupBy) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
-		Filter           json.RawMessage   `json:"filter"`
-		Granularity      json.RawMessage   `json:"granularity"`
-		Aggregations     []json.RawMessage `json:"aggregations"`
-		PostAggregations []json.RawMessage `json:"postAggregations"`
-		Having           json.RawMessage   `json:"having"`
-		LimitSpec        json.RawMessage   `json:"limitSpec"`
-		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
+		VirtualColumns  []json.RawMessage `json:"virtualColumns"`
+		Filter          json.RawMessage   `json:"filter"`
+		Granularity     json.RawMessage   `json:"granularity"`
+		Aggregators     []json.RawMessage `json:"aggregations"`
+		PostAggregators []json.RawMessage `json:"postAggregations"`
+		Having          json.RawMessage   `json:"having"`
+		LimitSpec       json.RawMessage   `json:"limitSpec"`
+		SubtotalsSpec   [][]string        `json:"subtotalsSpec"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	//var vv []query.VirtualColumns
-	//for j := range c.VirtualColumns {
-	//vv = append(vv, virtualcolumns.Load(j))
-	//}
-	var aa []query.Aggregation
-	for j = range c.Aggregations {
-
+	var err error
+	var v query.VirtualColumn
+	vv := make([]query.VirtualColumn, len(tmp.VirtualColumns))
+	for i := range tmp.VirtualColumns {
+		if v, err = virtualcolumn.Load(tmp.VirtualColumns[i]); err != nil {
+			return err
+		}
+		vv[i] = v
 	}
 	f, err := filter.Load(tmp.Filter)
 	if err != nil {
 		return err
 	}
-	s.Base = tmp.Base
-	s.ResultFormat = tmp.ResultFormat
-	s.BatchSize = tmp.BatchSize
-	s.Limit = tmp.Limit
-	s.Columns = tmp.Columns
-	s.Legacy = tmp.Legacy
-	s.Order = tmp.Order
-	s.SetFilter(f)
-	//s.SetVirtualColumns(vv)
+	gr, err := granularity.Load(tmp.Granularity)
+	if err != nil {
+		return err
+	}
+	var a query.Aggregator
+	aa := make([]query.Aggregator, len(tmp.Aggregators))
+	for i := range tmp.Aggregators {
+		if a, err = aggregation.Load(tmp.Aggregators[i]); err != nil {
+			return err
+		}
+		aa[i] = a
+	}
+	var p query.PostAggregator
+	pp := make([]query.PostAggregator, len(tmp.PostAggregators))
+	for i := range tmp.PostAggregators {
+		if p, err = postaggregation.Load(tmp.PostAggregators[i]); err != nil {
+			return err
+		}
+		pp[i] = p
+	}
+	h, err := havingspec.Load(tmp.Having)
+	if err != nil {
+		return err
+	}
+	l, err := limitspec.Load(tmp.LimitSpec)
+	if err != nil {
+		return err
+	}
+	g.Base = tmp.Base
+	g.VirtualColumns = vv
+	g.Filter = f
+	g.Granularity = gr
+	g.Aggregations = aa
+	g.PostAggregations = pp
+	g.Having = h
+	g.LimitSpec = l
+	g.SubtotalsSpec = tmp.SubtotalsSpec
 	return nil
 }
