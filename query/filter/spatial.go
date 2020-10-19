@@ -1,6 +1,10 @@
 package filter
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+)
 
 type Spatial struct {
 	Base
@@ -28,4 +32,25 @@ func (s *Spatial) SetBound(bound query.Bound) *Spatial {
 func (s *Spatial) SetFilterTuning(filterTuning *FilterTuning) *Spatial {
 	s.FilterTuning = filterTuning
 	return s
+}
+
+func (s *Spatial) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Dimension    string          `json:"dimension"`
+		Bound        json.RawMessage `json:"bound"`
+		FilterTuning *FilterTuning   `json:"filterTuning"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	//b, err := bound.Load(tmp.Bound)
+	//if err != nil {
+	//	return err
+	//}
+	s.Base = tmp.Base
+	s.Dimension = tmp.Dimension
+	//s.Bound = b
+	s.FilterTuning = tmp.FilterTuning
+	return nil
 }

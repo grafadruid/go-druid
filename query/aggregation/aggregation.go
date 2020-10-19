@@ -26,14 +26,14 @@ func (b *Base) SetName(name string) *Base {
 	return b
 }
 
-func Load(data []byte) (query.Aggregation, error) {
+func Load(data []byte) (query.Aggregator, error) {
 	var t struct {
 		Typ string `json:"type"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var a query.Aggregation
+	var a query.Aggregator
 	switch t.Typ {
 	case "cardinality":
 		a = NewCardinality()

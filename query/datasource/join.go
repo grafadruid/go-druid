@@ -1,6 +1,8 @@
 package datasource
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
 	"github.com/grafadruid/go-druid/query/types"
 )
@@ -43,4 +45,33 @@ func (j *Join) SetCondition(condition string) *Join {
 func (j *Join) SetJoinType(joinType types.JoinType) *Join {
 	j.JoinType = joinType
 	return j
+}
+
+func (j *Join) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Left        json.RawMessage `json:"left"`
+		Right       json.RawMessage `json:"right"`
+		RightPrefix string          `json:"rightPrefix"`
+		Condition   string          `json:"condition"`
+		JoinType    types.JoinType  `json:"joinType"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	l, err := Load(tmp.Left)
+	if err != nil {
+		return err
+	}
+	r, err := Load(tmp.Right)
+	if err != nil {
+		return err
+	}
+	j.Base = tmp.Base
+	j.Left = l
+	j.Right = r
+	j.RightPrefix = tmp.RightPrefix
+	j.Condition = tmp.Condition
+	j.JoinType = tmp.JoinType
+	return nil
 }

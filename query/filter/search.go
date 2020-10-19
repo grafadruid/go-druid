@@ -1,13 +1,18 @@
 package filter
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/extractionfn"
+)
 
 type Search struct {
 	Base
 	Dimension    string             `json:"dimension"`
 	Query        string             `json:"query"`
-	ExtractionFn query.ExtractionFn `json:"extractionFn,omitempty"`
-	FilterTuning *FilterTuning      `json:"filterTuning,omitempty"`
+	ExtractionFn query.ExtractionFn `json:"extractionFn"`
+	FilterTuning *FilterTuning      `json:"filterTuning"`
 }
 
 func NewSearch() *Search {
@@ -34,4 +39,27 @@ func (s *Search) SetExtractionFn(extractionFn query.ExtractionFn) *Search {
 func (s *Search) SetFilterTuning(filterTuning *FilterTuning) *Search {
 	s.FilterTuning = filterTuning
 	return s
+}
+
+func (s *Search) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Dimension    string          `json:"dimension"`
+		Query        string          `json:"query"`
+		ExtractionFn json.RawMessage `json:"extractionFn"`
+		FilterTuning *FilterTuning   `json:"filterTuning"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	e, err := extractionfn.Load(tmp.ExtractionFn)
+	if err != nil {
+		return err
+	}
+	s.Base = tmp.Base
+	s.Dimension = tmp.Dimension
+	s.Query = tmp.Query
+	s.ExtractionFn = e
+	s.FilterTuning = tmp.FilterTuning
+	return nil
 }

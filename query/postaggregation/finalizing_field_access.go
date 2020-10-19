@@ -1,22 +1,22 @@
 package postaggregation
 
-type FinalizingField struct {
+type FinalizingFieldAccess struct {
 	Base
 	FieldName string `json:"fieldName"`
 }
 
-func NewFinalizingField() *FinalizingField {
-	f := &FinalizingField{}
-	f.SetType("finalizingField")
+func NewFinalizingFieldAccess() *FinalizingFieldAccess {
+	f := &FinalizingFieldAccess{}
+	f.SetType("finalizingFieldAccess")
 	return f
 }
 
-func (f *FinalizingField) SetName(name string) *FinalizingField {
+func (f *FinalizingFieldAccess) SetName(name string) *FinalizingFieldAccess {
 	f.Base.SetName(name)
 	return f
 }
 
-func (f *FinalizingField) SetFieldName(fieldName string) *FinalizingField {
+func (f *FinalizingFieldAccess) SetFieldName(fieldName string) *FinalizingFieldAccess {
 	f.FieldName = fieldName
 	return f
 }

@@ -1,14 +1,19 @@
 package filter
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/extractionfn"
+)
 
 type Like struct {
 	Base
 	Dimension    string             `json:"dimension"`
 	Pattern      string             `json:"pattern"`
-	Escape       string             `json:"escapte,omitempty"`
-	ExtractionFn query.ExtractionFn `json:"extractionFn,omitempty"`
-	FilterTuning *FilterTuning      `json:"filterTuning,omitempty"`
+	Escape       string             `json:"escapte"`
+	ExtractionFn query.ExtractionFn `json:"extractionFn"`
+	FilterTuning *FilterTuning      `json:"filterTuning"`
 }
 
 func NewLike() *Like {
@@ -40,4 +45,29 @@ func (l *Like) SetExtractionFn(extractionFn query.ExtractionFn) *Like {
 func (l *Like) SetFilterTuning(filterTuning *FilterTuning) *Like {
 	l.FilterTuning = filterTuning
 	return l
+}
+
+func (l *Like) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Dimension    string          `json:"dimension"`
+		Pattern      string          `json:"pattern"`
+		Escape       string          `json:"escape"`
+		ExtractionFn json.RawMessage `json:"extractionFn"`
+		FilterTuning *FilterTuning   `json:"filterTuning"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	e, err := extractionfn.Load(tmp.ExtractionFn)
+	if err != nil {
+		return err
+	}
+	l.Base = tmp.Base
+	l.Dimension = tmp.Dimension
+	l.Pattern = tmp.Pattern
+	l.Escape = tmp.Escape
+	l.ExtractionFn = e
+	l.FilterTuning = tmp.FilterTuning
+	return nil
 }

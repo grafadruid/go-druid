@@ -2,27 +2,27 @@ package dimension
 
 import "github.com/grafadruid/go-druid/query/types"
 
-type Def struct {
+type Default struct {
 	Base
 }
 
-func NewDef() *Def {
-	d := &Def{}
-	d.SetType("def")
+func NewDefault() *Default {
+	d := &Default{}
+	d.SetType("default")
 	return d
 }
 
-func (d *Def) SetDimension(dimension string) *Def {
+func (d *Default) SetDimension(dimension string) *Default {
 	d.Base.SetDimension(dimension)
 	return d
 }
 
-func (d *Def) SetOutputName(outputName string) *Def {
+func (d *Default) SetOutputName(outputName string) *Default {
 	d.Base.SetOutputName(outputName)
 	return d
 }
 
-func (d *Def) SetOutputType(outputType types.OutputType) *Def {
+func (d *Default) SetOutputType(outputType types.OutputType) *Default {
 	d.Base.SetOutputType(outputType)
 	return d
 }

@@ -1,6 +1,10 @@
 package datasource
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+)
 
 type Base struct {
 	Type string `json:"type"`
@@ -16,17 +20,15 @@ func (b *Base) SetType(typ string) *Base {
 	return b
 }
 
-func Load(data []byte) (query.Datasource, error) {
+func Load(data []byte) (query.DataSource, error) {
 	var t struct {
 		Typ string `json:"type"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d query.Datasource
+	var d query.DataSource
 	switch t.Typ {
-	case "dataSource":
-		d = NewDataSource()
 	case "globalTable":
 		d = NewGlobalTable()
 	case "inline":
