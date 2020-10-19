@@ -1,6 +1,8 @@
 package dimension
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
 	"github.com/grafadruid/go-druid/query/types"
 )
@@ -40,4 +42,23 @@ func (p *PrefixFiltered) SetDelegate(delegate query.Dimension) *PrefixFiltered {
 func (p *PrefixFiltered) SetPrefix(prefix string) *PrefixFiltered {
 	p.Prefix = prefix
 	return p
+}
+
+func (p *PrefixFiltered) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Delegate json.RawMessage `json:"delegate"`
+		Prefix   string          `json:"prefix"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	d, err := Load(tmp.Delegate)
+	if err != nil {
+		return err
+	}
+	p.Base = tmp.Base
+	p.Delegate = d
+	p.Prefix = tmp.Prefix
+	return nil
 }

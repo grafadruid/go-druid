@@ -1,6 +1,8 @@
 package dimension
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
 	"github.com/grafadruid/go-druid/query/types"
 )
@@ -34,4 +36,21 @@ func (e *Extraction) SetOutputType(outputType types.OutputType) *Extraction {
 func (e *Extraction) SetExtractionFn(extractionFn query.ExtractionFn) *Extraction {
 	e.ExtractionFn = extractionFn
 	return e
+}
+
+func (e *Extraction) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		ExtractionFn json.RawMessage `json:"extractionFn"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	ef, err := Load(tmp.ExtractionFn)
+	if err != nil {
+		return err
+	}
+	e.Base = tmp.Base
+	e.ExtractionFn = ef
+	return nil
 }

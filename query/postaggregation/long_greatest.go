@@ -1,6 +1,10 @@
 package postaggregation
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+)
 
 type LongGreatest struct {
 	Base
@@ -21,4 +25,26 @@ func (l *LongGreatest) SetName(name string) *LongGreatest {
 func (l *LongGreatest) SetFields(fields []query.PostAggregator) *LongGreatest {
 	l.Fields = fields
 	return l
+}
+
+func (l *LongGreatest) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Fields []json.RawMessage `json:"fields"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	var err error
+	var p query.PostAggregator
+	pp := make([]query.PostAggregator, len(tmp.Fields))
+	for i := range tmp.Fields {
+		if p, err = Load(tmp.Fields[i]); err != nil {
+			return err
+		}
+		pp[i] = p
+	}
+	l.Base = tmp.Base
+	l.Fields = pp
+	return nil
 }

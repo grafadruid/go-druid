@@ -1,6 +1,8 @@
 package dimension
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
 	"github.com/grafadruid/go-druid/query/types"
 )
@@ -46,4 +48,25 @@ func (l *ListFiltered) SetValues(values []string) *ListFiltered {
 func (l *ListFiltered) SetIsWhiteList(isWhiteList bool) *ListFiltered {
 	l.IsWhiteList = isWhiteList
 	return l
+}
+
+func (l *ListFiltered) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Delegate    json.RawMessage `json:"delegate"`
+		Values      []string        `json:"values"`
+		IsWhiteList bool            `json:"isWhiteList"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	d, err := Load(tmp.Delegate)
+	if err != nil {
+		return err
+	}
+	l.Base = tmp.Base
+	l.Delegate = d
+	l.Values = tmp.Values
+	l.IsWhiteList = tmp.IsWhiteList
+	return nil
 }

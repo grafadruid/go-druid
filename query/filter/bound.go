@@ -1,7 +1,10 @@
 package filter
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/extractionfn"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -55,4 +58,33 @@ func (b *Bound) SetExtractionFn(extractionFn query.ExtractionFn) *Bound {
 func (b *Bound) SetOrdering(ordering types.StringComparator) *Bound {
 	b.Ordering = ordering
 	return b
+}
+
+func (b *Bound) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Dimension    string                 `json:"dimension"`
+		Lower        string                 `json:"lower"`
+		Upper        string                 `json:"upper"`
+		LowerStrict  bool                   `json:"lowerStrict"`
+		UpperStrict  bool                   `json:"upperStrict"`
+		ExtractionFn json.RawMessage        `json:"extractionFn"`
+		Ordering     types.StringComparator `json:"ordering"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	e, err := extractionfn.Load(tmp.ExtractionFn)
+	if err != nil {
+		return err
+	}
+	b.Base = tmp.Base
+	b.Dimension = tmp.Dimension
+	b.Lower = tmp.Lower
+	b.Upper = tmp.Upper
+	b.LowerStrict = tmp.LowerStrict
+	b.UpperStrict = tmp.UpperStrict
+	b.ExtractionFn = e
+	b.Ordering = tmp.Ordering
+	return nil
 }

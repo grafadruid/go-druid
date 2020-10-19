@@ -16,3 +16,8 @@ const (
 	Quarter              = "quarter"
 	Year                 = "year"
 )
+
+func NewSimple() *Simple {
+	var s Simple
+	return &s
+}

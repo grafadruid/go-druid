@@ -1,6 +1,11 @@
 package filter
 
-import "github.com/grafadruid/go-druid/query"
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/extractionfn"
+)
 
 type Regex struct {
 	Base
@@ -34,4 +39,27 @@ func (r *Regex) SetExtractionFn(extractionFn query.ExtractionFn) *Regex {
 func (r *Regex) SetFilterTuning(filterTuning *FilterTuning) *Regex {
 	r.FilterTuning = filterTuning
 	return r
+}
+
+func (r *Regex) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Dimension    string          `json:"dimension"`
+		Pattern      string          `json:"pattern"`
+		ExtractionFn json.RawMessage `json:"extractionFn"`
+		FilterTuning *FilterTuning   `json:"filterTuning"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	e, err := extractionfn.Load(tmp.ExtractionFn)
+	if err != nil {
+		return err
+	}
+	r.Base = tmp.Base
+	r.Dimension = tmp.Dimension
+	r.Pattern = tmp.Pattern
+	r.ExtractionFn = e
+	r.FilterTuning = tmp.FilterTuning
+	return nil
 }

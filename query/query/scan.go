@@ -6,6 +6,7 @@ import (
 	"github.com/grafadruid/go-druid/query"
 	"github.com/grafadruid/go-druid/query/filter"
 	"github.com/grafadruid/go-druid/query/types"
+	"github.com/grafadruid/go-druid/query/virtualcolumn"
 )
 
 type Order string
@@ -92,34 +93,39 @@ func (s *Scan) SetLegacy(legacy bool) *Scan {
 func (s *Scan) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		ResultFormat string   `json:"resultFormat"`
-		BatchSize    int64    `json:"batchSize"`
-		Limit        int64    `json:"limit"`
-		Columns      []string `json:"columns"`
-		Legacy       bool     `json:"legacy"`
-		Order        Order    `json:"order"`
-		//VirtualColumns []json.RawMessage `json:"virtualColumns"`
-		Filter json.RawMessage `json:"filter"`
+		VirtualColumns []json.RawMessage `json:"virtualColumns"`
+		ResultFormat   string            `json:"resultFormat"`
+		BatchSize      int64             `json:"batchSize"`
+		Limit          int64             `json:"limit"`
+		Order          Order             `json:"order"`
+		Filter         json.RawMessage   `json:"filter"`
+		Columns        []string          `json:"columns"`
+		Legacy         bool              `json:"legacy"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	//var vv []query.VirtualColumns
-	//for j := range c.VirtualColumns {
-	//vv = append(vv, virtualcolumns.Load(j))
-	//}
+	var err error
+	var v query.VirtualColumn
+	vv := make([]query.VirtualColumn, len(tmp.VirtualColumns))
+	for i := range tmp.VirtualColumns {
+		if v, err = virtualcolumn.Load(tmp.VirtualColumns[i]); err != nil {
+			return err
+		}
+		vv[i] = v
+	}
 	f, err := filter.Load(tmp.Filter)
 	if err != nil {
 		return err
 	}
 	s.Base = tmp.Base
+	s.VirtualColumns = vv
 	s.ResultFormat = tmp.ResultFormat
 	s.BatchSize = tmp.BatchSize
 	s.Limit = tmp.Limit
+	s.Order = tmp.Order
+	s.Filter = f
 	s.Columns = tmp.Columns
 	s.Legacy = tmp.Legacy
-	s.Order = tmp.Order
-	s.SetFilter(f)
-	//s.SetVirtualColumns(vv)
 	return nil
 }

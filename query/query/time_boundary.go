@@ -1,7 +1,10 @@
 package query
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/filter"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -40,4 +43,23 @@ func (t *TimeBoundary) SetBound(bound string) *TimeBoundary {
 func (t *TimeBoundary) SetFilter(filter query.Filter) *TimeBoundary {
 	t.Filter = filter
 	return t
+}
+
+func (t *TimeBoundary) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Bound  string          `json:"bound"`
+		Filter json.RawMessage `json:"filter"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	f, err := filter.Load(tmp.Filter)
+	if err != nil {
+		return err
+	}
+	t.Base = tmp.Base
+	t.Bound = tmp.Bound
+	t.Filter = f
+	return nil
 }

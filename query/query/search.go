@@ -1,7 +1,13 @@
 package query
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/dimension"
+	"github.com/grafadruid/go-druid/query/filter"
+	"github.com/grafadruid/go-druid/query/granularity"
+	"github.com/grafadruid/go-druid/query/searchqueryspec"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -68,4 +74,47 @@ func (s *Search) SetQuery(query query.SearchQuerySpec) *Search {
 func (s *Search) SetSort(sort *SearchSortSpec) *Search {
 	s.Sort = sort
 	return s
+}
+
+func (s *Search) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		Filter           json.RawMessage   `json:"filter"`
+		Granularity      json.RawMessage   `json:"granularity"`
+		Limit            int64             `json:"limit"`
+		SearchDimensions []json.RawMessage `json:"dimensions"`
+		Query            json.RawMessage   `json:"query"`
+		Sort             *SearchSortSpec   `json:"sort"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	var err error
+	f, err := filter.Load(tmp.Filter)
+	if err != nil {
+		return err
+	}
+	gr, err := granularity.Load(tmp.Granularity)
+	if err != nil {
+		return err
+	}
+	var se query.Dimension
+	ss := make([]query.Dimension, len(tmp.SearchDimensions))
+	for i := range tmp.SearchDimensions {
+		if se, err = dimension.Load(tmp.SearchDimensions[i]); err != nil {
+			return err
+		}
+		ss[i] = se
+	}
+	q, err := searchqueryspec.Load(tmp.Query)
+	if err != nil {
+		return err
+	}
+	s.Base = tmp.Base
+	s.Filter = f
+	s.Granularity = gr
+	s.SearchDimensions = ss
+	s.Query = q
+	s.Sort = tmp.Sort
+	return nil
 }
