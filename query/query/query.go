@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/datasource"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -48,6 +49,29 @@ func (b *Base) SetContext(context map[string]interface{}) *Base {
 
 func (b *Base) Language() query.QueryLanguage {
 	return query.NativeLanguage
+}
+
+func (b *Base) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		ID         string                 `json:"ID"`
+		QueryType  string                 `json:"queryType"`
+		DataSource json.RawMessage        `json:"dataSource"`
+		Intervals  []types.Interval       `json:"intervals"`
+		Context    map[string]interface{} `json:"context"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	d, err := datasource.Load(tmp.DataSource)
+	if err != nil {
+		return err
+	}
+	b.ID = tmp.ID
+	b.QueryType = tmp.QueryType
+	b.DataSource = d
+	b.Intervals = tmp.Intervals
+	b.Context = tmp.Context
+	return nil
 }
 
 func Load(data []byte) (query.Query, error) {
