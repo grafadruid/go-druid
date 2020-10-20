@@ -91,8 +91,8 @@ func (s *Scan) SetLegacy(legacy bool) *Scan {
 }
 
 func (s *Scan) UnmarshalJSON(data []byte) error {
+	var b Base
 	var tmp struct {
-		Base
 		VirtualColumns []json.RawMessage `json:"virtualColumns"`
 		ResultFormat   string            `json:"resultFormat"`
 		BatchSize      int64             `json:"batchSize"`
@@ -101,6 +101,9 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 		Filter         json.RawMessage   `json:"filter"`
 		Columns        []string          `json:"columns"`
 		Legacy         bool              `json:"legacy"`
+	}
+	if err := json.Unmarshal(data, &b); err != nil {
+		return err
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
@@ -118,7 +121,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	s.Base = tmp.Base
+	s.Base = b
 	s.VirtualColumns = vv
 	s.ResultFormat = tmp.ResultFormat
 	s.BatchSize = tmp.BatchSize
