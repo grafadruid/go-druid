@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/grafadruid/go-druid/query"
-	//base "github.com/grafadruid/go-druid/query/query"
 )
 
 type Query struct {
