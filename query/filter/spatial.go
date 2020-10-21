@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/bound"
 )
 
 type Spatial struct {
@@ -44,13 +45,13 @@ func (s *Spatial) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	//b, err := bound.Load(tmp.Bound)
-	//if err != nil {
-	//	return err
-	//}
+	b, err := bound.Load(tmp.Bound)
+	if err != nil {
+		return err
+	}
 	s.Base = tmp.Base
 	s.Dimension = tmp.Dimension
-	//s.Bound = b
+	s.Bound = b
 	s.FilterTuning = tmp.FilterTuning
 	return nil
 }
