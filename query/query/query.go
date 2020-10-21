@@ -47,6 +47,10 @@ func (b *Base) SetContext(context map[string]interface{}) *Base {
 	return b
 }
 
+func (b *Base) Type() query.ComponentType {
+	return b.QueryType
+}
+
 func (b *Base) Language() query.QueryLanguage {
 	return query.NativeLanguage
 }
@@ -65,6 +69,9 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 	d, err := datasource.Load(tmp.DataSource)
 	if err != nil {
 		return err
+	}
+	if d.Type() == "query" {
+		d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.DataSource, Load)
 	}
 	b.ID = tmp.ID
 	b.QueryType = tmp.QueryType

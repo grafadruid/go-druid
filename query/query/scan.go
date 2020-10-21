@@ -117,9 +117,12 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 		}
 		vv[i] = v
 	}
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f query.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
 	s.Base = b
 	s.VirtualColumns = vv
