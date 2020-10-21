@@ -11,21 +11,6 @@ func NewPolygon() *Polygon {
 	return p
 }
 
-func (p *Polygon) SetMinCoords(minCoords []float64) *Polygon {
-	p.Base.SetMinCoords(minCoords)
-	return p
-}
-
-func (p *Polygon) SetMaxCoords(maxCoords []float64) *Polygon {
-	p.Base.SetMaxCoords(maxCoords)
-	return p
-}
-
-func (p *Polygon) SetLimit(limit int64) *Polygon {
-	p.Base.SetLimit(limit)
-	return p
-}
-
 func (p *Polygon) SetAbscissa(abscissa []float64) *Polygon {
 	p.Abscissa = abscissa
 	return p
