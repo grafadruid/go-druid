@@ -7,7 +7,7 @@ import (
 )
 
 type Base struct {
-	Type string `json:"type"`
+	Typ string `json:"type"`
 }
 
 func NewBase() *Base {
@@ -16,8 +16,12 @@ func NewBase() *Base {
 }
 
 func (b *Base) SetType(typ string) *Base {
-	b.Type = typ
+	b.Typ = typ
 	return b
+}
+
+func (b *Base) Type() query.ComponentType {
+	return b.Typ
 }
 
 func Load(data []byte) (query.Dimension, error) {

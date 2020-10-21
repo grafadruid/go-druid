@@ -1,6 +1,7 @@
 package query
 
 type QueryLanguage int
+type ComponentType = string
 
 const (
 	NativeLanguage QueryLanguage = iota
@@ -8,33 +9,62 @@ const (
 )
 
 type Query interface {
+	Type() ComponentType
 	Language() QueryLanguage
 }
 
-type Aggregator interface{}
+type Aggregator interface {
+	Type() ComponentType
+}
 
-type Bound interface{}
+type Bound interface {
+	Type() ComponentType
+}
 
-type DataSource interface{}
+type DataSource interface {
+	Type() ComponentType
+}
 
-type Dimension interface{}
+type Dimension interface {
+	Type() ComponentType
+}
 
-type ExtractionFn interface{}
+type ExtractionFn interface {
+	Type() ComponentType
+}
 
-type Filter interface{}
+type Filter interface {
+	Type() ComponentType
+}
 
-type Granularity interface{}
+type Granularity interface {
+	Type() ComponentType
+}
 
-type HavingSpec interface{}
+type HavingSpec interface {
+	Type() ComponentType
+}
 
-type LimitSpec interface{}
+type LimitSpec interface {
+	Type() ComponentType
+}
 
-type LookupExtractor interface{}
+type LookupExtractor interface {
+	Type() ComponentType
+}
 
-type PostAggregator interface{}
+type PostAggregator interface {
+	Type() ComponentType
+}
 
-type SearchQuerySpec interface{}
+type SearchQuerySpec interface {
+	Type() ComponentType
+}
 
-type TopNMetric interface{}
+type TopNMetric interface {
+	Type() ComponentType
+}
 
-type VirtualColumn interface{}
+type VirtualColumn interface {
+	Type() ComponentType
+}

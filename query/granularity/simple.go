@@ -1,5 +1,7 @@
 package granularity
 
+import "github.com/grafadruid/go-druid/query"
+
 type Simple string
 
 const (
@@ -16,6 +18,10 @@ const (
 	Quarter              = "quarter"
 	Year                 = "year"
 )
+
+func (s *Simple) Type() query.ComponentType {
+	return "simple"
+}
 
 func NewSimple() *Simple {
 	var s Simple

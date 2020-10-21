@@ -1,12 +1,15 @@
 package datasource
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	//base "github.com/grafadruid/go-druid/query/query"
 )
 
 type Query struct {
 	Base
-	Query query.Query
+	Query query.Query `json:"-"`
 }
 
 func NewQuery() *Query {
@@ -19,19 +22,19 @@ func (q *Query) SetQuery(query query.Query) {
 	q.Query = query
 }
 
-//func (q *Query) UnmarshalJSON(data []byte) error {
-//var tmp struct {
-//Base
-//Query json.RawMessage `json:"query"`
-//}
-//if err := json.Unmarshal(data, &tmp); err != nil {
-//return err
-//}
-//qry, err := queries.Load(tmp.Query)
-//if err != nil {
-//return err
-//}
-//q.Base = tmp.Base
-//q.Query = qry
-//return nil
-//}
+func (q *Query) UnmarshalJSONWithQueryLoader(data []byte, loader func(data []byte) (query.Query, error)) error {
+	var tmp struct {
+		Base
+		Query json.RawMessage `json:"query"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	qry, err := loader(tmp.Query)
+	if err != nil {
+		return err
+	}
+	q.Base = tmp.Base
+	q.Query = qry
+	return nil
+}

@@ -7,7 +7,7 @@ import (
 )
 
 type Base struct {
-	Type string `json:"type"`
+	Typ  string `json:"type"`
 	Name string `json:"name"`
 }
 
@@ -18,13 +18,17 @@ func NewBase() *Base {
 }
 
 func (b *Base) SetType(typ string) *Base {
-	b.Type = typ
+	b.Typ = typ
 	return b
 }
 
 func (b *Base) SetName(name string) *Base {
 	b.Name = name
 	return b
+}
+
+func (b *Base) Type() query.ComponentType {
+	return b.Typ
 }
 
 func Load(data []byte) (query.PostAggregator, error) {
