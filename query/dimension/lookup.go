@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/lookup"
 )
 
 type Lookup struct {
@@ -63,15 +64,15 @@ func (l *Lookup) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	//l, err := lookupextractor.Load(tmp.Filter)
-	//if err != nil {
-	//	return err
-	//}
+	lu, err := lookup.Load(tmp.Lookup)
+	if err != nil {
+		return err
+	}
 	l.Base = tmp.Base
 	l.Name = tmp.Name
 	l.ReplaceMissingValueWith = tmp.ReplaceMissingValueWith
 	l.RetainMissingValue = tmp.RetainMissingValue
-	//l.Lookup = lookup
+	l.Lookup = lu
 	l.Optimize = tmp.Optimize
 	return nil
 }
