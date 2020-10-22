@@ -37,7 +37,7 @@ func Load(data []byte) (query.Granularity, error) {
 		g = NewDuration()
 	case "period":
 		g = NewPeriod()
-	case "simple":
+	default:
 		g = NewSimple()
 	}
 	return g, json.Unmarshal(data, &g)
