@@ -65,6 +65,10 @@ type TopNMetric interface {
 	Type() ComponentType
 }
 
+type ToInclude interface {
+	Type() ComponentType
+}
+
 type VirtualColumn interface {
 	Type() ComponentType
 }

@@ -1,7 +1,10 @@
 package query
 
 import (
+	"encoding/json"
+
 	"github.com/grafadruid/go-druid/query"
+	"github.com/grafadruid/go-druid/query/toinclude"
 	"github.com/grafadruid/go-druid/query/types"
 )
 
@@ -20,11 +23,11 @@ const (
 
 type SegmentMetadata struct {
 	Base
-	ToInclude              string         `json:"toInclude"`
-	Merge                  bool           `json:"merge"`
-	AnalysisTypes          []AnalysisType `json:"analysisTypes"`
-	UsingDefaultInterval   bool           `json:"usingDefaultInterval"`
-	LenientAggregatorMerge bool           `json:"lenientAggregatorMerge"`
+	ToInclude              query.ToInclude `json:"toInclude"`
+	Merge                  bool            `json:"merge"`
+	AnalysisTypes          []AnalysisType  `json:"analysisTypes"`
+	UsingDefaultInterval   bool            `json:"usingDefaultInterval"`
+	LenientAggregatorMerge bool            `json:"lenientAggregatorMerge"`
 }
 
 func NewSegmentMetadata() *SegmentMetadata {
@@ -48,7 +51,7 @@ func (s *SegmentMetadata) SetContext(context map[string]interface{}) *SegmentMet
 	return s
 }
 
-func (s *SegmentMetadata) SetToInclude(toInclude string) *SegmentMetadata {
+func (s *SegmentMetadata) SetToInclude(toInclude query.ToInclude) *SegmentMetadata {
 	s.ToInclude = toInclude
 	return s
 }
@@ -71,4 +74,29 @@ func (s *SegmentMetadata) SetUsingDefaultInterval(usingDefaultInterval bool) *Se
 func (s *SegmentMetadata) SetLenientAggregatorMerge(lenientAggregatorMerge bool) *SegmentMetadata {
 	s.LenientAggregatorMerge = lenientAggregatorMerge
 	return s
+}
+
+func (s *SegmentMetadata) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		Base
+		ToInclude              json.RawMessage `json:"toInclude"`
+		Merge                  bool            `json:"merge"`
+		AnalysisTypes          []AnalysisType  `json:"analysisTypes"`
+		UsingDefaultInterval   bool            `json:"usingDefaultInterval"`
+		LenientAggregatorMerge bool            `json:"lenientAggregatorMerge"`
+	}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	t, err := toinclude.Load(tmp.ToInclude)
+	if err != nil {
+		return err
+	}
+	s.Base = tmp.Base
+	s.ToInclude = t
+	s.Merge = tmp.Merge
+	s.AnalysisTypes = tmp.AnalysisTypes
+	s.UsingDefaultInterval = tmp.UsingDefaultInterval
+	s.LenientAggregatorMerge = tmp.LenientAggregatorMerge
+	return nil
 }
