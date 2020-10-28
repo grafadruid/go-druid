@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	goquery "github.com/google/go-querystring/query"
+	querystring "github.com/google/go-querystring/query"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -112,7 +112,7 @@ func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehtt
 				}
 			}
 		default:
-			q, err := goquery.Values(opt)
+			q, err := querystring.Values(opt)
 			if err != nil {
 				return nil, err
 			}

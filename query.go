@@ -1,8 +1,8 @@
 package druid
 
 import (
-	"github.com/grafadruid/go-druid/query"
-	base "github.com/grafadruid/go-druid/query/query"
+	"github.com/grafadruid/go-druid/builder"
+	"github.com/grafadruid/go-druid/builder/query"
 )
 
 const (
@@ -14,13 +14,13 @@ type QueryService struct {
 	client *Client
 }
 
-func (q *QueryService) Execute(qry query.Query, result interface{}) (*Response, error) {
+func (q *QueryService) Execute(qry builder.Query, result interface{}) (*Response, error) {
 	var path string
-	switch lang := qry.Language(); lang {
-	case query.NativeLanguage:
-		path = NativeQueryEndpoint
-	case query.SQLLanguage:
+	switch qry.Type() {
+	case "sql":
 		path = SQLQueryEndpoint
+	default:
+		path = NativeQueryEndpoint
 	}
 	r, err := q.client.NewRequest("POST", path, qry)
 	if err != nil {
@@ -33,10 +33,10 @@ func (q *QueryService) Execute(qry query.Query, result interface{}) (*Response, 
 	return resp, nil
 }
 
-//func (q *QueryService) Cancel(query query.Query) () {}
+//func (q *QueryService) Cancel(query builder.Query) () {}
 
-//func (q *QueryService) Candidates(query query.Query, result interface{}) (*Response, error) {}
+//func (q *QueryService) Candidates(query builder.Query, result interface{}) (*Response, error) {}
 
-func (q *QueryService) Load(data []byte) (query.Query, error) {
-	return base.Load(data)
+func (q *QueryService) Load(data []byte) (builder.Query, error) {
+	return query.Load(data)
 }
