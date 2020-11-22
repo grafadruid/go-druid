@@ -2,7 +2,9 @@ package query
 
 import (
 	"encoding/json"
+	"errors"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/filter"
@@ -80,8 +82,8 @@ func (t *Timeseries) SetLimit(limit int64) *Timeseries {
 }
 
 func (t *Timeseries) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
 		Descending      bool              `json:"descending"`
 		VirtualColumns  []json.RawMessage `json:"virtualColumns"`
 		Filter          json.RawMessage   `json:"filter"`
@@ -90,21 +92,24 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 		PostAggregators []json.RawMessage `json:"postAggregations"`
 		Limit           int64             `json:"limit"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	var err error
 	var v builder.VirtualColumn
 	vv := make([]builder.VirtualColumn, len(tmp.VirtualColumns))
 	for i := range tmp.VirtualColumns {
 		if v, err = virtualcolumn.Load(tmp.VirtualColumns[i]); err != nil {
+			err = errors.New("2")
 			return err
 		}
 		vv[i] = v
 	}
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
 	gr, err := granularity.Load(tmp.Granularity)
 	if err != nil {
@@ -126,7 +131,7 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 		}
 		pp[i] = p
 	}
-	t.Base = tmp.Base
+	t.Base.UnmarshalJSON(data)
 	t.Descending = tmp.Descending
 	t.VirtualColumns = vv
 	t.Filter = f
@@ -134,5 +139,6 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 	t.Aggregations = aa
 	t.PostAggregations = pp
 	t.Limit = tmp.Limit
+	spew.Dump(t)
 	return nil
 }

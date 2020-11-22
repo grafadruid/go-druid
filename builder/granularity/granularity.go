@@ -2,6 +2,7 @@ package granularity
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -20,20 +21,21 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.Granularity, error) {
+	var g builder.Granularity
 	var t struct {
 		Typ string `json:"type"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
-		return nil, err
+		g = NewSimple()
+		return g, json.Unmarshal(data, &g)
 	}
-	var g builder.Granularity
 	switch t.Typ {
 	case "duration":
 		g = NewDuration()
 	case "period":
 		g = NewPeriod()
 	default:
-		g = NewSimple()
+		return nil, errors.New("Unsupported type")
 	}
 	return g, json.Unmarshal(data, &g)
 }
