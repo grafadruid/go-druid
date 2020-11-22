@@ -25,6 +25,11 @@ func main() {
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
 
+	q, err = d.Query().Load([]byte("{\"batchSize\":20480,\"columns\":[\"__time\",\"channel\",\"cityName\",\"comment\",\"count\",\"countryIsoCode\",\"diffUrl\",\"flags\",\"isAnonymous\",\"isMinor\",\"isNew\",\"isRobot\",\"isUnpatrolled\",\"metroCode\",\"namespace\",\"page\",\"regionIsoCode\",\"regionName\",\"sum_added\",\"sum_commentLength\",\"sum_deleted\",\"sum_delta\",\"sum_deltaBucket\",\"user\",\"v0\"],\"context\":{\"plopa\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"filter\":{\"dimension\":\"countryName\",\"type\":\"selector\",\"value\":\"France\"},\"intervals\":[\"2016-06-27T01:55:25.000Z/2016-06-27T10:07:01.000Z\"],\"limit\":10,\"order\":\"none\",\"queryType\":\"scan\",\"virtualColumns\":[{\"expression\":\"'France'\",\"name\":\"v0\",\"outputType\":\"STRING\",\"type\":\"expression\"}]}"))
+	spew.Dump(q)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
+
 	q, err = d.Query().Load([]byte("{\"batchSize\":20480,\"columns\":[\"__time\",\"channel\",\"cityName\",\"comment\",\"count\",\"countryIsoCode\",\"diffUrl\",\"flags\",\"isAnonymous\",\"isMinor\",\"isNew\",\"isRobot\",\"isUnpatrolled\",\"metroCode\",\"namespace\",\"page\",\"regionIsoCode\",\"regionName\",\"sum_added\",\"sum_commentLength\",\"sum_deleted\",\"sum_delta\",\"sum_deltaBucket\",\"user\"],\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":{\"locale\":\"\",\"type\":\"lower\"},\"type\":\"selector\",\"value\":\"france\"},\"intervals\":[\"1980-01-26T23:00:00.000Z/2020-01-26T23:00:00.000Z\"],\"limit\":10,\"order\":\"descending\",\"queryType\":\"scan\", \"resultFormat\":\"compactedList\"}"))
 	spew.Dump(q)
 	d.Query().Execute(q, &results)

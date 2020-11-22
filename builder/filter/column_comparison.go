@@ -24,14 +24,14 @@ func (c *ColumnComparison) SetDimensions(dimensions []builder.Dimension) *Column
 }
 
 func (c *ColumnComparison) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
 		Base
 		Dimensions []json.RawMessage `json:"dimensions"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	var err error
 	var d builder.Dimension
 	dd := make([]builder.Dimension, len(tmp.Dimensions))
 	for i := range tmp.Dimensions {
