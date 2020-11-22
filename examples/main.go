@@ -6,6 +6,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid"
+	"github.com/grafadruid/go-druid/builder"
 )
 
 func main() {
@@ -19,8 +20,9 @@ func main() {
 	}
 	fmt.Println("{\"version\": \"" + status.Version + "\"}")
 
+	var q builder.Query
 	var results interface{}
-	q, err := d.Query().Load([]byte("{\"queryType\":\"scan\",\"dataSource\":{\"type\":\"table\",\"name\":\"wikipedia\"},\"intervals\":[\"1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z\"],\"virtualColumns\":[{\"type\":\"expression\",\"name\":\"v0\",\"expression\":\"'France'\",\"outputType\":\"STRING\"}],\"resultFormat\":\"compactedList\",\"batchSize\":20480,\"limit\":1,\"order\":\"none\",\"filter\":{\"type\":\"selector\",\"dimension\":\"countryName\",\"value\":\"France\",\"extractionFn\":null},\"columns\":[\"__time\",\"channel\",\"cityName\",\"comment\",\"count\",\"countryIsoCode\",\"diffUrl\",\"flags\",\"isAnonymous\",\"isMinor\",\"isNew\",\"isRobot\",\"isUnpatrolled\",\"metroCode\",\"namespace\",\"page\",\"regionIsoCode\",\"regionName\",\"sum_added\",\"sum_commentLength\",\"sum_deleted\",\"sum_delta\",\"sum_deltaBucket\",\"user\",\"v0\"],\"legacy\":false,\"context\":{\"sqlOuterLimit\":100,\"sqlQueryId\":\"b12ac7bb-7cc5-4873-b19d-1cd95264e01b\"},\"descending\":false,\"granularity\":{\"type\":\"all\"}}"))
+	q, err = d.Query().Load([]byte("{\"queryType\":\"scan\",\"dataSource\":{\"type\":\"table\",\"name\":\"wikipedia\"},\"intervals\":[\"1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z\"],\"virtualColumns\":[{\"type\":\"expression\",\"name\":\"v0\",\"expression\":\"'France'\",\"outputType\":\"STRING\"}],\"resultFormat\":\"compactedList\",\"batchSize\":20480,\"limit\":1,\"order\":\"none\",\"filter\":{\"type\":\"selector\",\"dimension\":\"countryName\",\"value\":\"France\",\"extractionFn\":null},\"columns\":[\"__time\",\"channel\",\"cityName\",\"comment\",\"count\",\"countryIsoCode\",\"diffUrl\",\"flags\",\"isAnonymous\",\"isMinor\",\"isNew\",\"isRobot\",\"isUnpatrolled\",\"metroCode\",\"namespace\",\"page\",\"regionIsoCode\",\"regionName\",\"sum_added\",\"sum_commentLength\",\"sum_deleted\",\"sum_delta\",\"sum_deltaBucket\",\"user\",\"v0\"],\"legacy\":false,\"context\":{\"sqlOuterLimit\":100,\"sqlQueryId\":\"b12ac7bb-7cc5-4873-b19d-1cd95264e01b\"},\"descending\":false,\"granularity\":{\"type\":\"all\"}}"))
 	spew.Dump(q)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
@@ -41,6 +43,16 @@ func main() {
 	spew.Dump(results)
 
 	q, err = d.Query().Load([]byte("{\"context\":{\"con\":\"text\"},\"query\":\"SELECT \\\"__time\\\", \\\"channel\\\", \\\"cityName\\\", \\\"comment\\\", \\\"count\\\", \\\"countryIsoCode\\\", \\\"countryName\\\", \\\"diffUrl\\\", \\\"flags\\\", \\\"isAnonymous\\\", \\\"isMinor\\\", \\\"isNew\\\", \\\"isRobot\\\", \\\"isUnpatrolled\\\", \\\"metroCode\\\", \\\"namespace\\\", \\\"page\\\", \\\"regionIsoCode\\\", \\\"regionName\\\", \\\"sum_added\\\", \\\"sum_commentLength\\\", \\\"sum_deleted\\\", \\\"sum_delta\\\", \\\"sum_deltaBucket\\\", \\\"user\\\"\\nFROM \\\"wikipedia\\\"\\nWHERE \\\"countryName\\\" = 'France'\\nLIMIT 10\",\"queryType\":\"sql\", \"resultFormat\":\"array\", \"header\": true}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"aggregations\":[{\"name\":\"count\",\"type\":\"count\"}],\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"granularity\":\"minute\",\"intervals\":[\"2016-06-27T01:37:05.875Z/2016-06-27T06:49:30.014Z\"],\"limit\":10,\"postAggregations\":[],\"queryType\":\"timeseries\",\"virtualColumns\":[]}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"aggregations\":[{\"name\":\"count\",\"type\":\"count\"}],\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"granularity\":{\"duration\":1000,\"origin\":\"2016-06-27T13:30:00.000Z\",\"type\":\"duration\"},\"intervals\":[\"2016-06-27T01:37:05.875Z/2016-06-27T06:49:30.014Z\"],\"limit\":10,\"postAggregations\":[],\"queryType\":\"timeseries\",\"virtualColumns\":[]}"))
 	spew.Dump(q, err)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
