@@ -20,7 +20,7 @@ const (
 type Scan struct {
 	Base
 	VirtualColumns []builder.VirtualColumn `json:"virtualColumns"`
-	ResultFormat   string                  `json:"resultFormat"`
+	ResultFormat   string                  `json:"resultFormat,omitempty"`
 	BatchSize      int64                   `json:"batchSize"`
 	Limit          int64                   `json:"limit"`
 	Order          Order                   `json:"order"`
@@ -102,7 +102,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 		Columns        []string          `json:"columns"`
 		Legacy         bool              `json:"legacy"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
 	var v builder.VirtualColumn

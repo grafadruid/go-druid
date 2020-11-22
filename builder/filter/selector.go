@@ -42,6 +42,7 @@ func (s *Selector) SetFilterTuning(filterTuning *FilterTuning) *Selector {
 }
 
 func (s *Selector) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
 		Base
 		Dimension    string          `json:"dimension"`
@@ -49,12 +50,15 @@ func (s *Selector) UnmarshalJSON(data []byte) error {
 		ExtractionFn json.RawMessage `json:"extractionFn"`
 		FilterTuning *FilterTuning   `json:"filterTuning"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	e, err := extractionfn.Load(tmp.ExtractionFn)
-	if err != nil {
-		return err
+	var e builder.ExtractionFn
+	if tmp.ExtractionFn != nil {
+		e, err = extractionfn.Load(tmp.ExtractionFn)
+		if err != nil {
+			return err
+		}
 	}
 	s.Base = tmp.Base
 	s.Dimension = tmp.Dimension

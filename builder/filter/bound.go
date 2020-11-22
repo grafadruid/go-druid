@@ -61,6 +61,7 @@ func (b *Bound) SetOrdering(ordering types.StringComparator) *Bound {
 }
 
 func (b *Bound) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
 		Base
 		Dimension    string                 `json:"dimension"`
@@ -71,12 +72,15 @@ func (b *Bound) UnmarshalJSON(data []byte) error {
 		ExtractionFn json.RawMessage        `json:"extractionFn"`
 		Ordering     types.StringComparator `json:"ordering"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	e, err := extractionfn.Load(tmp.ExtractionFn)
-	if err != nil {
-		return err
+	var e builder.ExtractionFn
+	if tmp.ExtractionFn != nil {
+		e, err = extractionfn.Load(tmp.ExtractionFn)
+		if err != nil {
+			return err
+		}
 	}
 	b.Base = tmp.Base
 	b.Dimension = tmp.Dimension

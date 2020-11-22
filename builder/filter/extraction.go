@@ -36,18 +36,22 @@ func (e *Extraction) SetExtractionFn(extractionFn builder.ExtractionFn) *Extract
 }
 
 func (e *Extraction) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
 		Base
 		Dimension    string          `json:"dimension"`
 		Value        string          `json:"value"`
 		ExtractionFn json.RawMessage `json:"extractionFn"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	ex, err := extractionfn.Load(tmp.ExtractionFn)
-	if err != nil {
-		return err
+	var ex builder.ExtractionFn
+	if tmp.ExtractionFn != nil {
+		ex, err = extractionfn.Load(tmp.ExtractionFn)
+		if err != nil {
+			return err
+		}
 	}
 	e.Base = tmp.Base
 	e.Dimension = tmp.Dimension
