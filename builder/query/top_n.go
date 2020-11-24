@@ -5,6 +5,7 @@ import (
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
+	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/filter"
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
@@ -87,21 +88,18 @@ func (t *TopN) SetPostAggregations(postAggregations []builder.PostAggregator) *T
 }
 
 func (t *TopN) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
-		Metric          json.RawMessage   `json:"metric"`
-		VirtualColumns  []json.RawMessage `json:"virtualColumns"`
-		Threshold       int64             `json:"threshold"`
-		Filter          json.RawMessage   `json:"filter"`
-		Granularity     json.RawMessage   `json:"granularity"`
-		Aggregators     []json.RawMessage `json:"aggregations"`
-		PostAggregators []json.RawMessage `json:"postAggregations"`
+		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
+		Dimension        json.RawMessage   `json:"dimension"`
+		Metric           json.RawMessage   `json:"metric"`
+		Threshold        int64             `json:"threshold"`
+		Filter           json.RawMessage   `json:"filter"`
+		Granularity      json.RawMessage   `json:"granularity"`
+		Aggregations     []json.RawMessage `json:"aggregations"`
+		PostAggregations []json.RawMessage `json:"postAggregations"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
-		return err
-	}
-	m, err := topnmetric.Load(tmp.Metric)
-	if err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
 	var v builder.VirtualColumn
@@ -112,33 +110,45 @@ func (t *TopN) UnmarshalJSON(data []byte) error {
 		}
 		vv[i] = v
 	}
-	f, err := filter.Load(tmp.Filter)
+	d, err := dimension.Load(tmp.Dimension)
 	if err != nil {
 		return err
+	}
+	m, err := topnmetric.Load(tmp.Metric)
+	if err != nil {
+		return err
+	}
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
 	gr, err := granularity.Load(tmp.Granularity)
 	if err != nil {
 		return err
 	}
 	var a builder.Aggregator
-	aa := make([]builder.Aggregator, len(tmp.Aggregators))
-	for i := range tmp.Aggregators {
-		if a, err = aggregation.Load(tmp.Aggregators[i]); err != nil {
+	aa := make([]builder.Aggregator, len(tmp.Aggregations))
+	for i := range tmp.Aggregations {
+		if a, err = aggregation.Load(tmp.Aggregations[i]); err != nil {
 			return err
 		}
 		aa[i] = a
 	}
 	var p builder.PostAggregator
-	pp := make([]builder.PostAggregator, len(tmp.PostAggregators))
-	for i := range tmp.PostAggregators {
-		if p, err = postaggregation.Load(tmp.PostAggregators[i]); err != nil {
+	pp := make([]builder.PostAggregator, len(tmp.PostAggregations))
+	for i := range tmp.PostAggregations {
+		if p, err = postaggregation.Load(tmp.PostAggregations[i]); err != nil {
 			return err
 		}
 		pp[i] = p
 	}
-	t.Base = tmp.Base
-	t.Metric = m
+	t.Base.UnmarshalJSON(data)
 	t.VirtualColumns = vv
+	t.Dimension = d
+	t.Metric = m
 	t.Threshold = tmp.Threshold
 	t.Filter = f
 	t.Granularity = gr

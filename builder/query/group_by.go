@@ -90,14 +90,14 @@ func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 func (g *GroupBy) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		VirtualColumns  []json.RawMessage `json:"virtualColumns"`
-		Filter          json.RawMessage   `json:"filter"`
-		Granularity     json.RawMessage   `json:"granularity"`
-		Aggregators     []json.RawMessage `json:"aggregations"`
-		PostAggregators []json.RawMessage `json:"postAggregations"`
-		Having          json.RawMessage   `json:"having"`
-		LimitSpec       json.RawMessage   `json:"limitSpec"`
-		SubtotalsSpec   [][]string        `json:"subtotalsSpec"`
+		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
+		Filter           json.RawMessage   `json:"filter"`
+		Granularity      json.RawMessage   `json:"granularity"`
+		Aggregations     []json.RawMessage `json:"aggregations"`
+		PostAggregations []json.RawMessage `json:"postAggregations"`
+		Having           json.RawMessage   `json:"having"`
+		LimitSpec        json.RawMessage   `json:"limitSpec"`
+		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
@@ -120,17 +120,17 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	var a builder.Aggregator
-	aa := make([]builder.Aggregator, len(tmp.Aggregators))
-	for i := range tmp.Aggregators {
-		if a, err = aggregation.Load(tmp.Aggregators[i]); err != nil {
+	aa := make([]builder.Aggregator, len(tmp.Aggregations))
+	for i := range tmp.Aggregations {
+		if a, err = aggregation.Load(tmp.Aggregations[i]); err != nil {
 			return err
 		}
 		aa[i] = a
 	}
 	var p builder.PostAggregator
-	pp := make([]builder.PostAggregator, len(tmp.PostAggregators))
-	for i := range tmp.PostAggregators {
-		if p, err = postaggregation.Load(tmp.PostAggregators[i]); err != nil {
+	pp := make([]builder.PostAggregator, len(tmp.PostAggregations))
+	for i := range tmp.PostAggregations {
+		if p, err = postaggregation.Load(tmp.PostAggregations[i]); err != nil {
 			return err
 		}
 		pp[i] = p
