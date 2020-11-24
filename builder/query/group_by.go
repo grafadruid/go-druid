@@ -23,7 +23,7 @@ type GroupBy struct {
 	PostAggregations []builder.PostAggregator `json:"postAggregations"`
 	Having           builder.HavingSpec       `json:"having"`
 	LimitSpec        builder.LimitSpec        `json:"limitSpec"`
-	SubtotalsSpec    [][]string               `json:"subtotalsSpec"`
+	SubtotalsSpec    [][]string               `json:"subtotalsSpec",omitempty`
 }
 
 func NewGroupBy() *GroupBy {
@@ -88,8 +88,8 @@ func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 }
 
 func (g *GroupBy) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
 		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
 		Filter           json.RawMessage   `json:"filter"`
 		Granularity      json.RawMessage   `json:"granularity"`
@@ -99,10 +99,9 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		LimitSpec        json.RawMessage   `json:"limitSpec"`
 		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	var err error
 	var v builder.VirtualColumn
 	vv := make([]builder.VirtualColumn, len(tmp.VirtualColumns))
 	for i := range tmp.VirtualColumns {
@@ -111,9 +110,12 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		}
 		vv[i] = v
 	}
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
 	gr, err := granularity.Load(tmp.Granularity)
 	if err != nil {
@@ -135,15 +137,24 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		}
 		pp[i] = p
 	}
-	h, err := havingspec.Load(tmp.Having)
-	if err != nil {
-		return err
+	var h builder.HavingSpec
+	if tmp.Having != nil {
+		h, err = havingspec.Load(tmp.Having)
+		if err != nil {
+			return err
+		}
 	}
-	l, err := limitspec.Load(tmp.LimitSpec)
-	if err != nil {
-		return err
+	var l builder.LimitSpec
+	if tmp.LimitSpec != nil {
+		l, err = limitspec.Load(tmp.LimitSpec)
+		if err != nil {
+			return err
+		}
 	}
-	g.Base = tmp.Base
+	if len(tmp.SubtotalsSpec) == 0 {
+		tmp.SubtotalsSpec = nil
+	}
+	g.Base.UnmarshalJSON(data)
 	g.VirtualColumns = vv
 	g.Filter = f
 	g.Granularity = gr
