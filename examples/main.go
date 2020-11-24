@@ -57,7 +57,12 @@ func main() {
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
 
-	q, err = d.Query().Load([]byte("{\"aggregations\":[{\"fieldName\":\"sum_delta\",\"name\":\"delta\",\"type\":\"longSum\"}],\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"dimension\":{\"dimension\":\"regionName\",\"outputName\":\"region\",\"outputType\":\"STRING\",\"type\":\"default\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"granularity\":\"day\",\"intervals\":[\"2016-06-26T23:46:21.573Z/2016-06-27T16:03:59.999Z\"],\"metric\":{\"metric\":\"delta\",\"type\":\"numeric\"},\"postAggregations\":[],\"queryType\":\"topN\",\"threshold\":50,\"virtualColumns\":[]}"))
+	q, err = d.Query().Load([]byte("{\"aggregations\":[{\"fieldName\":\"sum_delta\",\"name\":\"delta\",\"type\":\"longSum\"}],\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"dimension\":{\"dimension\":\"regionName\",\"outputName\":\"region\",\"outputType\":\"STRING\",\"type\":\"default\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"granularity\":\"hour\",\"intervals\":[\"2016-06-26T23:46:21.573Z/2016-07-27T16:03:59.999Z\"],\"metric\":{\"metric\":\"delta\",\"type\":\"numeric\"},\"postAggregations\":[],\"queryType\":\"topN\",\"threshold\":50,\"virtualColumns\":[]}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"aggregations\":[{\"fieldName\":\"sum_delta\",\"name\":\"delta\",\"type\":\"longSum\"}],\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"dimensions\":[{\"dimension\":\"countryName\",\"outputName\":\"country\",\"outputType\":\"STRING\",\"type\":\"default\"},{\"dimension\":\"regionName\",\"outputName\":\"region\",\"outputType\":\"STRING\",\"type\":\"default\"}],\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"granularity\":\"minute\",\"intervals\":[\"2016-06-26T23:58:44.369Z/2016-06-27T21:02:53.165Z\"],\"postAggregations\":[],\"queryType\":\"groupBy\",\"subtotalsSpec\":[],\"virtualColumns\":[]}"))
 	spew.Dump(q, err)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)

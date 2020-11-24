@@ -5,6 +5,7 @@ import (
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
+	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/filter"
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/havingspec"
@@ -16,6 +17,7 @@ import (
 
 type GroupBy struct {
 	Base
+	Dimensions       []builder.Dimension      `json:"dimensions"`
 	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns"`
 	Filter           builder.Filter           `json:"filter"`
 	Granularity      builder.Granularity      `json:"granularity"`
@@ -23,7 +25,7 @@ type GroupBy struct {
 	PostAggregations []builder.PostAggregator `json:"postAggregations"`
 	Having           builder.HavingSpec       `json:"having"`
 	LimitSpec        builder.LimitSpec        `json:"limitSpec"`
-	SubtotalsSpec    [][]string               `json:"subtotalsSpec"`
+	SubtotalsSpec    [][]string               `json:"subtotalsSpec",omitempty`
 }
 
 func NewGroupBy() *GroupBy {
@@ -44,6 +46,11 @@ func (g *GroupBy) SetIntervals(intervals []types.Interval) *GroupBy {
 
 func (g *GroupBy) SetContext(context map[string]interface{}) *GroupBy {
 	g.Base.SetContext(context)
+	return g
+}
+
+func (g *GroupBy) SetDimensions(dimensions []builder.Dimension) *GroupBy {
+	g.Dimensions = dimensions
 	return g
 }
 
@@ -88,8 +95,9 @@ func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 }
 
 func (g *GroupBy) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
+		Dimensions       []json.RawMessage `json:"dimensions"`
 		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
 		Filter           json.RawMessage   `json:"filter"`
 		Granularity      json.RawMessage   `json:"granularity"`
@@ -99,10 +107,17 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		LimitSpec        json.RawMessage   `json:"limitSpec"`
 		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	var err error
+	var d builder.Dimension
+	dd := make([]builder.Dimension, len(tmp.Dimensions))
+	for i := range tmp.Dimensions {
+		if d, err = dimension.Load(tmp.Dimensions[i]); err != nil {
+			return err
+		}
+		dd[i] = d
+	}
 	var v builder.VirtualColumn
 	vv := make([]builder.VirtualColumn, len(tmp.VirtualColumns))
 	for i := range tmp.VirtualColumns {
@@ -111,9 +126,12 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		}
 		vv[i] = v
 	}
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
 	gr, err := granularity.Load(tmp.Granularity)
 	if err != nil {
@@ -135,15 +153,25 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 		}
 		pp[i] = p
 	}
-	h, err := havingspec.Load(tmp.Having)
-	if err != nil {
-		return err
+	var h builder.HavingSpec
+	if tmp.Having != nil {
+		h, err = havingspec.Load(tmp.Having)
+		if err != nil {
+			return err
+		}
 	}
-	l, err := limitspec.Load(tmp.LimitSpec)
-	if err != nil {
-		return err
+	var l builder.LimitSpec
+	if tmp.LimitSpec != nil {
+		l, err = limitspec.Load(tmp.LimitSpec)
+		if err != nil {
+			return err
+		}
 	}
-	g.Base = tmp.Base
+	if len(tmp.SubtotalsSpec) == 0 {
+		tmp.SubtotalsSpec = nil
+	}
+	g.Base.UnmarshalJSON(data)
+	g.Dimensions = dd
 	g.VirtualColumns = vv
 	g.Filter = f
 	g.Granularity = gr

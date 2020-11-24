@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/filter"
@@ -139,6 +138,5 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 	t.Aggregations = aa
 	t.PostAggregations = pp
 	t.Limit = tmp.Limit
-	spew.Dump(t)
 	return nil
 }
