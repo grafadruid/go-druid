@@ -67,4 +67,8 @@ func main() {
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
 
+	q, err = d.Query().Load([]byte("{\"context\":{\"plop\":\"plep\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"filter\":{\"dimension\":\"countryName\",\"extractionFn\":null,\"type\":\"selector\",\"value\":\"France\"},\"intervals\":[\"2016-06-26T23:54:05.880Z/2016-06-27T21:07:39.779Z\"],\"limit\":0,\"query\":{\"type\":\"contains\",\"value\":\"Allier\"},\"queryType\":\"search\",\"searchDimensions\":[{\"dimension\":\"regionName\",\"outputType\":\"STRING\",\"type\":\"default\"}]}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
 }
