@@ -77,8 +77,8 @@ func (s *Search) SetSort(sort *SearchSortSpec) *Search {
 }
 
 func (s *Search) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
 		Filter           json.RawMessage   `json:"filter"`
 		Granularity      json.RawMessage   `json:"granularity"`
 		Limit            int64             `json:"limit"`
@@ -86,17 +86,22 @@ func (s *Search) UnmarshalJSON(data []byte) error {
 		Query            json.RawMessage   `json:"query"`
 		Sort             *SearchSortSpec   `json:"sort"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	var err error
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
-	gr, err := granularity.Load(tmp.Granularity)
-	if err != nil {
-		return err
+	var gr builder.Granularity
+	if tmp.Granularity != nil {
+		gr, err = granularity.Load(tmp.Granularity)
+		if err != nil {
+			return err
+		}
 	}
 	var se builder.Dimension
 	ss := make([]builder.Dimension, len(tmp.SearchDimensions))
@@ -110,7 +115,7 @@ func (s *Search) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	s.Base = tmp.Base
+	s.Base.UnmarshalJSON(data)
 	s.Filter = f
 	s.Granularity = gr
 	s.SearchDimensions = ss
