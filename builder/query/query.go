@@ -10,7 +10,7 @@ import (
 
 type Base struct {
 	ID         string                 `json:"ID,omitempty"`
-	QueryType  builder.ComponentType  `json:"queryType"`
+	QueryType  builder.ComponentType  `json:"queryType,omitempty"`
 	DataSource builder.DataSource     `json:"dataSource,omitempty"`
 	Intervals  []types.Interval       `json:"intervals,omitempty"`
 	Context    map[string]interface{} `json:"context,omitempty"`
@@ -48,7 +48,7 @@ func (b *Base) Type() builder.ComponentType {
 func (b *Base) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		ID         string                 `json:"ID,omitempty"`
-		QueryType  builder.ComponentType  `json:"queryType"`
+		QueryType  builder.ComponentType  `json:"queryType,omitempty"`
 		DataSource json.RawMessage        `json:"dataSource,omitempty"`
 		Intervals  []types.Interval       `json:"intervals,omitempty"`
 		Context    map[string]interface{} `json:"context,omitempty"`
@@ -75,7 +75,7 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 
 func Load(data []byte) (builder.Query, error) {
 	var t struct {
-		Typ builder.ComponentType `json:"queryType"`
+		Typ builder.ComponentType `json:"queryType,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err

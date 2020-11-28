@@ -9,11 +9,11 @@ import (
 
 type TimeFormat struct {
 	Base
-	Format      string              `json:"format"`
-	TimeZone    types.DateTimeZone  `json:"timeZone"`
-	Locale      string              `json:"locale"`
-	Granularity builder.Granularity `json:"granularity"`
-	AsMillis    bool                `json:"asMillis"`
+	Format      string              `json:"format,omitempty"`
+	TimeZone    types.DateTimeZone  `json:"timeZone,omitempty"`
+	Locale      string              `json:"locale,omitempty"`
+	Granularity builder.Granularity `json:"granularity,omitempty"`
+	AsMillis    bool                `json:"asMillis,omitempty"`
 }
 
 func NewTimeFormat() *TimeFormat {
@@ -50,11 +50,11 @@ func (t *TimeFormat) SetAsMillis(asMillis bool) *TimeFormat {
 func (t *TimeFormat) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Format      string             `json:"format"`
-		TimeZone    types.DateTimeZone `json:"timeZone"`
-		Locale      string             `json:"locale"`
-		Granularity json.RawMessage    `json:"granularity"`
-		AsMillis    bool               `json:"asMillis"`
+		Format      string             `json:"format,omitempty"`
+		TimeZone    types.DateTimeZone `json:"timeZone,omitempty"`
+		Locale      string             `json:"locale,omitempty"`
+		Granularity json.RawMessage    `json:"granularity,omitempty"`
+		AsMillis    bool               `json:"asMillis,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

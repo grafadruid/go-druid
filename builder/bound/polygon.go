@@ -2,8 +2,8 @@ package bound
 
 type Polygon struct {
 	Base
-	Abscissa []float64 `json:"abscissa"`
-	Ordinate []float64 `json:"ordinate"`
+	Abscissa []float64 `json:"abscissa,omitempty"`
+	Ordinate []float64 `json:"ordinate,omitempty"`
 }
 
 func NewPolygon() *Polygon {

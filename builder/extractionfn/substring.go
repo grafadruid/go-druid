@@ -3,7 +3,7 @@ package extractionfn
 type Substring struct {
 	Base
 	Index  int64 `json:"index,omitempty"`
-	Length int64 `json:"length"`
+	Length int64 `json:"length,omitempty"`
 }
 
 func NewSubstring() *Substring {

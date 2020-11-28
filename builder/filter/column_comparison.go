@@ -9,7 +9,7 @@ import (
 
 type ColumnComparison struct {
 	Base
-	Dimensions []builder.Dimension `json:"dimensions"`
+	Dimensions []builder.Dimension `json:"dimensions,omitempty"`
 }
 
 func NewColumnComparison() *ColumnComparison {
@@ -27,7 +27,7 @@ func (c *ColumnComparison) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimensions []json.RawMessage `json:"dimensions"`
+		Dimensions []json.RawMessage `json:"dimensions,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

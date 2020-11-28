@@ -8,7 +8,7 @@ import (
 
 type Not struct {
 	Base
-	HavingSpec builder.HavingSpec `json:"havingSpec"`
+	HavingSpec builder.HavingSpec `json:"havingSpec,omitempty"`
 }
 
 func NewNot() *Not {
@@ -25,7 +25,7 @@ func (n *Not) SetHavingSpecs(havingSpec builder.HavingSpec) *Not {
 func (n *Not) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		HavingSpec json.RawMessage `json:"havingSpec"`
+		HavingSpec json.RawMessage `json:"havingSpec,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

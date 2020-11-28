@@ -8,9 +8,9 @@ import (
 
 type Arithmetic struct {
 	Base
-	Fn       string                   `json:"fn"`
-	Fields   []builder.PostAggregator `json:"fields"`
-	Ordering string                   `json:"ordering"`
+	Fn       string                   `json:"fn,omitempty"`
+	Fields   []builder.PostAggregator `json:"fields,omitempty"`
+	Ordering string                   `json:"ordering,omitempty"`
 }
 
 func NewArithmetic() *Arithmetic {
@@ -42,9 +42,9 @@ func (a *Arithmetic) SetOrdering(ordering string) *Arithmetic {
 func (a *Arithmetic) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Fn       string            `json:"fn"`
-		Fields   []json.RawMessage `json:"fields"`
-		Ordering string            `json:"ordering"`
+		Fn       string            `json:"fn,omitempty"`
+		Fields   []json.RawMessage `json:"fields,omitempty"`
+		Ordering string            `json:"ordering,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

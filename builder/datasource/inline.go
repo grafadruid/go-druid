@@ -2,9 +2,9 @@ package datasource
 
 type Inline struct {
 	Base
-	ColumnNames []string   `json:"columnNames"`
-	ColumnTypes []string   `json:"columnTypes"`
-	Rows        [][]string `json:"rows"`
+	ColumnNames []string   `json:"columnNames,omitempty"`
+	ColumnTypes []string   `json:"columnTypes,omitempty"`
+	Rows        [][]string `json:"rows,omitempty"`
 }
 
 func NewInline() *Inline {

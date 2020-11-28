@@ -8,9 +8,9 @@ import (
 )
 
 type Base struct {
-	Typ        builder.ComponentType `json:"type"`
-	Dimension  string                `json:"dimension"`
-	OutputName string                `json:"outputName"`
+	Typ        builder.ComponentType `json:"type,omitempty"`
+	Dimension  string                `json:"dimension,omitempty"`
+	OutputName string                `json:"outputName,omitempty"`
 	OutputType types.OutputType      `json:"outputType,omitempty"`
 }
 
@@ -40,7 +40,7 @@ func (b *Base) Type() builder.ComponentType {
 
 func Load(data []byte) (builder.Dimension, error) {
 	var t struct {
-		Typ builder.ComponentType `json:"type"`
+		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err

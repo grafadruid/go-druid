@@ -9,9 +9,9 @@ import (
 
 type Extraction struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Value        string               `json:"value"`
-	ExtractionFn builder.ExtractionFn `json:"extractionFn"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Value        string               `json:"value,omitempty"`
+	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 }
 
 func NewExtraction() *Extraction {
@@ -39,9 +39,9 @@ func (e *Extraction) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Value        string          `json:"value"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Value        string          `json:"value,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

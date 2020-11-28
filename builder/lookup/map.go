@@ -2,8 +2,8 @@ package lookup
 
 type Map struct {
 	Base
-	Map        map[string]string `json:"map"`
-	IsOneToOne bool              `json:"isOneToOne"`
+	Map        map[string]string `json:"map,omitempty"`
+	IsOneToOne bool              `json:"isOneToOne,omitempty"`
 }
 
 func NewMap() *Map {

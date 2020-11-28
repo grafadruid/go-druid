@@ -2,8 +2,8 @@ package extractionfn
 
 type Javascript struct {
 	Base
-	Function  string `json:"function"`
-	Injective bool   `json:"injective"`
+	Function  string `json:"function,omitempty"`
+	Injective bool   `json:"injective,omitempty"`
 }
 
 func NewJavascript() *Javascript {

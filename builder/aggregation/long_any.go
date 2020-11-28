@@ -2,7 +2,7 @@ package aggregation
 
 type LongAny struct {
 	Base
-	FieldName string `json:"fieldName"`
+	FieldName string `json:"fieldName,omitempty"`
 }
 
 func NewLongAny() *LongAny {

@@ -2,7 +2,7 @@ package aggregation
 
 type Histogram struct {
 	Base
-	FieldName string    `json:"fieldName"`
+	FieldName string    `json:"fieldName,omitempty"`
 	Breaks    []float64 `json:"breaks,omitempty"`
 }
 

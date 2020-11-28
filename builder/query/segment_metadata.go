@@ -23,11 +23,11 @@ const (
 
 type SegmentMetadata struct {
 	Base
-	ToInclude              builder.ToInclude `json:"toInclude"`
-	Merge                  bool              `json:"merge"`
-	AnalysisTypes          []AnalysisType    `json:"analysisTypes"`
-	UsingDefaultInterval   bool              `json:"usingDefaultInterval"`
-	LenientAggregatorMerge bool              `json:"lenientAggregatorMerge"`
+	ToInclude              builder.ToInclude `json:"toInclude,omitempty"`
+	Merge                  bool              `json:"merge,omitempty"`
+	AnalysisTypes          []AnalysisType    `json:"analysisTypes,omitempty"`
+	UsingDefaultInterval   bool              `json:"usingDefaultInterval,omitempty"`
+	LenientAggregatorMerge bool              `json:"lenientAggregatorMerge,omitempty"`
 }
 
 func NewSegmentMetadata() *SegmentMetadata {
@@ -79,11 +79,11 @@ func (s *SegmentMetadata) SetLenientAggregatorMerge(lenientAggregatorMerge bool)
 func (s *SegmentMetadata) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		ToInclude              json.RawMessage `json:"toInclude"`
-		Merge                  bool            `json:"merge"`
-		AnalysisTypes          []AnalysisType  `json:"analysisTypes"`
-		UsingDefaultInterval   bool            `json:"usingDefaultInterval"`
-		LenientAggregatorMerge bool            `json:"lenientAggregatorMerge"`
+		ToInclude              json.RawMessage `json:"toInclude,omitempty"`
+		Merge                  bool            `json:"merge,omitempty"`
+		AnalysisTypes          []AnalysisType  `json:"analysisTypes,omitempty"`
+		UsingDefaultInterval   bool            `json:"usingDefaultInterval,omitempty"`
+		LenientAggregatorMerge bool            `json:"lenientAggregatorMerge,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

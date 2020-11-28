@@ -9,11 +9,11 @@ import (
 
 type Join struct {
 	Base
-	Left        builder.DataSource `json:"left"`
-	Right       builder.DataSource `json:"right"`
-	RightPrefix string             `json:"rightPrefix"`
-	Condition   string             `json:"condition"`
-	JoinType    types.JoinType     `json:"joinType"`
+	Left        builder.DataSource `json:"left,omitempty"`
+	Right       builder.DataSource `json:"right,omitempty"`
+	RightPrefix string             `json:"rightPrefix,omitempty"`
+	Condition   string             `json:"condition,omitempty"`
+	JoinType    types.JoinType     `json:"joinType,omitempty"`
 }
 
 func NewJoin() *Join {
@@ -50,11 +50,11 @@ func (j *Join) SetJoinType(joinType types.JoinType) *Join {
 func (j *Join) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Left        json.RawMessage `json:"left"`
-		Right       json.RawMessage `json:"right"`
-		RightPrefix string          `json:"rightPrefix"`
-		Condition   string          `json:"condition"`
-		JoinType    types.JoinType  `json:"joinType"`
+		Left        json.RawMessage `json:"left,omitempty"`
+		Right       json.RawMessage `json:"right,omitempty"`
+		RightPrefix string          `json:"rightPrefix,omitempty"`
+		Condition   string          `json:"condition,omitempty"`
+		JoinType    types.JoinType  `json:"joinType,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

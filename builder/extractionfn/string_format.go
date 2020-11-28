@@ -6,8 +6,8 @@ import (
 
 type StringFormat struct {
 	Base
-	Format       string             `json:"format"`
-	NullHandling types.NullHandling `json:"nullHandling"`
+	Format       string             `json:"format,omitempty"`
+	NullHandling types.NullHandling `json:"nullHandling,omitempty"`
 }
 
 func NewStringFormat() *StringFormat {

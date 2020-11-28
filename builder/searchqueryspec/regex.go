@@ -2,7 +2,7 @@ package searchqueryspec
 
 type Regex struct {
 	Base
-	Pattern string `json:"pattern"`
+	Pattern string `json:"pattern,omitempty"`
 }
 
 func NewRegex() *Regex {

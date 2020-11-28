@@ -6,8 +6,8 @@ import (
 
 type Duration struct {
 	Base
-	Duration time.Duration `json:"duration"`
-	Origin   time.Time     `json:"origin"`
+	Duration time.Duration `json:"duration,omitempty"`
+	Origin   time.Time     `json:"origin,omitempty"`
 }
 
 func NewDuration() *Duration {

@@ -2,7 +2,7 @@ package topnmetric
 
 type AlphaNumeric struct {
 	Base
-	PreviousStop string `json:"previousStop"`
+	PreviousStop string `json:"previousStop,omitempty"`
 }
 
 func NewAlphaNumeric() *AlphaNumeric {

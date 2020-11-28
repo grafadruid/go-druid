@@ -10,8 +10,8 @@ import (
 
 type Interval struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Intervals    []*types.Interval    `json:"intervals"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Intervals    []*types.Interval    `json:"intervals,omitempty"`
 	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
@@ -46,10 +46,10 @@ func (i *Interval) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string            `json:"dimension"`
-		Intervals    []*types.Interval `json:"intervals"`
-		ExtractionFn json.RawMessage   `json:"extractionFn"`
-		FilterTuning *FilterTuning     `json:"filterTuning"`
+		Dimension    string            `json:"dimension,omitempty"`
+		Intervals    []*types.Interval `json:"intervals,omitempty"`
+		ExtractionFn json.RawMessage   `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning     `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

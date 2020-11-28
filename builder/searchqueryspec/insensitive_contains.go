@@ -2,7 +2,7 @@ package searchqueryspec
 
 type InsensitiveContains struct {
 	Base
-	Value string `json:"value"`
+	Value string `json:"value,omitempty"`
 }
 
 func NewInsensitiveContains() *InsensitiveContains {

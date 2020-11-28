@@ -9,7 +9,7 @@ import (
 
 type SearchQuery struct {
 	Base
-	Query builder.SearchQuerySpec `json:"query"`
+	Query builder.SearchQuerySpec `json:"query,omitempty"`
 }
 
 func NewSearchQuery() *SearchQuery {
@@ -26,7 +26,7 @@ func (s *SearchQuery) SetQuery(q builder.SearchQuerySpec) *SearchQuery {
 func (s *SearchQuery) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Query json.RawMessage `json:"query"`
+		Query json.RawMessage `json:"query,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

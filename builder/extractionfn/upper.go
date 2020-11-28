@@ -2,7 +2,7 @@ package extractionfn
 
 type Upper struct {
 	Base
-	Locale string `json:"locale"`
+	Locale string `json:"locale,omitempty"`
 }
 
 func NewUpper() *Upper {

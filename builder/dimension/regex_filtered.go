@@ -9,8 +9,8 @@ import (
 
 type RegexFiltered struct {
 	Base
-	Delegate builder.Dimension `json:"delegate"`
-	Pattern  string            `json:"pattern"`
+	Delegate builder.Dimension `json:"delegate,omitempty"`
+	Pattern  string            `json:"pattern,omitempty"`
 }
 
 func NewRegexFiltered() *RegexFiltered {
@@ -47,8 +47,8 @@ func (r *RegexFiltered) SetPattern(pattern string) *RegexFiltered {
 func (r *RegexFiltered) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Delegate json.RawMessage `json:"delegate"`
-		Pattern  string          `json:"pattern"`
+		Delegate json.RawMessage `json:"delegate,omitempty"`
+		Pattern  string          `json:"pattern,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

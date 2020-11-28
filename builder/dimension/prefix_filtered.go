@@ -9,8 +9,8 @@ import (
 
 type PrefixFiltered struct {
 	Base
-	Delegate builder.Dimension `json:"delegate"`
-	Prefix   string            `json:"prefix"`
+	Delegate builder.Dimension `json:"delegate,omitempty"`
+	Prefix   string            `json:"prefix,omitempty"`
 }
 
 func NewPrefixFiltered() *PrefixFiltered {
@@ -47,8 +47,8 @@ func (p *PrefixFiltered) SetPrefix(prefix string) *PrefixFiltered {
 func (p *PrefixFiltered) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Delegate json.RawMessage `json:"delegate"`
-		Prefix   string          `json:"prefix"`
+		Delegate json.RawMessage `json:"delegate,omitempty"`
+		Prefix   string          `json:"prefix,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

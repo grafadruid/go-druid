@@ -2,7 +2,7 @@ package filter
 
 type And struct {
 	Base
-	Fields []string `json:"fields"`
+	Fields []string `json:"fields,omitempty"`
 }
 
 func NewAnd() *And {

@@ -8,7 +8,7 @@ import (
 
 type LongLeast struct {
 	Base
-	Fields []builder.PostAggregator `json:"fields"`
+	Fields []builder.PostAggregator `json:"fields,omitempty"`
 }
 
 func NewLongLeast() *LongLeast {
@@ -30,7 +30,7 @@ func (l *LongLeast) SetFields(fields []builder.PostAggregator) *LongLeast {
 func (l *LongLeast) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Fields []json.RawMessage `json:"fields"`
+		Fields []json.RawMessage `json:"fields,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

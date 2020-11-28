@@ -2,8 +2,8 @@ package postaggregation
 
 type Expression struct {
 	Base
-	Expression string `json:"expression"`
-	Ordering   string `json:"ordering"`
+	Expression string `json:"expression,omitempty"`
+	Ordering   string `json:"ordering,omitempty"`
 }
 
 func NewExpression() *Expression {

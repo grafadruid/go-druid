@@ -9,8 +9,8 @@ import (
 
 type Spatial struct {
 	Base
-	Dimension    string        `json:"dimension"`
-	Bound        builder.Bound `json:"bound"`
+	Dimension    string        `json:"dimension,omitempty"`
+	Bound        builder.Bound `json:"bound,omitempty"`
 	FilterTuning *FilterTuning `json:"filterTuning,omitempty"`
 }
 
@@ -38,9 +38,9 @@ func (s *Spatial) SetFilterTuning(filterTuning *FilterTuning) *Spatial {
 func (s *Spatial) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Bound        json.RawMessage `json:"bound"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Bound        json.RawMessage `json:"bound,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

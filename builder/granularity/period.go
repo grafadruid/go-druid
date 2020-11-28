@@ -8,9 +8,9 @@ import (
 
 type Period struct {
 	Base
-	Period   time.Duration      `json:"period"`
-	Origin   time.Time          `json:"origin"`
-	TimeZone types.DateTimeZone `json:"timeZone"`
+	Period   time.Duration      `json:"period,omitempty"`
+	Origin   time.Time          `json:"origin,omitempty"`
+	TimeZone types.DateTimeZone `json:"timeZone,omitempty"`
 }
 
 func NewPeriod() *Period {

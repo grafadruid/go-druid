@@ -2,8 +2,8 @@ package searchqueryspec
 
 type Contains struct {
 	Base
-	Value         string `json:"value"`
-	CaseSensitive bool   `json:"caseSensitive"`
+	Value         string `json:"value,omitempty"`
+	CaseSensitive bool   `json:"caseSensitive,omitempty"`
 }
 
 func NewContains() *Contains {

@@ -2,7 +2,7 @@ package datasource
 
 type GlobalTable struct {
 	Base
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 }
 
 func NewGlobalTable() *GlobalTable {

@@ -2,7 +2,7 @@ package postaggregation
 
 type Constant struct {
 	Base
-	Value float64 `json:"value"`
+	Value float64 `json:"value,omitempty"`
 }
 
 func NewConstant() *Constant {

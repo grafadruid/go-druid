@@ -2,7 +2,7 @@ package filter
 
 type Or struct {
 	Base
-	Fields []string `json:"fields"`
+	Fields []string `json:"fields,omitempty"`
 }
 
 func NewOr() *Or {

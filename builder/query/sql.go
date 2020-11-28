@@ -6,15 +6,15 @@ import (
 
 type SQL struct {
 	Base
-	Query        string         `json:"query"`
+	Query        string         `json:"query,omitempty"`
 	ResultFormat string         `json:"resultFormat,omitempty"`
 	Header       bool           `json:"header,omitempty"`
 	Parameters   []SQLParameter `json:"parameters,omitempty"`
 }
 
 type SQLParameter struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 func NewSQL() *SQL {
@@ -50,7 +50,7 @@ func (s *SQL) SetParameters(parameters []SQLParameter) *SQL {
 
 func (s *SQL) UnmarshalJSON(data []byte) error {
 	var tmp struct {
-		Query        string         `json:"query"`
+		Query        string         `json:"query,omitempty"`
 		ResultFormat string         `json:"resultFormat,omitempty"`
 		Header       bool           `json:"header,omitempty"`
 		Parameters   []SQLParameter `json:"parameters,omitempty"`

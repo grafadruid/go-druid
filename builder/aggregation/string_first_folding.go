@@ -2,8 +2,8 @@ package aggregation
 
 type StringFirstFolding struct {
 	Base
-	FieldName      string `json:"fieldName"`
-	MaxStringBytes int64  `json:"maxStringBytes"`
+	FieldName      string `json:"fieldName,omitempty"`
+	MaxStringBytes int64  `json:"maxStringBytes,omitempty"`
 }
 
 func NewStringFirstFolding() *StringFirstFolding {
