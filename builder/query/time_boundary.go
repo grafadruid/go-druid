@@ -46,19 +46,22 @@ func (t *TimeBoundary) SetFilter(filter builder.Filter) *TimeBoundary {
 }
 
 func (t *TimeBoundary) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
 		Bound  string          `json:"bound,omitempty"`
 		Filter json.RawMessage `json:"filter,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	f, err := filter.Load(tmp.Filter)
-	if err != nil {
-		return err
+	var f builder.Filter
+	if tmp.Filter != nil {
+		f, err = filter.Load(tmp.Filter)
+		if err != nil {
+			return err
+		}
 	}
-	t.Base = tmp.Base
+	t.Base.UnmarshalJSON(data)
 	t.Bound = tmp.Bound
 	t.Filter = f
 	return nil

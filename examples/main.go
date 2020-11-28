@@ -71,4 +71,9 @@ func main() {
 	spew.Dump(q, err)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"bound\":\"minTime\",\"context\":{},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"intervals\":[\"2016-06-26T17:10:06.877Z/2016-06-27T20:16:36.865Z\"],\"queryType\":\"timeBoundary\"}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
 }
