@@ -17,14 +17,14 @@ import (
 
 type GroupBy struct {
 	Base
-	Dimensions       []builder.Dimension      `json:"dimensions"`
-	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns"`
-	Filter           builder.Filter           `json:"filter"`
-	Granularity      builder.Granularity      `json:"granularity"`
-	Aggregations     []builder.Aggregator     `json:"aggregations"`
-	PostAggregations []builder.PostAggregator `json:"postAggregations"`
-	Having           builder.HavingSpec       `json:"having"`
-	LimitSpec        builder.LimitSpec        `json:"limitSpec"`
+	Dimensions       []builder.Dimension      `json:"dimensions,omitempty"`
+	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns,omitempty"`
+	Filter           builder.Filter           `json:"filter,omitempty"`
+	Granularity      builder.Granularity      `json:"granularity,omitempty"`
+	Aggregations     []builder.Aggregator     `json:"aggregations,omitempty"`
+	PostAggregations []builder.PostAggregator `json:"postAggregations,omitempty"`
+	Having           builder.HavingSpec       `json:"having,omitempty"`
+	LimitSpec        builder.LimitSpec        `json:"limitSpec,omitempty"`
 	SubtotalsSpec    [][]string               `json:"subtotalsSpec",omitempty`
 }
 
@@ -97,15 +97,15 @@ func (g *GroupBy) SetSubtotalsSpec(subtotalsSpec [][]string) *GroupBy {
 func (g *GroupBy) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		Dimensions       []json.RawMessage `json:"dimensions"`
-		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
-		Filter           json.RawMessage   `json:"filter"`
-		Granularity      json.RawMessage   `json:"granularity"`
-		Aggregations     []json.RawMessage `json:"aggregations"`
-		PostAggregations []json.RawMessage `json:"postAggregations"`
-		Having           json.RawMessage   `json:"having"`
-		LimitSpec        json.RawMessage   `json:"limitSpec"`
-		SubtotalsSpec    [][]string        `json:"subtotalsSpec"`
+		Dimensions       []json.RawMessage `json:"dimensions,omitempty"`
+		VirtualColumns   []json.RawMessage `json:"virtualColumns,omitempty"`
+		Filter           json.RawMessage   `json:"filter,omitempty"`
+		Granularity      json.RawMessage   `json:"granularity,omitempty"`
+		Aggregations     []json.RawMessage `json:"aggregations,omitempty"`
+		PostAggregations []json.RawMessage `json:"postAggregations,omitempty"`
+		Having           json.RawMessage   `json:"having,omitempty"`
+		LimitSpec        json.RawMessage   `json:"limitSpec,omitempty"`
+		SubtotalsSpec    [][]string        `json:"subtotalsSpec,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

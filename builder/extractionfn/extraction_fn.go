@@ -7,7 +7,7 @@ import (
 )
 
 type Base struct {
-	Typ builder.ComponentType `json:"type"`
+	Typ builder.ComponentType `json:"type,omitempty"`
 }
 
 func (b *Base) SetType(typ builder.ComponentType) *Base {
@@ -21,7 +21,7 @@ func (b *Base) Type() builder.ComponentType {
 
 func Load(data []byte) (builder.ExtractionFn, error) {
 	var t struct {
-		Typ builder.ComponentType `json:"type"`
+		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err

@@ -2,9 +2,9 @@ package bound
 
 type Rectangular struct {
 	Base
-	MinCoords []float64 `json:"minCoords"`
-	MaxCoords []float64 `json:"maxCoords"`
-	Limit     int64     `json:"limit"`
+	MinCoords []float64 `json:"minCoords,omitempty"`
+	MaxCoords []float64 `json:"maxCoords,omitempty"`
+	Limit     int64     `json:"limit,omitempty"`
 }
 
 func NewRectangular() *Rectangular {

@@ -2,9 +2,9 @@ package aggregation
 
 type HyperUnique struct {
 	Base
-	FieldName          string `json:"fieldName"`
-	IsInputHyperUnique bool   `json:"isInputHyperUnique"`
-	Round              bool   `json:"round"`
+	FieldName          string `json:"fieldName,omitempty"`
+	IsInputHyperUnique bool   `json:"isInputHyperUnique,omitempty"`
+	Round              bool   `json:"round,omitempty"`
 }
 
 func NewHyperUnique() *HyperUnique {

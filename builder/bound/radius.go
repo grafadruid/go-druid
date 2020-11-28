@@ -2,8 +2,8 @@ package bound
 
 type Radius struct {
 	Base
-	Coords []float64 `json:"coords"`
-	Radius float64   `json:"radius"`
+	Coords []float64 `json:"coords,omitempty"`
+	Radius float64   `json:"radius,omitempty"`
 }
 
 func NewRadius() *Radius {

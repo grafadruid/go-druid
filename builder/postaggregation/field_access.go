@@ -2,7 +2,7 @@ package postaggregation
 
 type FieldAccess struct {
 	Base
-	FieldName string `json:"fieldName"`
+	FieldName string `json:"fieldName,omitempty"`
 }
 
 func NewFieldAccess() *FieldAccess {

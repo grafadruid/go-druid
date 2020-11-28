@@ -2,10 +2,10 @@ package extractionfn
 
 type Regex struct {
 	Base
-	Expr                    string `json:"expr"`
-	Index                   int64  `json:"index"`
-	ReplaceMissingValue     bool   `json:"replaceMissingValue"`
-	ReplaceMissingValueWith string `json:"replaceMissingValueWith"`
+	Expr                    string `json:"expr,omitempty"`
+	Index                   int64  `json:"index,omitempty"`
+	ReplaceMissingValue     bool   `json:"replaceMissingValue,omitempty"`
+	ReplaceMissingValueWith string `json:"replaceMissingValueWith,omitempty"`
 }
 
 func NewRegex() *Regex {

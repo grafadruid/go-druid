@@ -9,7 +9,7 @@ import (
 
 type Extraction struct {
 	Base
-	ExtractionFn builder.ExtractionFn `json:"extractionFn"`
+	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 }
 
 func NewExtraction() *Extraction {
@@ -41,7 +41,7 @@ func (e *Extraction) SetExtractionFn(extractionFn builder.ExtractionFn) *Extract
 func (e *Extraction) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		ExtractionFn json.RawMessage `json:"extractionFn"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

@@ -8,7 +8,7 @@ import (
 
 type And struct {
 	Base
-	HavingSpecs []builder.HavingSpec `json:"havingSpecs"`
+	HavingSpecs []builder.HavingSpec `json:"havingSpecs,omitempty"`
 }
 
 func NewAnd() *And {
@@ -25,7 +25,7 @@ func (a *And) SetHavingSpecs(havingSpecs []builder.HavingSpec) *And {
 func (a *And) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		HavingSpecs []json.RawMessage `json:"havingSpecs"`
+		HavingSpecs []json.RawMessage `json:"havingSpecs,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

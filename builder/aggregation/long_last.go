@@ -2,7 +2,7 @@ package aggregation
 
 type LongLast struct {
 	Base
-	FieldName string `json:"fieldName"`
+	FieldName string `json:"fieldName,omitempty"`
 }
 
 func NewLongLast() *LongLast {

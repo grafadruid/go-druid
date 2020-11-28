@@ -8,7 +8,7 @@ import (
 
 type DoubleGreatest struct {
 	Base
-	Fields []builder.PostAggregator `json:"fields"`
+	Fields []builder.PostAggregator `json:"fields,omitempty"`
 }
 
 func NewDoubleGreatest() *DoubleGreatest {
@@ -30,7 +30,7 @@ func (d *DoubleGreatest) SetFields(fields []builder.PostAggregator) *DoubleGreat
 func (d *DoubleGreatest) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Fields []json.RawMessage `json:"fields"`
+		Fields []json.RawMessage `json:"fields,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

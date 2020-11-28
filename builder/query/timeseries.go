@@ -15,13 +15,13 @@ import (
 
 type Timeseries struct {
 	Base
-	Descending       bool                     `json:"descending"`
-	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns"`
-	Filter           builder.Filter           `json:"filter"`
-	Granularity      builder.Granularity      `json:"granularity"`
-	Aggregations     []builder.Aggregator     `json:"aggregations"`
-	PostAggregations []builder.PostAggregator `json:"postAggregations"`
-	Limit            int64                    `json:"limit"`
+	Descending       bool                     `json:"descending,omitempty"`
+	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns,omitempty"`
+	Filter           builder.Filter           `json:"filter,omitempty"`
+	Granularity      builder.Granularity      `json:"granularity,omitempty"`
+	Aggregations     []builder.Aggregator     `json:"aggregations,omitempty"`
+	PostAggregations []builder.PostAggregator `json:"postAggregations,omitempty"`
+	Limit            int64                    `json:"limit,omitempty"`
 }
 
 func NewTimeseries() *Timeseries {
@@ -83,13 +83,13 @@ func (t *Timeseries) SetLimit(limit int64) *Timeseries {
 func (t *Timeseries) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		Descending       bool              `json:"descending"`
-		VirtualColumns   []json.RawMessage `json:"virtualColumns"`
-		Filter           json.RawMessage   `json:"filter"`
-		Granularity      json.RawMessage   `json:"granularity"`
-		Aggregations     []json.RawMessage `json:"aggregations"`
-		PostAggregations []json.RawMessage `json:"postAggregations"`
-		Limit            int64             `json:"limit"`
+		Descending       bool              `json:"descending,omitempty"`
+		VirtualColumns   []json.RawMessage `json:"virtualColumns,omitempty"`
+		Filter           json.RawMessage   `json:"filter,omitempty"`
+		Granularity      json.RawMessage   `json:"granularity,omitempty"`
+		Aggregations     []json.RawMessage `json:"aggregations,omitempty"`
+		PostAggregations []json.RawMessage `json:"postAggregations,omitempty"`
+		Limit            int64             `json:"limit,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

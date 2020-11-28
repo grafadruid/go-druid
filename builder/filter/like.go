@@ -9,11 +9,11 @@ import (
 
 type Like struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Pattern      string               `json:"pattern"`
-	Escape       string               `json:"escapte"`
-	ExtractionFn builder.ExtractionFn `json:"extractionFn"`
-	FilterTuning *FilterTuning        `json:"filterTuning"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Pattern      string               `json:"pattern,omitempty"`
+	Escape       string               `json:"escapte,omitempty"`
+	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
+	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
 
 func NewLike() *Like {
@@ -51,11 +51,11 @@ func (l *Like) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Pattern      string          `json:"pattern"`
-		Escape       string          `json:"escape"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Pattern      string          `json:"pattern,omitempty"`
+		Escape       string          `json:"escape,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

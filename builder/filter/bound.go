@@ -10,7 +10,7 @@ import (
 
 type Bound struct {
 	Base
-	Dimension    string                 `json:"dimension"`
+	Dimension    string                 `json:"dimension,omitempty"`
 	Lower        string                 `json:"lower,omitempty"`
 	Upper        string                 `json:"upper,omitempty"`
 	LowerStrict  bool                   `json:"lowerStrict,omitempty"`
@@ -64,13 +64,13 @@ func (b *Bound) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string                 `json:"dimension"`
-		Lower        string                 `json:"lower"`
-		Upper        string                 `json:"upper"`
-		LowerStrict  bool                   `json:"lowerStrict"`
-		UpperStrict  bool                   `json:"upperStrict"`
-		ExtractionFn json.RawMessage        `json:"extractionFn"`
-		Ordering     types.StringComparator `json:"ordering"`
+		Dimension    string                 `json:"dimension,omitempty"`
+		Lower        string                 `json:"lower,omitempty"`
+		Upper        string                 `json:"upper,omitempty"`
+		LowerStrict  bool                   `json:"lowerStrict,omitempty"`
+		UpperStrict  bool                   `json:"upperStrict,omitempty"`
+		ExtractionFn json.RawMessage        `json:"extractionFn,omitempty"`
+		Ordering     types.StringComparator `json:"ordering,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

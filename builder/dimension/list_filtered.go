@@ -9,9 +9,9 @@ import (
 
 type ListFiltered struct {
 	Base
-	Delegate    builder.Dimension `json:"delegate"`
-	Values      []string          `json:"values"`
-	IsWhiteList bool              `json:"isWhiteList"`
+	Delegate    builder.Dimension `json:"delegate,omitempty"`
+	Values      []string          `json:"values,omitempty"`
+	IsWhiteList bool              `json:"isWhiteList,omitempty"`
 }
 
 func NewListFiltered() *ListFiltered {
@@ -53,9 +53,9 @@ func (l *ListFiltered) SetIsWhiteList(isWhiteList bool) *ListFiltered {
 func (l *ListFiltered) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Delegate    json.RawMessage `json:"delegate"`
-		Values      []string        `json:"values"`
-		IsWhiteList bool            `json:"isWhiteList"`
+		Delegate    json.RawMessage `json:"delegate,omitempty"`
+		Values      []string        `json:"values,omitempty"`
+		IsWhiteList bool            `json:"isWhiteList,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

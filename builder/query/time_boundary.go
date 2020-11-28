@@ -10,8 +10,8 @@ import (
 
 type TimeBoundary struct {
 	Base
-	Bound  string         `json:"bound"`
-	Filter builder.Filter `json:"filter"`
+	Bound  string         `json:"bound,omitempty"`
+	Filter builder.Filter `json:"filter,omitempty"`
 }
 
 func NewTimeBoundary() *TimeBoundary {
@@ -48,8 +48,8 @@ func (t *TimeBoundary) SetFilter(filter builder.Filter) *TimeBoundary {
 func (t *TimeBoundary) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Bound  string          `json:"bound"`
-		Filter json.RawMessage `json:"filter"`
+		Bound  string          `json:"bound,omitempty"`
+		Filter json.RawMessage `json:"filter,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

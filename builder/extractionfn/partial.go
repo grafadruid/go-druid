@@ -2,7 +2,7 @@ package extractionfn
 
 type Partial struct {
 	Base
-	Expr string `json:"expr"`
+	Expr string `json:"expr,omitempty"`
 }
 
 func NewPartial() *Partial {

@@ -9,8 +9,8 @@ import (
 
 type Lookup struct {
 	Base
-	Lookup                  builder.LookupExtractor `json:"lookup"`
-	RetainMissingValue      bool                    `json:"retainMissingValue"`
+	Lookup                  builder.LookupExtractor `json:"lookup,omitempty"`
+	RetainMissingValue      bool                    `json:"retainMissingValue,omitempty"`
 	ReplaceMissingValueWith string                  `json:"replaceMissingValueWith,omitempty"`
 	Injective               bool                    `json:"injective,omitempty"`
 	Optimize                bool                    `json:"optimize,omitempty"`
@@ -49,8 +49,8 @@ func (l *Lookup) SetOptimize(optimize bool) *Lookup {
 func (l *Lookup) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Lookup                  json.RawMessage `json:"lookup"`
-		RetainMissingValue      bool            `json:"retainMissingValue"`
+		Lookup                  json.RawMessage `json:"lookup,omitempty"`
+		RetainMissingValue      bool            `json:"retainMissingValue,omitempty"`
 		ReplaceMissingValueWith string          `json:"replaceMissingValueWith,omitempty"`
 		Injective               bool            `json:"injective,omitempty"`
 		Optimize                bool            `json:"optimize,omitempty"`

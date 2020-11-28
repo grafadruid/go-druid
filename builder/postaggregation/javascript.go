@@ -2,8 +2,8 @@ package postaggregation
 
 type Javascript struct {
 	Base
-	FieldNames []string `json:"fieldNames"`
-	Function   string   `json:"function"`
+	FieldNames []string `json:"fieldNames,omitempty"`
+	Function   string   `json:"function,omitempty"`
 }
 
 func NewJavascript() *Javascript {

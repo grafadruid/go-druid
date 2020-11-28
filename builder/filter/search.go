@@ -9,10 +9,10 @@ import (
 
 type Search struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Query        string               `json:"builder"`
-	ExtractionFn builder.ExtractionFn `json:"extractionFn"`
-	FilterTuning *FilterTuning        `json:"filterTuning"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Query        string               `json:"builder,omitempty"`
+	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
+	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
 
 func NewSearch() *Search {
@@ -45,10 +45,10 @@ func (s *Search) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Query        string          `json:"builder"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Query        string          `json:"builder,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

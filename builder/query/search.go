@@ -12,17 +12,17 @@ import (
 )
 
 type SearchSortSpec struct {
-	Type types.StringComparator `json:"type"`
+	Type types.StringComparator `json:"type,omitempty"`
 }
 
 type Search struct {
 	Base
-	Filter           builder.Filter          `json:"filter"`
-	Granularity      builder.Granularity     `json:"granularity"`
-	Limit            int64                   `json:"limit"`
-	SearchDimensions []builder.Dimension     `json:"searchDimensions"`
-	Query            builder.SearchQuerySpec `json:"query"`
-	Sort             *SearchSortSpec         `json:"sort"`
+	Filter           builder.Filter          `json:"filter,omitempty"`
+	Granularity      builder.Granularity     `json:"granularity,omitempty"`
+	Limit            int64                   `json:"limit,omitempty"`
+	SearchDimensions []builder.Dimension     `json:"searchDimensions,omitempty"`
+	Query            builder.SearchQuerySpec `json:"query,omitempty"`
+	Sort             *SearchSortSpec         `json:"sort,omitempty"`
 }
 
 func NewSearch() *Search {
@@ -79,12 +79,12 @@ func (s *Search) SetSort(sort *SearchSortSpec) *Search {
 func (s *Search) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		Filter           json.RawMessage   `json:"filter"`
-		Granularity      json.RawMessage   `json:"granularity"`
-		Limit            int64             `json:"limit"`
-		SearchDimensions []json.RawMessage `json:"searchDimensions"`
-		Query            json.RawMessage   `json:"query"`
-		Sort             *SearchSortSpec   `json:"sort"`
+		Filter           json.RawMessage   `json:"filter,omitempty"`
+		Granularity      json.RawMessage   `json:"granularity,omitempty"`
+		Limit            int64             `json:"limit,omitempty"`
+		SearchDimensions []json.RawMessage `json:"searchDimensions,omitempty"`
+		Query            json.RawMessage   `json:"query,omitempty"`
+		Sort             *SearchSortSpec   `json:"sort,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

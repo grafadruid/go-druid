@@ -8,7 +8,7 @@ import (
 
 type LongGreatest struct {
 	Base
-	Fields []builder.PostAggregator `json:"fields"`
+	Fields []builder.PostAggregator `json:"fields,omitempty"`
 }
 
 func NewLongGreatest() *LongGreatest {
@@ -30,7 +30,7 @@ func (l *LongGreatest) SetFields(fields []builder.PostAggregator) *LongGreatest 
 func (l *LongGreatest) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Fields []json.RawMessage `json:"fields"`
+		Fields []json.RawMessage `json:"fields,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

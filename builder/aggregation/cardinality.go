@@ -2,9 +2,9 @@ package aggregation
 
 type Cardinality struct {
 	Base
-	Fields []string `json:"fields"`
-	ByRow  bool     `json:"byRow"`
-	Round  bool     `json:"round"`
+	Fields []string `json:"fields,omitempty"`
+	ByRow  bool     `json:"byRow,omitempty"`
+	Round  bool     `json:"round,omitempty"`
 }
 
 func NewCardinality() *Cardinality {

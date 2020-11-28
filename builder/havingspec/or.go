@@ -8,7 +8,7 @@ import (
 
 type Or struct {
 	Base
-	HavingSpecs []builder.HavingSpec `json:"havingSpecs"`
+	HavingSpecs []builder.HavingSpec `json:"havingSpecs,omitempty"`
 }
 
 func NewOr() *Or {
@@ -25,7 +25,7 @@ func (o *Or) SetHavingSpecs(havingSpecs []builder.HavingSpec) *Or {
 func (o *Or) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		HavingSpecs []json.RawMessage `json:"havingSpecs"`
+		HavingSpecs []json.RawMessage `json:"havingSpecs,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

@@ -2,7 +2,7 @@ package filter
 
 type Expression struct {
 	Base
-	Expression   string        `json:"expression"`
+	Expression   string        `json:"expression,omitempty"`
 	FilterTuning *FilterTuning `json:"filterTuning,omitempty"`
 }
 

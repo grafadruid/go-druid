@@ -2,9 +2,9 @@ package extractionfn
 
 type Time struct {
 	Base
-	TimeFormat   string `json:"timeFormat"`
-	ResultFormat string `json:"resultFormat"`
-	Joda         bool   `json:"joda"`
+	TimeFormat   string `json:"timeFormat,omitempty"`
+	ResultFormat string `json:"resultFormat,omitempty"`
+	Joda         bool   `json:"joda,omitempty"`
 }
 
 func NewTime() *Time {

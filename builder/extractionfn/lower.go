@@ -2,7 +2,7 @@ package extractionfn
 
 type Lower struct {
 	Base
-	Locale string `json:"locale"`
+	Locale string `json:"locale,omitempty"`
 }
 
 func NewLower() *Lower {

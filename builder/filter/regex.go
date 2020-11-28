@@ -9,8 +9,8 @@ import (
 
 type Regex struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Pattern      string               `json:"pattern"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Pattern      string               `json:"pattern,omitempty"`
 	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
@@ -45,10 +45,10 @@ func (r *Regex) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Pattern      string          `json:"pattern"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Pattern      string          `json:"pattern,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

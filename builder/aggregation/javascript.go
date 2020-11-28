@@ -2,10 +2,10 @@ package aggregation
 
 type Javascript struct {
 	Base
-	FieldNames  []string `json:"fieldNames"`
-	FnAggregate string   `json:"fnAggregate"`
-	FnReset     string   `json:"fnReset"`
-	FnCombine   string   `json:"fnCombine"`
+	FieldNames  []string `json:"fieldNames,omitempty"`
+	FnAggregate string   `json:"fnAggregate,omitempty"`
+	FnReset     string   `json:"fnReset,omitempty"`
+	FnCombine   string   `json:"fnCombine,omitempty"`
 }
 
 func NewJavascript() *Javascript {

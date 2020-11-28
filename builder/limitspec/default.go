@@ -12,16 +12,16 @@ const (
 )
 
 type OrderByColumnSpec struct {
-	Dimension           string `json:"string"`
+	Dimension           string `json:"string,omitempty"`
 	Direction           Direction
-	DimensionComparator types.StringComparator `json:"dimensionComparator"`
+	DimensionComparator types.StringComparator `json:"dimensionComparator,omitempty"`
 }
 
 type Default struct {
 	Base
-	Columns []OrderByColumnSpec `json:"columns"`
-	Offset  int                 `json:"offset"`
-	Limit   int                 `json:"limit"`
+	Columns []OrderByColumnSpec `json:"columns,omitempty"`
+	Offset  int                 `json:"offset,omitempty"`
+	Limit   int                 `json:"limit,omitempty"`
 }
 
 func NewDefault() *Default {

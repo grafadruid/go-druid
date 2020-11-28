@@ -19,14 +19,14 @@ const (
 
 type Scan struct {
 	Base
-	VirtualColumns []builder.VirtualColumn `json:"virtualColumns"`
+	VirtualColumns []builder.VirtualColumn `json:"virtualColumns,omitempty"`
 	ResultFormat   string                  `json:"resultFormat,omitempty"`
-	BatchSize      int64                   `json:"batchSize"`
-	Limit          int64                   `json:"limit"`
-	Order          Order                   `json:"order"`
-	Filter         builder.Filter          `json:"filter"`
-	Columns        []string                `json:"columns"`
-	Legacy         bool                    `json:"legacy"`
+	BatchSize      int64                   `json:"batchSize,omitempty"`
+	Limit          int64                   `json:"limit,omitempty"`
+	Order          Order                   `json:"order,omitempty"`
+	Filter         builder.Filter          `json:"filter,omitempty"`
+	Columns        []string                `json:"columns,omitempty"`
+	Legacy         bool                    `json:"legacy,omitempty"`
 }
 
 func NewScan() *Scan {
@@ -93,14 +93,14 @@ func (s *Scan) SetLegacy(legacy bool) *Scan {
 func (s *Scan) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		VirtualColumns []json.RawMessage `json:"virtualColumns"`
-		ResultFormat   string            `json:"resultFormat"`
-		BatchSize      int64             `json:"batchSize"`
-		Limit          int64             `json:"limit"`
-		Order          Order             `json:"order"`
-		Filter         json.RawMessage   `json:"filter"`
-		Columns        []string          `json:"columns"`
-		Legacy         bool              `json:"legacy"`
+		VirtualColumns []json.RawMessage `json:"virtualColumns,omitempty"`
+		ResultFormat   string            `json:"resultFormat,omitempty"`
+		BatchSize      int64             `json:"batchSize,omitempty"`
+		Limit          int64             `json:"limit,omitempty"`
+		Order          Order             `json:"order,omitempty"`
+		Filter         json.RawMessage   `json:"filter,omitempty"`
+		Columns        []string          `json:"columns,omitempty"`
+		Legacy         bool              `json:"legacy,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

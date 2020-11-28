@@ -2,7 +2,7 @@ package filter
 
 type Not struct {
 	Base
-	Field string `json:"field"`
+	Field string `json:"field,omitempty"`
 }
 
 func NewNot() *Not {

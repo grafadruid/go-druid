@@ -2,7 +2,7 @@ package topnmetric
 
 type Numeric struct {
 	Base
-	Metric string `json:"metric"`
+	Metric string `json:"metric,omitempty"`
 }
 
 func NewNumeric() *Numeric {

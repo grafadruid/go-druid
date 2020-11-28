@@ -4,8 +4,8 @@ import "github.com/grafadruid/go-druid/builder/types"
 
 type Dimension struct {
 	Base
-	PreviousStop string                 `json:"previousStop"`
-	Ordering     types.StringComparator `json:"ordering"`
+	PreviousStop string                 `json:"previousStop,omitempty"`
+	Ordering     types.StringComparator `json:"ordering,omitempty"`
 }
 
 func NewDimension() *Dimension {

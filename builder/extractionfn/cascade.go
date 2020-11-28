@@ -8,7 +8,7 @@ import (
 
 type Cascade struct {
 	Base
-	ExtractionFns []builder.ExtractionFn `json:"extractionFns"`
+	ExtractionFns []builder.ExtractionFn `json:"extractionFns,omitempty"`
 }
 
 func NewCascade() *Cascade {
@@ -25,7 +25,7 @@ func (c *Cascade) SetExtractionFns(extractionFns []builder.ExtractionFn) *Cascad
 func (c *Cascade) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		ExtractionFns []json.RawMessage `json:"extractionFns"`
+		ExtractionFns []json.RawMessage `json:"extractionFns,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

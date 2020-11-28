@@ -8,7 +8,7 @@ import (
 
 type DoubleLeast struct {
 	Base
-	Fields []builder.PostAggregator `json:"fields"`
+	Fields []builder.PostAggregator `json:"fields,omitempty"`
 }
 
 func NewDoubleLeast() *DoubleLeast {
@@ -30,7 +30,7 @@ func (d *DoubleLeast) SetFields(fields []builder.PostAggregator) *DoubleLeast {
 func (d *DoubleLeast) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Fields []json.RawMessage `json:"fields"`
+		Fields []json.RawMessage `json:"fields,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

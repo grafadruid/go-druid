@@ -2,7 +2,7 @@ package toinclude
 
 type List struct {
 	Base
-	Columns []string `json:"columns"`
+	Columns []string `json:"columns,omitempty"`
 }
 
 func NewList() *List {

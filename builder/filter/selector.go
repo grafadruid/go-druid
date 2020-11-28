@@ -9,10 +9,10 @@ import (
 
 type Selector struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Value        string               `json:"value"`
-	ExtractionFn builder.ExtractionFn `json:"extractionFn"`
-	FilterTuning *FilterTuning        `json:"filterTuning"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Value        string               `json:"value,omitempty"`
+	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
+	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
 
 func NewSelector() *Selector {
@@ -45,10 +45,10 @@ func (s *Selector) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Value        string          `json:"value"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Value        string          `json:"value,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

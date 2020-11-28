@@ -2,7 +2,7 @@ package datasource
 
 type Lookup struct {
 	Base
-	Lookup string `json:"lookup"`
+	Lookup string `json:"lookup,omitempty"`
 }
 
 func NewLookup() *Lookup {

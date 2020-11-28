@@ -2,7 +2,7 @@ package datasource
 
 type Union struct {
 	Base
-	DataSources []string `json:"dataSources"`
+	DataSources []string `json:"dataSources,omitempty"`
 }
 
 func NewUnion() *Union {

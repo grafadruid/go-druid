@@ -11,8 +11,8 @@ const (
 
 type Expression struct {
 	Base
-	Name       string `json:"name"`
-	Expression string `json:"expression"`
+	Name       string `json:"name,omitempty"`
+	Expression string `json:"expression,omitempty"`
 	OutputType OutputType
 }
 

@@ -2,7 +2,7 @@ package topnmetric
 
 type Lexicographic struct {
 	Base
-	PreviousStop string `json:"previousStop"`
+	PreviousStop string `json:"previousStop,omitempty"`
 }
 
 func NewLexicographic() *Lexicographic {

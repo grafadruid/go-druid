@@ -2,7 +2,7 @@ package postaggregation
 
 type FinalizingFieldAccess struct {
 	Base
-	FieldName string `json:"fieldName"`
+	FieldName string `json:"fieldName,omitempty"`
 }
 
 func NewFinalizingFieldAccess() *FinalizingFieldAccess {

@@ -9,8 +9,8 @@ import (
 
 type In struct {
 	Base
-	Dimension    string               `json:"dimension"`
-	Values       []string             `json:"values"`
+	Dimension    string               `json:"dimension,omitempty"`
+	Values       []string             `json:"values,omitempty"`
 	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
@@ -45,10 +45,10 @@ func (i *In) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string          `json:"dimension"`
-		Values       []string        `json:"values"`
-		ExtractionFn json.RawMessage `json:"extractionFn"`
-		FilterTuning *FilterTuning   `json:"filterTuning"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Values       []string        `json:"values,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

@@ -8,7 +8,7 @@ import (
 
 type Query struct {
 	Base
-	Query builder.Query `json:"-"`
+	Query builder.Query `json:"-,omitempty"`
 }
 
 func NewQuery() *Query {
@@ -24,7 +24,7 @@ func (q *Query) SetQuery(qry builder.Query) {
 func (q *Query) UnmarshalJSONWithQueryLoader(data []byte, loader func(data []byte) (builder.Query, error)) error {
 	var tmp struct {
 		Base
-		Query json.RawMessage `json:"query"`
+		Query json.RawMessage `json:"query,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

@@ -2,7 +2,7 @@ package postaggregation
 
 type HyperUniqueFinalizing struct {
 	Base
-	FieldName string `json:"fieldName"`
+	FieldName string `json:"fieldName,omitempty"`
 }
 
 func NewHyperUniqueFinalizing() *HyperUniqueFinalizing {

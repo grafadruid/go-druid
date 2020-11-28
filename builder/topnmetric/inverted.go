@@ -8,7 +8,7 @@ import (
 
 type Inverted struct {
 	Base
-	Metric builder.TopNMetric `json:"metric"`
+	Metric builder.TopNMetric `json:"metric,omitempty"`
 }
 
 func NewInverted() *Inverted {
@@ -25,7 +25,7 @@ func (i *Inverted) SetMetric(metric builder.TopNMetric) *Inverted {
 func (i *Inverted) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
-		Metric json.RawMessage `json:"metric"`
+		Metric json.RawMessage `json:"metric,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
