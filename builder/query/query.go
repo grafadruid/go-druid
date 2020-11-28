@@ -82,7 +82,7 @@ func Load(data []byte) (builder.Query, error) {
 	}
 	var q builder.Query
 	switch t.Typ {
-	case "datasourceMetadata":
+	case "dataSourceMetadata":
 		q = NewDataSourceMetadata()
 	case "groupBy":
 		q = NewGroupBy()

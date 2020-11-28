@@ -22,6 +22,7 @@ func main() {
 
 	var q builder.Query
 	var results interface{}
+
 	q, err = d.Query().Load([]byte("{\"queryType\":\"scan\",\"dataSource\":{\"type\":\"table\",\"name\":\"wikipedia\"},\"intervals\":[\"1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z\"],\"virtualColumns\":[{\"type\":\"expression\",\"name\":\"v0\",\"expression\":\"'France'\",\"outputType\":\"STRING\"}],\"resultFormat\":\"compactedList\",\"batchSize\":20480,\"limit\":1,\"order\":\"none\",\"filter\":{\"type\":\"selector\",\"dimension\":\"countryName\",\"value\":\"France\",\"extractionFn\":null},\"columns\":[\"__time\",\"channel\",\"cityName\",\"comment\",\"count\",\"countryIsoCode\",\"diffUrl\",\"flags\",\"isAnonymous\",\"isMinor\",\"isNew\",\"isRobot\",\"isUnpatrolled\",\"metroCode\",\"namespace\",\"page\",\"regionIsoCode\",\"regionName\",\"sum_added\",\"sum_commentLength\",\"sum_deleted\",\"sum_delta\",\"sum_deltaBucket\",\"user\",\"v0\"],\"legacy\":false,\"context\":{\"sqlOuterLimit\":100,\"sqlQueryId\":\"b12ac7bb-7cc5-4873-b19d-1cd95264e01b\"},\"descending\":false,\"granularity\":{\"type\":\"all\"}}"))
 	spew.Dump(q)
 	d.Query().Execute(q, &results)
@@ -73,6 +74,11 @@ func main() {
 	spew.Dump(results)
 
 	q, err = d.Query().Load([]byte("{\"bound\":\"minTime\",\"context\":{},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"intervals\":[\"2016-06-26T17:10:06.877Z/2016-06-27T20:16:36.865Z\"],\"queryType\":\"timeBoundary\"}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"context\":{\"a\":\"a\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"queryType\":\"dataSourceMetadata\"}"))
 	spew.Dump(q, err)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
