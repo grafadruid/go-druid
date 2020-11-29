@@ -77,22 +77,25 @@ func (s *SegmentMetadata) SetLenientAggregatorMerge(lenientAggregatorMerge bool)
 }
 
 func (s *SegmentMetadata) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
-		Base
 		ToInclude              json.RawMessage `json:"toInclude,omitempty"`
 		Merge                  bool            `json:"merge,omitempty"`
 		AnalysisTypes          []AnalysisType  `json:"analysisTypes,omitempty"`
 		UsingDefaultInterval   bool            `json:"usingDefaultInterval,omitempty"`
 		LenientAggregatorMerge bool            `json:"lenientAggregatorMerge,omitempty"`
 	}
-	if err := json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	t, err := toinclude.Load(tmp.ToInclude)
-	if err != nil {
-		return err
+	var t builder.ToInclude
+	if tmp.ToInclude != nil {
+		t, err = toinclude.Load(tmp.ToInclude)
+		if err != nil {
+			return err
+		}
 	}
-	s.Base = tmp.Base
+	s.Base.UnmarshalJSON(data)
 	s.ToInclude = t
 	s.Merge = tmp.Merge
 	s.AnalysisTypes = tmp.AnalysisTypes
