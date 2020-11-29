@@ -82,4 +82,9 @@ func main() {
 	spew.Dump(q, err)
 	d.Query().Execute(q, &results)
 	spew.Dump(results)
+
+	q, err = d.Query().Load([]byte("{\"context\":{\"a\":\"a\"},\"dataSource\":{\"name\":\"wikipedia\",\"type\":\"table\"},\"intervals\":[],\"queryType\":\"segmentMetadata\"}"))
+	spew.Dump(q, err)
+	d.Query().Execute(q, &results)
+	spew.Dump(results)
 }
