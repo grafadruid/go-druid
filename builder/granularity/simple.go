@@ -23,8 +23,9 @@ func (s *Simple) Type() builder.ComponentType {
 	return "simple"
 }
 
-func (s *Simple) SetGranularity(g Simple) {
+func (s *Simple) SetGranularity(g Simple) *Simple {
 	*s = g
+	return s
 }
 
 func NewSimple() *Simple {
