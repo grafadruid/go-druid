@@ -33,8 +33,9 @@ func main() {
 	c := aggregation.NewCount().SetName("count")
 	aa := []builder.Aggregator{c}
 	s := filter.NewSelector().SetDimension("country").SetValue("France")
+	m := granularity.NewSimple().SetGranularity(granularity.Minute)
 	l := limitspec.NewDefault().SetLimit(10)
-	ts := query.NewTimeseries().SetDatasource(t).SetInterval(i).SetAggregations(aa).SetGranularity(granularity.Minute).SetFilter(s).SetLimit(l)
+	ts := query.NewTimeseries().SetDatasource(t).SetInterval(i).SetAggregations(aa).SetGranularity(m).SetFilter(s).SetLimit(l)
 
 	var results interface{}
 	d.Query().Execute(ts, &results)

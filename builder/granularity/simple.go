@@ -23,6 +23,10 @@ func (s *Simple) Type() builder.ComponentType {
 	return "simple"
 }
 
+func (s *Simple) SetGranularity(g Simple) {
+	*s = g
+}
+
 func NewSimple() *Simple {
 	var s Simple
 	return &s
