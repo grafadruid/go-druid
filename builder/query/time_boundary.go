@@ -2,10 +2,8 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/types"
 )
 
 type TimeBoundary struct {
@@ -25,7 +23,7 @@ func (t *TimeBoundary) SetDataSource(dataSource builder.DataSource) *TimeBoundar
 	return t
 }
 
-func (t *TimeBoundary) SetIntervals(intervals []types.Interval) *TimeBoundary {
+func (t *TimeBoundary) SetIntervals(intervals builder.Intervals) *TimeBoundary {
 	t.Base.SetIntervals(intervals)
 	return t
 }

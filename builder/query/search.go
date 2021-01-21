@@ -2,7 +2,6 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/filter"
@@ -36,7 +35,7 @@ func (s *Search) SetDataSource(dataSource builder.DataSource) *Search {
 	return s
 }
 
-func (s *Search) SetIntervals(intervals []types.Interval) *Search {
+func (s *Search) SetIntervals(intervals builder.Intervals) *Search {
 	s.Base.SetIntervals(intervals)
 	return s
 }
