@@ -2,7 +2,6 @@ package query
 
 import (
 	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/types"
 )
 
 type DataSourceMetadata struct {
@@ -20,7 +19,7 @@ func (d *DataSourceMetadata) SetDataSource(dataSource builder.DataSource) *DataS
 	return d
 }
 
-func (d *DataSourceMetadata) SetIntervals(intervals []types.Interval) *DataSourceMetadata {
+func (d *DataSourceMetadata) SetIntervals(intervals builder.Intervals) *DataSourceMetadata {
 	d.Base.SetIntervals(intervals)
 	return d
 }

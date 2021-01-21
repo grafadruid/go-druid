@@ -2,17 +2,17 @@ package query
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder/intervals"
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/datasource"
-	"github.com/grafadruid/go-druid/builder/types"
 )
 
 type Base struct {
 	ID         string                 `json:"ID,omitempty"`
 	QueryType  builder.ComponentType  `json:"queryType,omitempty"`
 	DataSource builder.DataSource     `json:"dataSource,omitempty"`
-	Intervals  []types.Interval       `json:"intervals,omitempty"`
+	Intervals  builder.Intervals      `json:"intervals,omitempty"`
 	Context    map[string]interface{} `json:"context,omitempty"`
 }
 
@@ -31,7 +31,7 @@ func (b *Base) SetDataSource(dataSource builder.DataSource) *Base {
 	return b
 }
 
-func (b *Base) SetIntervals(intervals []types.Interval) *Base {
+func (b *Base) SetIntervals(intervals builder.Intervals) *Base {
 	b.Intervals = intervals
 	return b
 }
@@ -50,7 +50,7 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 		ID         string                 `json:"ID,omitempty"`
 		QueryType  builder.ComponentType  `json:"queryType,omitempty"`
 		DataSource json.RawMessage        `json:"dataSource,omitempty"`
-		Intervals  []types.Interval       `json:"intervals,omitempty"`
+		Intervals  json.RawMessage        `json:"intervals,omitempty"`
 		Context    map[string]interface{} `json:"context,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
@@ -65,10 +65,19 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 			d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.DataSource, Load)
 		}
 		b.DataSource = d
+
+		i, err := intervals.Load(tmp.Intervals)
+		if err != nil {
+			return err
+		}
+		if d.Type() == "query" {
+			d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.Intervals, Load)
+		}
+		b.Intervals = i
 	}
 	b.ID = tmp.ID
 	b.QueryType = tmp.QueryType
-	b.Intervals = tmp.Intervals
+
 	b.Context = tmp.Context
 	return nil
 }

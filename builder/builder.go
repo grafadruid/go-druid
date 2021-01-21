@@ -65,3 +65,7 @@ type ToInclude interface {
 type VirtualColumn interface {
 	Type() ComponentType
 }
+
+type Intervals interface {
+	Type() ComponentType
+}

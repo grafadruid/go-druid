@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/grafadruid/go-druid/builder/intervals"
 	"log"
 	"time"
 
@@ -13,7 +14,6 @@ import (
 	"github.com/grafadruid/go-druid/builder/filter"
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/query"
-	"github.com/grafadruid/go-druid/builder/types"
 )
 
 func main() {
@@ -28,13 +28,17 @@ func main() {
 	fmt.Println("{\"version\": \"" + status.Version + "\"}")
 
 	t := datasource.NewTable().SetName("wikipedia")
-	i := types.NewInterval(time.Unix(0, 0), time.Now())
+
+	i := intervals.NewInterval(time.Unix(0, 0), time.Now())
+	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
+
 	c := aggregation.NewCount().SetName("count")
 	aa := []builder.Aggregator{c}
-	s := filter.NewSelector().SetDimension("country").SetValue("France")
-	m := granularity.NewSimple().SetGranularity(granularity.Minute)
-	ts := query.NewTimeseries().SetDataSource(t).SetIntervals([]types.Interval{i}).SetAggregations(aa).SetGranularity(m).SetFilter(s).SetLimit(10)
+	s := filter.NewSelector().SetDimension("countryName").SetValue("France")
+	m := granularity.NewSimple().SetGranularity(granularity.All)
+	ts := query.NewTimeseries().SetDataSource(t).SetIntervals(is).SetAggregations(aa).SetGranularity(m).SetFilter(s).SetLimit(10)
 	var results interface{}
 	d.Query().Execute(ts, &results)
+
 	spew.Dump(results)
 }

@@ -2,10 +2,8 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/types"
 	"github.com/grafadruid/go-druid/builder/virtualcolumn"
 )
 
@@ -40,7 +38,7 @@ func (s *Scan) SetDataSource(dataSource builder.DataSource) *Scan {
 	return s
 }
 
-func (s *Scan) SetIntervals(intervals []types.Interval) *Scan {
+func (s *Scan) SetIntervals(intervals builder.Intervals) *Scan {
 	s.Base.SetIntervals(intervals)
 	return s
 }
@@ -120,7 +118,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
-	s.Base.UnmarshalJSON(data)
+	err = s.Base.UnmarshalJSON(data)
 	s.VirtualColumns = vv
 	s.ResultFormat = tmp.ResultFormat
 	s.BatchSize = tmp.BatchSize
@@ -129,5 +127,5 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 	s.Filter = f
 	s.Columns = tmp.Columns
 	s.Legacy = tmp.Legacy
-	return nil
+	return err
 }
