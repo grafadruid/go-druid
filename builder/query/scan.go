@@ -5,7 +5,6 @@ import (
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/types"
 	"github.com/grafadruid/go-druid/builder/virtualcolumn"
 )
 
@@ -40,7 +39,7 @@ func (s *Scan) SetDataSource(dataSource builder.DataSource) *Scan {
 	return s
 }
 
-func (s *Scan) SetIntervals(intervals []types.Interval) *Scan {
+func (s *Scan) SetIntervals(intervals builder.Intervals) *Scan {
 	s.Base.SetIntervals(intervals)
 	return s
 }
