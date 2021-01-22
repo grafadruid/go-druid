@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/grafadruid/go-druid/builder/intervals"
 	"log"
 	"time"
+
+	"github.com/grafadruid/go-druid/builder/intervals"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid"
@@ -29,8 +30,11 @@ func main() {
 
 	t := datasource.NewTable().SetName("wikipedia")
 
-	i := intervals.NewInterval(time.Unix(0, 0), time.Now())
-	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
+	i := intervals.NewInterval()
+	i.SetInterval(time.Unix(0, 0), time.Now())
+	i2 := intervals.NewInterval()
+	i2.SetIntervalWithString("2021-01-21T14:59:05.000Z", "P1D")
+	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i, i2})
 
 	c := aggregation.NewCount().SetName("count")
 	aa := []builder.Aggregator{c}

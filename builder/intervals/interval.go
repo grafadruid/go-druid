@@ -1,40 +1,28 @@
 package intervals
 
 import (
-	"strings"
 	"time"
 )
 
 const (
-	IntervalFormat = time.RFC3339
+	IntervalTimeFormat = time.RFC3339Nano
 )
 
 // Interval represents a druid interval.
-type Interval struct {
-	StartTime time.Time
-	EndTime   time.Time
-}
+type Interval string
 
 // NewInterval instantiate a new interval.
-func NewInterval(startTime, endTime time.Time) *Interval {
-	return &Interval{StartTime: startTime, EndTime: endTime}
+func NewInterval() *Interval {
+	var i Interval
+	return &i
 }
 
-// MarshalText marshals Interval following ISO 8601 time interval.
-func (i *Interval) MarshalText() ([]byte, error) {
-	return []byte(i.StartTime.Format(IntervalFormat) + "/" + i.EndTime.Format(IntervalFormat)), nil
+func (i *Interval) SetInterval(start, end time.Time) *Interval {
+	*i = Interval(start.Format(IntervalTimeFormat) + "/" + end.Format(IntervalTimeFormat))
+	return i
 }
 
-func (i *Interval) UnmarshalText(text []byte) error {
-	interval := strings.Split(string(text), "/")
-	var err error
-	i.StartTime, err = time.Parse(time.RFC3339Nano, interval[0])
-	if err != nil {
-		return err
-	}
-	i.EndTime, err = time.Parse(time.RFC3339Nano, interval[1])
-	if err != nil {
-		return err
-	}
-	return nil
+func (i *Interval) SetIntervalWithString(start, end string) *Interval {
+	*i = Interval(start + "/" + end)
+	return i
 }

@@ -1,17 +1,35 @@
 package intervals
 
-type Intervals struct {
-	Base
-	Intervals []*Interval `json:"intervals,omitempty"`
+import (
+	"encoding/json"
+
+	"github.com/grafadruid/go-druid/builder"
+)
+
+type Base struct {
+	Typ builder.ComponentType `json:"type,omitempty"`
 }
 
-func NewIntervals() *Intervals {
-	i := &Intervals{}
-	i.SetType("intervals")
-	return i
+func (b *Base) SetType(typ builder.ComponentType) *Base {
+	b.Typ = typ
+	return b
 }
 
-func (i *Intervals) SetIntervals(intervals []*Interval) *Intervals {
-	i.Intervals = intervals
-	return i
+func (b *Base) Type() builder.ComponentType {
+	return b.Typ
+}
+
+func Load(data []byte) (builder.Intervals, error) {
+	var t struct {
+		Typ builder.ComponentType `json:"type,omitempty"`
+	}
+	if err := json.Unmarshal(data, &t); err != nil {
+		return nil, err
+	}
+	var i builder.Intervals
+	switch t.Typ {
+	case "intervals":
+		i = NewIntervals()
+	}
+	return i, json.Unmarshal(data, &i)
 }
