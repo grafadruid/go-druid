@@ -2,7 +2,6 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/dimension"
@@ -11,7 +10,6 @@ import (
 	"github.com/grafadruid/go-druid/builder/havingspec"
 	"github.com/grafadruid/go-druid/builder/limitspec"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
-	"github.com/grafadruid/go-druid/builder/types"
 	"github.com/grafadruid/go-druid/builder/virtualcolumn"
 )
 
@@ -39,7 +37,7 @@ func (g *GroupBy) SetDataSource(dataSource builder.DataSource) *GroupBy {
 	return g
 }
 
-func (g *GroupBy) SetIntervals(intervals []types.Interval) *GroupBy {
+func (g *GroupBy) SetIntervals(intervals builder.Intervals) *GroupBy {
 	g.Base.SetIntervals(intervals)
 	return g
 }

@@ -5,13 +5,13 @@ import (
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/extractionfn"
-	"github.com/grafadruid/go-druid/builder/types"
+	"github.com/grafadruid/go-druid/builder/intervals"
 )
 
 type Interval struct {
 	Base
 	Dimension    string               `json:"dimension,omitempty"`
-	Intervals    []*types.Interval    `json:"intervals,omitempty"`
+	Intervals    builder.Intervals    `json:"intervals,omitempty"`
 	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
 }
@@ -27,7 +27,7 @@ func (i *Interval) SetDimension(dimension string) *Interval {
 	return i
 }
 
-func (i *Interval) SetIntervals(intervals []*types.Interval) *Interval {
+func (i *Interval) SetIntervals(intervals builder.Intervals) *Interval {
 	i.Intervals = intervals
 	return i
 }
@@ -46,10 +46,10 @@ func (i *Interval) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		Base
-		Dimension    string            `json:"dimension,omitempty"`
-		Intervals    []*types.Interval `json:"intervals,omitempty"`
-		ExtractionFn json.RawMessage   `json:"extractionFn,omitempty"`
-		FilterTuning *FilterTuning     `json:"filterTuning,omitempty"`
+		Dimension    string          `json:"dimension,omitempty"`
+		Intervals    json.RawMessage `json:"intervals,omitempty"`
+		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
+		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err
@@ -61,9 +61,16 @@ func (i *Interval) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	var ii builder.Intervals
+	if tmp.Intervals != nil {
+		ii, err = intervals.Load(tmp.Intervals)
+		if err != nil {
+			return err
+		}
+	}
 	i.Base = tmp.Base
 	i.Dimension = tmp.Dimension
-	i.Intervals = tmp.Intervals
+	i.Intervals = ii
 	i.ExtractionFn = e
 	i.FilterTuning = tmp.FilterTuning
 	return nil

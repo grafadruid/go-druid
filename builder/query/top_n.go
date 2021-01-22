@@ -2,7 +2,6 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/dimension"
@@ -10,7 +9,6 @@ import (
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
 	"github.com/grafadruid/go-druid/builder/topnmetric"
-	"github.com/grafadruid/go-druid/builder/types"
 	"github.com/grafadruid/go-druid/builder/virtualcolumn"
 )
 
@@ -37,7 +35,7 @@ func (t *TopN) SetDataSource(dataSource builder.DataSource) *TopN {
 	return t
 }
 
-func (t *TopN) SetIntervals(intervals []types.Interval) *TopN {
+func (t *TopN) SetIntervals(intervals builder.Intervals) *TopN {
 	t.Base.SetIntervals(intervals)
 	return t
 }
