@@ -2,10 +2,8 @@ package query
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/toinclude"
-	"github.com/grafadruid/go-druid/builder/types"
 )
 
 type AnalysisType string
@@ -41,7 +39,7 @@ func (s *SegmentMetadata) SetDataSource(dataSource builder.DataSource) *SegmentM
 	return s
 }
 
-func (s *SegmentMetadata) SetIntervals(intervals []types.Interval) *SegmentMetadata {
+func (s *SegmentMetadata) SetIntervals(intervals builder.Intervals) *SegmentMetadata {
 	s.Base.SetIntervals(intervals)
 	return s
 }

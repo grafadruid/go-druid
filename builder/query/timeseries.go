@@ -3,13 +3,11 @@ package query
 import (
 	"encoding/json"
 	"errors"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/filter"
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
-	"github.com/grafadruid/go-druid/builder/types"
 	"github.com/grafadruid/go-druid/builder/virtualcolumn"
 )
 
@@ -35,7 +33,7 @@ func (t *Timeseries) SetDataSource(dataSource builder.DataSource) *Timeseries {
 	return t
 }
 
-func (t *Timeseries) SetIntervals(intervals []types.Interval) *Timeseries {
+func (t *Timeseries) SetIntervals(intervals builder.Intervals) *Timeseries {
 	t.Base.SetIntervals(intervals)
 	return t
 }
