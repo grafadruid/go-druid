@@ -93,11 +93,11 @@ func (s *SegmentMetadata) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
-	s.Base.UnmarshalJSON(data)
+	err = s.Base.UnmarshalJSON(data)
 	s.ToInclude = t
 	s.Merge = tmp.Merge
 	s.AnalysisTypes = tmp.AnalysisTypes
 	s.UsingDefaultInterval = tmp.UsingDefaultInterval
 	s.LenientAggregatorMerge = tmp.LenientAggregatorMerge
-	return nil
+	return err
 }

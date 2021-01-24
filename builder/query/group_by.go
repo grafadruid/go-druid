@@ -168,7 +168,7 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 	if len(tmp.SubtotalsSpec) == 0 {
 		tmp.SubtotalsSpec = nil
 	}
-	g.Base.UnmarshalJSON(data)
+	err = g.Base.UnmarshalJSON(data)
 	g.Dimensions = dd
 	g.VirtualColumns = vv
 	g.Filter = f
@@ -178,5 +178,5 @@ func (g *GroupBy) UnmarshalJSON(data []byte) error {
 	g.Having = h
 	g.LimitSpec = l
 	g.SubtotalsSpec = tmp.SubtotalsSpec
-	return nil
+	return err
 }

@@ -143,7 +143,7 @@ func (t *TopN) UnmarshalJSON(data []byte) error {
 		}
 		pp[i] = p
 	}
-	t.Base.UnmarshalJSON(data)
+	err = t.Base.UnmarshalJSON(data)
 	t.VirtualColumns = vv
 	t.Dimension = d
 	t.Metric = m
@@ -152,5 +152,5 @@ func (t *TopN) UnmarshalJSON(data []byte) error {
 	t.Granularity = gr
 	t.Aggregations = aa
 	t.PostAggregations = pp
-	return nil
+	return err
 }
