@@ -49,6 +49,7 @@ func (s *SQL) SetParameters(parameters []SQLParameter) *SQL {
 }
 
 func (s *SQL) UnmarshalJSON(data []byte) error {
+	var err error
 	var tmp struct {
 		Query        string         `json:"query,omitempty"`
 		ResultFormat string         `json:"resultFormat,omitempty"`
@@ -58,10 +59,10 @@ func (s *SQL) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	s.Base.UnmarshalJSON(data)
+	err = s.Base.UnmarshalJSON(data)
 	s.Query = tmp.Query
 	s.ResultFormat = tmp.ResultFormat
 	s.Header = tmp.Header
 	s.Parameters = tmp.Parameters
-	return nil
+	return err
 }
