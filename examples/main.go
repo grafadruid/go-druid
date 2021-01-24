@@ -42,7 +42,10 @@ func main() {
 	m := granularity.NewSimple().SetGranularity(granularity.All)
 	ts := query.NewTimeseries().SetDataSource(t).SetIntervals(is).SetAggregations(aa).SetGranularity(m).SetFilter(s).SetLimit(10)
 	var results interface{}
-	d.Query().Execute(ts, &results)
+	_, err = d.Query().Execute(ts, &results)
+	if err != nil {
+		log.Fatalf("Execute failed, %s", err)
+	}
 
 	spew.Dump(results)
 }
