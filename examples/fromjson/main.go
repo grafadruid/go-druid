@@ -72,7 +72,6 @@ func main() {
 	qry = `{"bound":"minTime","context":{},"dataSource":{"name":"wikipedia","type":"table"},"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]},"queryType":"timeBoundary"}`
 	loadAndExecute(d, []byte(qry))
 
-	// https://github.com/grafadruid/go-druid/issues/14
 	qry = `{"context":{"a":"a"},"dataSource":{"name":"wikipedia","type":"table"},"queryType":"dataSourceMetadata"}`
 	loadAndExecute(d, []byte(qry))
 
