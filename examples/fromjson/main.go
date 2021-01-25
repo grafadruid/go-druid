@@ -20,7 +20,7 @@ func loadAndExecute(d *druid.Client, qry []byte) {
 	spew.Dump(q)
 	_, err = d.Query().Execute(q, &results)
 	if err != nil {
-		log.Fatalf("Load failed, %s (query: %s)", err, string(qry))
+		log.Fatalf("Execute failed, %s (query: %s)", err, string(qry))
 	}
 	spew.Dump(results)
 }
@@ -47,11 +47,12 @@ func main() {
 	qry = `{"batchSize":20480,"columns":["__time","channel","cityName","comment","count","countryIsoCode","diffUrl","flags","isAnonymous","isMinor","isNew","isRobot","isUnpatrolled","metroCode","namespace","page","regionIsoCode","regionName","sum_added","sum_commentLength","sum_deleted","sum_delta","sum_deltaBucket","user"],"dataSource":{"name":"wikipedia","type":"table"},"filter":{"dimension":"countryName","extractionFn":{"locale":"","type":"lower"},"type":"selector","value":"france"},"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]},"limit":10,"order":"descending","queryType":"scan", "resultFormat":"compactedList"}`
 	loadAndExecute(d, []byte(qry))
 
+	// https://github.com/grafadruid/go-druid/issues/15
 	qry = `{"batchSize":20480,"columns":["__time","channel","cityName","comment","count","countryIsoCode","diffUrl","flags","isAnonymous","isMinor","isNew","isRobot","isUnpatrolled","metroCode","namespace","page","regionIsoCode","regionName","sum_added","sum_commentLength","sum_deleted","sum_delta","sum_deltaBucket","user"],"dataSource":{"type":"query","query":{"queryType":"scan","dataSource":{"type":"table","name":"A"},"columns":["AT"],"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]}}},"filter":{"dimension":"countryName","extractionFn":{"locale":"","type":"lower"},"type":"selector","value":"france"},"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]},"limit":10,"order":"descending","queryType":"scan"}`
 	//loadAndExecute(d, []byte(qry))
 
-	qry = `{"context":{"con":"text"},"query":"SELECT \"__time\", \"channel\", \"cityName\", \"comment\", \"count\", \"countryIsoCode\", \"countryName\", \"diffUrl\", \"flags\", \"isAnonymous\", \"isMinor\", \"isNew\", \"isRobot\", \"isUnpatrolled\", \"metroCode\", \"namespace\", \"page\", \"regionIsoCode\", \"regionName\", \"sum_added\", \"sum_commentLength\", \"sum_deleted\", \"sum_delta\", \"sum_deltaBucket\", \"user\"\nFROM \"wikipedia\"\nWHERE \"countryName\" = 'France'\nLIMIT 10","queryType":"sql", "resultFormat":"array", "header": true}`
-	//loadAndExecute(d, []byte(qry))
+	qry = `{"context":{"con":"text"},"query":"SELECT * \nFROM \"wikipedia\"\nWHERE \"countryName\" = 'France'\nLIMIT 10","queryType":"sql", "resultFormat":"array", "header": true}`
+	loadAndExecute(d, []byte(qry))
 
 	qry = `{"aggregations":[{"name":"count","type":"count"}],"context":{"plop":"plep"},"dataSource":{"name":"wikipedia","type":"table"},"filter":{"dimension":"countryName","extractionFn":null,"type":"selector","value":"France"},"granularity":"minute","intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]},"limit":10,"postAggregations":[],"queryType":"timeseries","virtualColumns":[]}`
 	loadAndExecute(d, []byte(qry))
@@ -71,6 +72,7 @@ func main() {
 	qry = `{"bound":"minTime","context":{},"dataSource":{"name":"wikipedia","type":"table"},"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"]},"queryType":"timeBoundary"}`
 	loadAndExecute(d, []byte(qry))
 
+	// https://github.com/grafadruid/go-druid/issues/14
 	qry = `{"context":{"a":"a"},"dataSource":{"name":"wikipedia","type":"table"},"queryType":"dataSourceMetadata"}`
 	//loadAndExecute(d, []byte(qry))
 
