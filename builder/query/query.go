@@ -2,11 +2,9 @@ package query
 
 import (
 	"encoding/json"
-
-	"github.com/grafadruid/go-druid/builder/intervals"
-
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/datasource"
+	"github.com/grafadruid/go-druid/builder/intervals"
 )
 
 type Base struct {
