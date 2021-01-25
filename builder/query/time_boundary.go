@@ -59,8 +59,8 @@ func (t *TimeBoundary) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
-	t.Base.UnmarshalJSON(data)
+	err = t.Base.UnmarshalJSON(data)
 	t.Bound = tmp.Bound
 	t.Filter = f
-	return nil
+	return err
 }

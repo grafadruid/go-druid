@@ -114,11 +114,11 @@ func (s *Search) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	s.Base.UnmarshalJSON(data)
+	err = s.Base.UnmarshalJSON(data)
 	s.Filter = f
 	s.Granularity = gr
 	s.SearchDimensions = ss
 	s.Query = q
 	s.Sort = tmp.Sort
-	return nil
+	return err
 }

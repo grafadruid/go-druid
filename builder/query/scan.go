@@ -119,7 +119,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
-	s.Base.UnmarshalJSON(data)
+	err = s.Base.UnmarshalJSON(data)
 	s.VirtualColumns = vv
 	s.ResultFormat = tmp.ResultFormat
 	s.BatchSize = tmp.BatchSize
@@ -128,5 +128,5 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 	s.Filter = f
 	s.Columns = tmp.Columns
 	s.Legacy = tmp.Legacy
-	return nil
+	return err
 }

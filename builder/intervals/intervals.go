@@ -2,7 +2,6 @@ package intervals
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 )
 

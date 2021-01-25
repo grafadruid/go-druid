@@ -128,7 +128,7 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 		}
 		pp[i] = p
 	}
-	t.Base.UnmarshalJSON(data)
+	err = t.Base.UnmarshalJSON(data)
 	t.Descending = tmp.Descending
 	t.VirtualColumns = vv
 	t.Filter = f
@@ -136,5 +136,5 @@ func (t *Timeseries) UnmarshalJSON(data []byte) error {
 	t.Aggregations = aa
 	t.PostAggregations = pp
 	t.Limit = tmp.Limit
-	return nil
+	return err
 }
