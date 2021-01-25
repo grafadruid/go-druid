@@ -64,9 +64,14 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 			d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.DataSource, Load)
 		}
 		b.DataSource = d
-		i, err := intervals.Load(tmp.Intervals)
-		if err != nil {
-			return err
+		// intervals are optional in some cases, eg dataSourceMetadata
+		// https://druid.apache.org/docs/latest/querying/datasourcemetadataquery.html
+		var i builder.Intervals
+		if tmp.Intervals != nil {
+			i, err = intervals.Load(tmp.Intervals)
+			if err != nil {
+				return err
+			}
 		}
 		b.Intervals = i
 	}
