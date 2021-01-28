@@ -22,6 +22,7 @@ type Scan struct {
 	ResultFormat   string                  `json:"resultFormat,omitempty"`
 	BatchSize      int64                   `json:"batchSize,omitempty"`
 	Limit          int64                   `json:"limit,omitempty"`
+	Offset         int64                   `json:"offset,omitempty"`
 	Order          Order                   `json:"order,omitempty"`
 	Filter         builder.Filter          `json:"filter,omitempty"`
 	Columns        []string                `json:"columns,omitempty"`
@@ -69,6 +70,11 @@ func (s *Scan) SetLimit(limit int64) *Scan {
 	return s
 }
 
+func (s *Scan) SetOffset(offset int64) *Scan {
+	s.Offset = offset
+	return s
+}
+
 func (s *Scan) SetOrder(order Order) *Scan {
 	s.Order = order
 	return s
@@ -96,6 +102,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 		ResultFormat   string            `json:"resultFormat,omitempty"`
 		BatchSize      int64             `json:"batchSize,omitempty"`
 		Limit          int64             `json:"limit,omitempty"`
+		Offset         int64             `json:"offset,omitempty"`
 		Order          Order             `json:"order,omitempty"`
 		Filter         json.RawMessage   `json:"filter,omitempty"`
 		Columns        []string          `json:"columns,omitempty"`
@@ -124,6 +131,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 	s.ResultFormat = tmp.ResultFormat
 	s.BatchSize = tmp.BatchSize
 	s.Limit = tmp.Limit
+	s.Offset = tmp.Offset
 	s.Order = tmp.Order
 	s.Filter = f
 	s.Columns = tmp.Columns
