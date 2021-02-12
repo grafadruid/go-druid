@@ -38,9 +38,12 @@ func main() {
 
 	c := aggregation.NewCount().SetName("count")
 	aa := []builder.Aggregator{c}
-	s := filter.NewSelector().SetDimension("countryName").SetValue("France")
+	s1 := filter.NewSelector().SetDimension("countryName").SetValue("France")
+	s2 := filter.NewSelector().SetDimension("cityName").SetValue("Paris")
+	n := filter.NewNot().SetField(s2)
+	a := filter.NewAnd().SetFields([]builder.Filter{s1, n})
 	m := granularity.NewSimple().SetGranularity(granularity.All)
-	ts := query.NewTimeseries().SetDataSource(t).SetIntervals(is).SetAggregations(aa).SetGranularity(m).SetFilter(s).SetLimit(10)
+	ts := query.NewTimeseries().SetDataSource(t).SetIntervals(is).SetAggregations(aa).SetGranularity(m).SetFilter(a).SetLimit(10)
 	var results interface{}
 	_, err = d.Query().Execute(ts, &results)
 	if err != nil {
