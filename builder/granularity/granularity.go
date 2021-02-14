@@ -34,8 +34,10 @@ func Load(data []byte) (builder.Granularity, error) {
 		g = NewDuration()
 	case "period":
 		g = NewPeriod()
+	case "all":
+		g = NewAll()
 	default:
-		return nil, errors.New("Unsupported type")
+		return nil, errors.New("unsupported type")
 	}
 	return g, json.Unmarshal(data, &g)
 }

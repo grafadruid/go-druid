@@ -32,3 +32,16 @@ func NewSimple() *Simple {
 	var s Simple
 	return &s
 }
+
+type TypeAll struct {
+	Base
+}
+
+func NewAll() *TypeAll {
+	var a TypeAll
+	return &a
+}
+
+func (a *TypeAll) Type() builder.ComponentType {
+	return "all"
+}
