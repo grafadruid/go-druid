@@ -34,8 +34,8 @@ func Load(data []byte) (builder.Granularity, error) {
 		g = NewDuration()
 	case "period":
 		g = NewPeriod()
-	case "all":
-		g = NewAll()
+	case "all", "none":
+		g = NewComplexSimple()
 	default:
 		return nil, errors.New("unsupported type")
 	}

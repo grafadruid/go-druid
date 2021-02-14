@@ -33,15 +33,16 @@ func NewSimple() *Simple {
 	return &s
 }
 
-type TypeAll struct {
+// TypeComplexSimple is for those Simple types than can take both Long and Short specs
+type TypeComplexSimple struct {
 	Base
 }
 
-func NewAll() *TypeAll {
-	var a TypeAll
+func NewComplexSimple() *TypeComplexSimple {
+	var a TypeComplexSimple
 	return &a
 }
 
-func (a *TypeAll) Type() builder.ComponentType {
+func (a *TypeComplexSimple) Type() builder.ComponentType {
 	return "all"
 }
