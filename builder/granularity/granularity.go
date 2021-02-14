@@ -3,6 +3,7 @@ package granularity
 import (
 	"encoding/json"
 	"errors"
+	"strconv"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -35,7 +36,8 @@ func Load(data []byte) (builder.Granularity, error) {
 	case "period":
 		g = NewPeriod()
 	case "all", "none":
-		g = NewComplexSimple(t.Typ)
+		g = NewSimple()
+		data = []byte(strconv.Quote(t.Typ))
 	default:
 		return nil, errors.New("unsupported type")
 	}

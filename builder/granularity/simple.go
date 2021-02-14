@@ -32,18 +32,3 @@ func NewSimple() *Simple {
 	var s Simple
 	return &s
 }
-
-// ComplexSimple is for those Simple types than can take both Long and Short specs
-type ComplexSimple struct {
-	Base
-}
-
-func NewComplexSimple(typ string) *ComplexSimple {
-	var a ComplexSimple
-	a.Typ = typ
-	return &a
-}
-
-func (c *ComplexSimple) Type() builder.ComponentType {
-	return c.Typ
-}
