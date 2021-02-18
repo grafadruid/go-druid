@@ -7,4 +7,5 @@ require (
 	github.com/google/go-querystring v1.0.0
 	github.com/hashicorp/go-retryablehttp v0.6.7
 	github.com/stretchr/testify v1.2.2
+	golang.org/x/tools v0.1.0 // indirect
 )
