@@ -2,6 +2,7 @@ package lookup
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -30,6 +31,8 @@ func Load(data []byte) (builder.LookupExtractor, error) {
 	switch t.Typ {
 	case "map":
 		l = NewMap()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return l, json.Unmarshal(data, &l)
 }
