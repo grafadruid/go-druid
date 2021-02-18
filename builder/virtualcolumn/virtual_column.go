@@ -2,6 +2,7 @@ package virtualcolumn
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -30,6 +31,8 @@ func Load(data []byte) (builder.Dimension, error) {
 	switch t.Typ {
 	case "expression":
 		d = NewExpression()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return d, json.Unmarshal(data, &d)
 }
