@@ -2,6 +2,7 @@ package extractionfn
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -58,6 +59,8 @@ func Load(data []byte) (builder.ExtractionFn, error) {
 		e = NewTimeFormat()
 	case "upper":
 		e = NewUpper()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return e, json.Unmarshal(data, &e)
 }
