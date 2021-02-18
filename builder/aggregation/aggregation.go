@@ -94,6 +94,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLastFolding()
 	case "stringLast":
 		a = NewStringLast()
+	case "tDigestSketch":
+		a = NewTDigestSketch()		
 	}
 	return a, json.Unmarshal(data, &a)
 }

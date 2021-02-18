@@ -56,6 +56,9 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewLongGreatest()
 	case "longLeast":
 		p = NewLongLeast()
+	case "quantilesFromTDigestSketch":
+		p = NewQuantilesFromTDigestSketch()
+		
 	}
 	return p, json.Unmarshal(data, &p)
 }
