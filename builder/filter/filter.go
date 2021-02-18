@@ -2,6 +2,7 @@ package filter
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -64,6 +65,8 @@ func Load(data []byte) (builder.Filter, error) {
 		f = NewSpatial()
 	case "true":
 		f = NewTrue()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return f, json.Unmarshal(data, &f)
 }
