@@ -27,7 +27,7 @@ func (q *QuantilesFromTDigestSketch) SetName(name string) *QuantilesFromTDigestS
 	return q
 }
 
-// SetName set fractions
+// SetFractions set fractions
 func (q *QuantilesFromTDigestSketch) SetFractions(fractions []float64) *QuantilesFromTDigestSketch {
 	q.Fractions = fractions
 	return q
