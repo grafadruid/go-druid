@@ -29,7 +29,7 @@ func getConnection() *druid.Client {
 }
 
 /*
-	Prerequisite: These examples will work only if you tdigest sketch data in your datastore.
+	Prerequisite: These examples will work only if you have tdigest sketch data in your datastore.
 	To experiment, you can use the doubles_sketch_data.tsv file attached in this repo. It is a copy of  https://github.com/apache/druid/blob/master/extensions-contrib/tdigestsketch/src/test/resources/doubles_sketch_data.tsv
 */
 
