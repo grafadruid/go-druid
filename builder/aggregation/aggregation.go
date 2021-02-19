@@ -2,6 +2,7 @@ package aggregation
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -96,6 +97,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLast()
 	case "tDigestSketch":
 		a = NewTDigestSketch()		
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return a, json.Unmarshal(data, &a)
 }

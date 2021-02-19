@@ -2,6 +2,7 @@ package postaggregation
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -58,7 +59,8 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewLongLeast()
 	case "quantilesFromTDigestSketch":
 		p = NewQuantilesFromTDigestSketch()
-		
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return p, json.Unmarshal(data, &p)
 }

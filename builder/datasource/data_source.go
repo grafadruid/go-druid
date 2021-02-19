@@ -2,6 +2,7 @@ package datasource
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -42,6 +43,8 @@ func Load(data []byte) (builder.DataSource, error) {
 		d = NewTable()
 	case "union":
 		d = NewUnion()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return d, json.Unmarshal(data, &d)
 }
