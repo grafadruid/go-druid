@@ -2,6 +2,7 @@ package havingspec
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -46,6 +47,8 @@ func Load(data []byte) (builder.Dimension, error) {
 		d = NewNot()
 	case "or":
 		d = NewOr()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

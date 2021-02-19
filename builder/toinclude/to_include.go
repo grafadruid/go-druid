@@ -2,6 +2,7 @@ package toinclude
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -34,6 +35,8 @@ func Load(data []byte) (builder.ToInclude, error) {
 		ti = NewList()
 	case "none":
 		ti = NewNone()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return ti, json.Unmarshal(data, &ti)
 }

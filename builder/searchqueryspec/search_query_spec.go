@@ -2,6 +2,7 @@ package searchqueryspec
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -38,6 +39,8 @@ func Load(data []byte) (builder.SearchQuerySpec, error) {
 		s = NewInsensitiveContains()
 	case "regex":
 		s = NewRegex()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return s, json.Unmarshal(data, &s)
 }

@@ -2,6 +2,8 @@ package intervals
 
 import (
 	"encoding/json"
+	"errors"
+
 	"github.com/grafadruid/go-druid/builder"
 )
 
@@ -29,6 +31,8 @@ func Load(data []byte) (builder.Intervals, error) {
 	switch t.Typ {
 	case "intervals":
 		i = NewIntervals()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return i, json.Unmarshal(data, &i)
 }

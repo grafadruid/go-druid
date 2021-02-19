@@ -2,6 +2,7 @@ package topnmetric
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -38,6 +39,8 @@ func Load(data []byte) (builder.TopNMetric, error) {
 		tnm = NewLexicographic()
 	case "numeric":
 		tnm = NewNumeric()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return tnm, json.Unmarshal(data, &tnm)
 }

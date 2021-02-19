@@ -2,6 +2,7 @@ package bound
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -34,6 +35,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		b = NewRadius()
 	case "rectangular":
 		b = NewRectangular()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return b, json.Unmarshal(data, &b)
 }
