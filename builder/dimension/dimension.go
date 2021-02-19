@@ -2,6 +2,7 @@ package dimension
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/types"
@@ -59,6 +60,8 @@ func Load(data []byte) (builder.Dimension, error) {
 		d = NewPrefixFiltered()
 	case "regexFiltered":
 		d = NewRegexFiltered()
+	default:
+		return nil, errors.New("unsupported type")
 	}
 	return d, json.Unmarshal(data, &d)
 }
