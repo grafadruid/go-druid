@@ -1,17 +1,18 @@
 package granularity
 
 import (
+	"github.com/grafadruid/go-druid/builder/testutil"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewSimple(t *testing.T) {
+	expected := []byte(`"all"`)
 	s := NewSimple()
 	s.SetGranularity("all")
 
-	expected := `"all"`
-	built, err := Load([]byte(expected))
+	built, err := Load(expected)
 	assert.Nil(t, err)
 
-	assert.Equal(t, s, built, "expected and generated do not match")
+	testutil.Compare(t, expected, s, built)
 }
