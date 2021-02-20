@@ -8,19 +8,23 @@ import (
 	"github.com/grafadruid/go-druid/builder"
 )
 
+// Base is the base for granularity.
 type Base struct {
 	Typ string `json:"type,omitempty"`
 }
 
+// SetType sets type.
 func (b *Base) SetType(typ string) *Base {
 	b.Typ = typ
 	return b
 }
 
+// Type returns the type.
 func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
+// Load converts the druid native query to builder.Granularity
 func Load(data []byte) (builder.Granularity, error) {
 	var g builder.Granularity
 	var t struct {
