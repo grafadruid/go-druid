@@ -95,6 +95,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLastFolding()
 	case "stringLast":
 		a = NewStringLast()
+	case "tDigestSketch":
+		a = NewTDigestSketch()		
 	default:
 		return nil, errors.New("unsupported type")
 	}
