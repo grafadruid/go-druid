@@ -1,9 +1,7 @@
 package granularity
 
 import (
-	"encoding/json"
-	"github.com/grafadruid/go-druid/builder"
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -12,15 +10,8 @@ func TestNewSimple(t *testing.T) {
 	s.SetGranularity("all")
 
 	expected := `"all"`
-	var unmarshalled builder.Granularity
-	unmarshalled, err := Load([]byte(expected))
-	if err != nil {
-		t.Errorf("Load failed, %s", err)
-	}
+	built, err := Load([]byte(expected))
+	assert.Nil(t, err)
 
-	if !reflect.DeepEqual(s, unmarshalled) {
-		generated, err := json.Marshal(s)
-		t.Errorf("Expected=%s, Got=%s (err:%v)", expected, generated, err)
-	}
-
+	assert.Equal(t, s, built, "expected and generated do not match")
 }
