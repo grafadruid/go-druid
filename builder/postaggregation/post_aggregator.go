@@ -57,6 +57,8 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewLongGreatest()
 	case "longLeast":
 		p = NewLongLeast()
+	case "quantilesFromTDigestSketch":
+		p = NewQuantilesFromTDigestSketch()
 	default:
 		return nil, errors.New("unsupported type")
 	}
