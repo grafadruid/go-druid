@@ -2,6 +2,7 @@ package granularity
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder"
 	"reflect"
 	"testing"
 	"time"
@@ -14,10 +15,10 @@ func TestNewPeriod(t *testing.T) {
 	p.SetPeriod(time.Minute)
 
 	expected := `{"type":"period","period":60000000000,"origin":"2021-02-19T16:00:00-08:00","timeZone":"America/Chicago"}`
-	var unmarshalled *Period
-	err := json.Unmarshal([]byte(expected), &unmarshalled)
+	var unmarshalled builder.Granularity
+	unmarshalled, err := Load([]byte(expected))
 	if err != nil {
-		t.Errorf("json.Unmarshal failed, %s", err)
+		t.Errorf("Load failed, %s", err)
 	}
 
 	if !reflect.DeepEqual(p, unmarshalled) {

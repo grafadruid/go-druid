@@ -2,6 +2,7 @@ package granularity
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder"
 	"reflect"
 	"testing"
 )
@@ -11,10 +12,10 @@ func TestNewSimple(t *testing.T) {
 	s.SetGranularity("all")
 
 	expected := `"all"`
-	var unmarshalled *Simple
-	err := json.Unmarshal([]byte(expected), &unmarshalled)
+	var unmarshalled builder.Granularity
+	unmarshalled, err := Load([]byte(expected))
 	if err != nil {
-		t.Errorf("json.Marshal failed, %s", err)
+		t.Errorf("Load failed, %s", err)
 	}
 
 	if !reflect.DeepEqual(s, unmarshalled) {
