@@ -21,13 +21,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.TopNMetric, error) {
+	var tnm builder.TopNMetric
+	if string(data) == "null" {
+		return tnm, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var tnm builder.TopNMetric
 	switch t.Typ {
 	case "alphaNumeric":
 		tnm = NewAlphaNumeric()
