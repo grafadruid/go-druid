@@ -60,7 +60,7 @@ func Load(data []byte) (builder.ExtractionFn, error) {
 	case "upper":
 		e = NewUpper()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported extractionfn type")
 	}
 	return e, json.Unmarshal(data, &e)
 }

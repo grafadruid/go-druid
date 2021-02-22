@@ -48,7 +48,7 @@ func Load(data []byte) (builder.Dimension, error) {
 	case "or":
 		d = NewOr()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported havingspec type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

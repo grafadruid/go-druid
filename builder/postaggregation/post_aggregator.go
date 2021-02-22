@@ -60,7 +60,7 @@ func Load(data []byte) (builder.PostAggregator, error) {
 	case "quantilesFromTDigestSketch":
 		p = NewQuantilesFromTDigestSketch()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported postaggregation type")
 	}
 	return p, json.Unmarshal(data, &p)
 }

@@ -13,5 +13,5 @@ func TestLoadUnsupportedType(t *testing.T) {
 
 	assert.Nil(f, "filter should be nil")
 	assert.NotNil(err, "error should not be nil")
-	assert.Error(err, "unsupported type")
+	assert.Error(err, "unsupported virtualcolumn type")
 }

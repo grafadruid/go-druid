@@ -36,7 +36,7 @@ func Load(data []byte) (builder.ToInclude, error) {
 	case "none":
 		ti = NewNone()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported toinclude type")
 	}
 	return ti, json.Unmarshal(data, &ti)
 }
