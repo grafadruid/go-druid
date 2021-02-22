@@ -20,19 +20,22 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Dimension, error) {
+func Load(data []byte) (builder.LimitSpec, error) {
+	var l builder.LimitSpec
+	if string(data) == "null" {
+		return l, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d builder.Dimension
 	switch t.Typ {
 	case "default":
-		d = NewDefault()
+		l = NewDefault()
 	default:
 		return nil, errors.New("unsupported limitspec type")
 	}
-	return d, json.Unmarshal(data, &d)
+	return l, json.Unmarshal(data, &l)
 }

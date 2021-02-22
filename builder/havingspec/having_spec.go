@@ -20,35 +20,38 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Dimension, error) {
+func Load(data []byte) (builder.HavingSpec, error) {
+	var h builder.HavingSpec
+	if string(data) == "null" {
+		return h, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d builder.Dimension
 	switch t.Typ {
 	case "always":
-		d = NewAlways()
+		h = NewAlways()
 	case "and":
-		d = NewAnd()
+		h = NewAnd()
 	case "dimSelector":
-		d = NewDimSelector()
+		h = NewDimSelector()
 	case "equalTo":
-		d = NewEqualTo()
+		h = NewEqualTo()
 	case "greaterThan":
-		d = NewGreaterThan()
+		h = NewGreaterThan()
 	case "lessThan":
-		d = NewLessThan()
+		h = NewLessThan()
 	case "never":
-		d = NewNever()
+		h = NewNever()
 	case "not":
-		d = NewNot()
+		h = NewNot()
 	case "or":
-		d = NewOr()
+		h = NewOr()
 	default:
 		return nil, errors.New("unsupported havingspec type")
 	}
-	return d, json.Unmarshal(data, &d)
+	return h, json.Unmarshal(data, &h)
 }

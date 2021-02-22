@@ -27,6 +27,9 @@ func (b *Base) Type() builder.ComponentType {
 // Load converts the druid native query to builder.Granularity
 func Load(data []byte) (builder.Granularity, error) {
 	var g builder.Granularity
+	if string(data) == "null" {
+		return g, nil
+	}
 	var t struct {
 		Typ string `json:"type,omitempty"`
 	}
