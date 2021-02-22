@@ -2,6 +2,8 @@ package query
 
 import (
 	"encoding/json"
+	"errors"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/datasource"
 	"github.com/grafadruid/go-druid/builder/intervals"
@@ -106,6 +108,8 @@ func Load(data []byte) (builder.Query, error) {
 		q = NewTimeseries()
 	case "topN":
 		q = NewTopN()
+	default:
+		return nil, errors.New("unsupported query type")
 	}
 	return q, json.Unmarshal(data, &q)
 }

@@ -43,7 +43,7 @@ func Load(data []byte) (builder.Granularity, error) {
 		g = NewSimple()
 		data = []byte(strconv.Quote(t.Typ))
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported granularity type")
 	}
 	return g, json.Unmarshal(data, &g)
 }

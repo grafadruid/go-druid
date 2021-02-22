@@ -66,7 +66,7 @@ func Load(data []byte) (builder.Filter, error) {
 	case "true":
 		f = NewTrue()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported filter type")
 	}
 	return f, json.Unmarshal(data, &f)
 }

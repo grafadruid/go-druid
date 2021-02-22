@@ -32,7 +32,7 @@ func Load(data []byte) (builder.Dimension, error) {
 	case "default":
 		d = NewDefault()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported limitspec type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

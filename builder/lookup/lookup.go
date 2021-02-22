@@ -32,7 +32,7 @@ func Load(data []byte) (builder.LookupExtractor, error) {
 	case "map":
 		l = NewMap()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported lookup type")
 	}
 	return l, json.Unmarshal(data, &l)
 }
