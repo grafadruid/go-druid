@@ -21,13 +21,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.SearchQuerySpec, error) {
+	var s builder.SearchQuerySpec
+	if string(data) == "null" {
+		return s, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var s builder.SearchQuerySpec
 	switch t.Typ {
 	case "all":
 		s = NewAll()

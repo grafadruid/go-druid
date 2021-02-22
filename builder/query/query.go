@@ -82,13 +82,16 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 }
 
 func Load(data []byte) (builder.Query, error) {
+	var q builder.Query
+	if string(data) == "null" {
+		return q, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"queryType,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var q builder.Query
 	switch t.Typ {
 	case "dataSourceMetadata":
 		q = NewDataSourceMetadata()
