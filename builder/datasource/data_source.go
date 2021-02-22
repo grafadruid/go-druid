@@ -44,7 +44,7 @@ func Load(data []byte) (builder.DataSource, error) {
 	case "union":
 		d = NewUnion()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported datasource type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

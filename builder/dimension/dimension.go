@@ -61,7 +61,7 @@ func Load(data []byte) (builder.Dimension, error) {
 	case "regexFiltered":
 		d = NewRegexFiltered()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported dimension type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

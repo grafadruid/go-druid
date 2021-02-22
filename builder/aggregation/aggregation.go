@@ -98,7 +98,7 @@ func Load(data []byte) (builder.Aggregator, error) {
 	case "tDigestSketch":
 		a = NewTDigestSketch()		
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported aggregation type")
 	}
 	return a, json.Unmarshal(data, &a)
 }

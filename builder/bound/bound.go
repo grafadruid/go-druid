@@ -36,7 +36,7 @@ func Load(data []byte) (builder.Aggregator, error) {
 	case "rectangular":
 		b = NewRectangular()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported bound type")
 	}
 	return b, json.Unmarshal(data, &b)
 }

@@ -40,7 +40,7 @@ func Load(data []byte) (builder.SearchQuerySpec, error) {
 	case "regex":
 		s = NewRegex()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported searchqueryspec type")
 	}
 	return s, json.Unmarshal(data, &s)
 }

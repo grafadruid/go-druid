@@ -40,7 +40,7 @@ func Load(data []byte) (builder.TopNMetric, error) {
 	case "numeric":
 		tnm = NewNumeric()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported topnmetric type")
 	}
 	return tnm, json.Unmarshal(data, &tnm)
 }

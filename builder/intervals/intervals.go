@@ -32,7 +32,7 @@ func Load(data []byte) (builder.Intervals, error) {
 	case "intervals":
 		i = NewIntervals()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported intervals type")
 	}
 	return i, json.Unmarshal(data, &i)
 }
