@@ -20,7 +20,7 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Aggregator, error) {
+func Load(data []byte) (builder.Bound, error) {
 	var b builder.Bound
 	if string(data) == "null" {
 		return b, nil
