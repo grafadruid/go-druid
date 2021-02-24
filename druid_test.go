@@ -31,3 +31,5 @@ func TestNewClientWithSkipVerify(t *testing.T) {
 	assert.NotNil(d, "client should not be nil")
 	assert.True(d.skipTLSVerify, "they should not be equal")
 }
+
+// TODO: at some point use https://golang.org/src/crypto/tls/example_test.go this to create server with bad cert and test
