@@ -19,3 +19,15 @@ func TestSetBaseURLWithSuffix(t *testing.T) {
 	assert.Nil(err, "error should be nil")
 	assert.Equal(d.baseURL, wantBaseURL, "they should not be equal")
 }
+
+func TestNewClientWithSkipVerify(t *testing.T) {
+	assert := assert.New(t)
+
+	var druidOpts []ClientOption
+	druidOpts = append(druidOpts, WithSkipTLSVerify(true))
+
+	d, err := NewClient("localhost:8082", druidOpts...)
+	assert.Nil(err, "error should be nil")
+	assert.NotNil(d, "client should not be nil")
+	assert.True(d.skipTLSVerify, "they should not be equal")
+}

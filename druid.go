@@ -33,11 +33,12 @@ var (
 )
 
 type Client struct {
-	http      *retryablehttp.Client
-	baseURL   *url.URL
-	username  string
-	password  string
-	basicAuth bool
+	http          *retryablehttp.Client
+	baseURL       *url.URL
+	username      string
+	password      string
+	basicAuth     bool
+	skipTLSVerify bool
 }
 
 type clientOptions struct {
@@ -79,9 +80,10 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 			RetryWaitMax: opts.retryWaitMax,
 			RetryMax:     opts.retryMax,
 		},
-		username:  opts.username,
-		password:  opts.password,
-		basicAuth: opts.username != "" && opts.password != "",
+		username:      opts.username,
+		password:      opts.password,
+		basicAuth:     opts.username != "" && opts.password != "",
+		skipTLSVerify: opts.skipTLSVerify,
 	}
 	if err := c.setBaseURL(baseURL); err != nil {
 		return nil, err
