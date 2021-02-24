@@ -21,18 +21,21 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.LookupExtractor, error) {
+	var l builder.LookupExtractor
+	if string(data) == "null" {
+		return l, nil
+	}
 	var t struct {
 		Typ string `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var l builder.LookupExtractor
 	switch t.Typ {
 	case "map":
 		l = NewMap()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported lookup type")
 	}
 	return l, json.Unmarshal(data, &l)
 }

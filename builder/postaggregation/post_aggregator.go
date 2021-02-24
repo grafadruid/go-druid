@@ -27,13 +27,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.PostAggregator, error) {
+	var p builder.PostAggregator
+	if string(data) == "null" {
+		return p, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var p builder.PostAggregator
 	switch t.Typ {
 	case "arithmetic":
 		p = NewArithmetic()
@@ -57,8 +60,10 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewLongGreatest()
 	case "longLeast":
 		p = NewLongLeast()
+	case "quantilesFromTDigestSketch":
+		p = NewQuantilesFromTDigestSketch()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported postaggregation type")
 	}
 	return p, json.Unmarshal(data, &p)
 }

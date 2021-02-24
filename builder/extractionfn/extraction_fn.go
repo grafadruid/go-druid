@@ -21,13 +21,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.ExtractionFn, error) {
+	var e builder.ExtractionFn
+	if string(data) == "null" {
+		return e, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var e builder.ExtractionFn
 	switch t.Typ {
 	case "bucket":
 		e = NewBucket()
@@ -60,7 +63,7 @@ func Load(data []byte) (builder.ExtractionFn, error) {
 	case "upper":
 		e = NewUpper()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported extractionfn type")
 	}
 	return e, json.Unmarshal(data, &e)
 }

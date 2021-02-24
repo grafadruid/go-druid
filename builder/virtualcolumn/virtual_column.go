@@ -20,19 +20,22 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Dimension, error) {
+func Load(data []byte) (builder.VirtualColumn, error) {
+	var v builder.VirtualColumn
+	if string(data) == "null" {
+		return v, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d builder.Dimension
 	switch t.Typ {
 	case "expression":
-		d = NewExpression()
+		v = NewExpression()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported virtualcolumn type")
 	}
-	return d, json.Unmarshal(data, &d)
+	return v, json.Unmarshal(data, &v)
 }

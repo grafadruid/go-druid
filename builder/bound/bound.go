@@ -20,14 +20,17 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Aggregator, error) {
+func Load(data []byte) (builder.Bound, error) {
+	var b builder.Bound
+	if string(data) == "null" {
+		return b, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var b builder.Bound
 	switch t.Typ {
 	case "polygon":
 		b = NewPolygon()
@@ -36,7 +39,7 @@ func Load(data []byte) (builder.Aggregator, error) {
 	case "rectangular":
 		b = NewRectangular()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported bound type")
 	}
 	return b, json.Unmarshal(data, &b)
 }

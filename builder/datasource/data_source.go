@@ -21,13 +21,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.DataSource, error) {
+	var d builder.DataSource
+	if string(data) == "null" {
+		return d, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d builder.DataSource
 	switch t.Typ {
 	case "globalTable":
 		d = NewGlobalTable()
@@ -44,7 +47,7 @@ func Load(data []byte) (builder.DataSource, error) {
 	case "union":
 		d = NewUnion()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported datasource type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

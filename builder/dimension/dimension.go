@@ -40,13 +40,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.Dimension, error) {
+	var d builder.Dimension
+	if string(data) == "null" {
+		return d, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var d builder.Dimension
 	switch t.Typ {
 	case "default":
 		d = NewDefault()
@@ -61,7 +64,7 @@ func Load(data []byte) (builder.Dimension, error) {
 	case "regexFiltered":
 		d = NewRegexFiltered()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported dimension type")
 	}
 	return d, json.Unmarshal(data, &d)
 }

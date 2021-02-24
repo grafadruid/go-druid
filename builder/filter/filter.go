@@ -21,13 +21,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.Filter, error) {
+	var f builder.Filter
+	if string(data) == "null" {
+		return f, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var f builder.Filter
 	switch t.Typ {
 	case "and":
 		f = NewAnd()
@@ -66,7 +69,7 @@ func Load(data []byte) (builder.Filter, error) {
 	case "true":
 		f = NewTrue()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported filter type")
 	}
 	return f, json.Unmarshal(data, &f)
 }

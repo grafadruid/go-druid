@@ -2,6 +2,8 @@ package query
 
 import (
 	"encoding/json"
+	"errors"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/datasource"
 	"github.com/grafadruid/go-druid/builder/intervals"
@@ -80,13 +82,16 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 }
 
 func Load(data []byte) (builder.Query, error) {
+	var q builder.Query
+	if string(data) == "null" {
+		return q, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"queryType,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var q builder.Query
 	switch t.Typ {
 	case "dataSourceMetadata":
 		q = NewDataSourceMetadata()
@@ -106,6 +111,8 @@ func Load(data []byte) (builder.Query, error) {
 		q = NewTimeseries()
 	case "topN":
 		q = NewTopN()
+	default:
+		return nil, errors.New("unsupported query type")
 	}
 	return q, json.Unmarshal(data, &q)
 }

@@ -27,13 +27,16 @@ func (b *Base) Type() builder.ComponentType {
 }
 
 func Load(data []byte) (builder.Aggregator, error) {
+	var a builder.Aggregator
+	if string(data) == "null" {
+		return a, nil
+	}
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	var a builder.Aggregator
 	switch t.Typ {
 	case "cardinality":
 		a = NewCardinality()
@@ -95,8 +98,10 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLastFolding()
 	case "stringLast":
 		a = NewStringLast()
+	case "tDigestSketch":
+		a = NewTDigestSketch()
 	default:
-		return nil, errors.New("unsupported type")
+		return nil, errors.New("unsupported aggregation type")
 	}
 	return a, json.Unmarshal(data, &a)
 }

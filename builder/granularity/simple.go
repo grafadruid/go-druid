@@ -2,6 +2,8 @@ package granularity
 
 import "github.com/grafadruid/go-druid/builder"
 
+// Simple granularities are specified as a string and bucket timestamps by their UTC time.
+// https://druid.apache.org/docs/latest/querying/granularities.html#simple-granularities
 type Simple string
 
 const (
@@ -19,15 +21,18 @@ const (
 	Year                 = "year"
 )
 
+// Type sets the type to Simple
 func (s *Simple) Type() builder.ComponentType {
 	return "simple"
 }
 
+// SetGranularity sets granularity.
 func (s *Simple) SetGranularity(g Simple) *Simple {
 	*s = g
 	return s
 }
 
+// NewSimple creates a Simple type.
 func NewSimple() *Simple {
 	var s Simple
 	return &s
