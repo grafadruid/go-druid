@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -23,6 +24,7 @@ const (
 	defaultRetryWaitMin          = 100 * time.Millisecond
 	defaultRetryWaitMax          = 3 * time.Second
 	defaultRetryMax              = 5
+	defaultSkipTlsOption         = false
 )
 
 var (
@@ -39,29 +41,34 @@ type Client struct {
 }
 
 type clientOptions struct {
-	httpClient   *http.Client
-	username     string
-	password     string
-	backoff      retryablehttp.Backoff
-	retry        retryablehttp.CheckRetry
-	retryWaitMin time.Duration
-	retryWaitMax time.Duration
-	retryMax     int
+	httpClient    *http.Client
+	username      string
+	password      string
+	backoff       retryablehttp.Backoff
+	retry         retryablehttp.CheckRetry
+	retryWaitMin  time.Duration
+	retryWaitMax  time.Duration
+	retryMax      int
+	skipTLSVerify bool
 }
 
 type ClientOption func(*clientOptions)
 
 func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	opts := &clientOptions{
-		httpClient:   defaultHTTPClient(),
-		backoff:      defaultBackoff,
-		retry:        defaultRetry,
-		retryWaitMin: defaultRetryWaitMin,
-		retryWaitMax: defaultRetryWaitMax,
-		retryMax:     defaultRetryMax,
+		httpClient:    defaultHTTPClient(),
+		backoff:       defaultBackoff,
+		retry:         defaultRetry,
+		retryWaitMin:  defaultRetryWaitMin,
+		retryWaitMax:  defaultRetryWaitMax,
+		retryMax:      defaultRetryMax,
+		skipTLSVerify: defaultSkipTlsOption,
 	}
 	for _, opt := range options {
 		opt(opts)
+	}
+	if opts.skipTLSVerify {
+		InsecureSkipVerify(opts)
 	}
 	c := &Client{
 		http: &retryablehttp.Client{
@@ -81,6 +88,13 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	}
 
 	return c, nil
+}
+
+func InsecureSkipVerify(opts *clientOptions) {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+	}
+	opts.httpClient.Transport = &http.Transport{TLSClientConfig: tlsConfig}
 }
 
 func (c *Client) Close() error {
@@ -182,6 +196,12 @@ func WithBasicAuth(username, password string) ClientOption {
 	return func(opts *clientOptions) {
 		opts.username = username
 		opts.password = password
+	}
+}
+
+func WithSkipTLSVerify(skip bool) ClientOption {
+	return func(opts *clientOptions) {
+		opts.skipTLSVerify = skip
 	}
 }
 
