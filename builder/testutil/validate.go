@@ -2,8 +2,9 @@ package testutil
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // Compare compares the builder type b to expected and also built to expected.
@@ -13,7 +14,7 @@ func Compare(t *testing.T, expected []byte, b interface{}, built interface{}) {
 	js, err := json.Marshal(b)
 	assert.Nil(t, err)
 
-	assert.Equal(t, js, expected)
+	assert.Equal(t, expected, js)
 
 	assert.Equal(t, b, built)
 
@@ -21,5 +22,5 @@ func Compare(t *testing.T, expected []byte, b interface{}, built interface{}) {
 	// be compared with expected.
 	jbuilt, err := json.Marshal(built)
 	assert.Nil(t, err)
-	assert.Equal(t, jbuilt, expected)
+	assert.Equal(t, expected, jbuilt)
 }
