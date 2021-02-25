@@ -22,8 +22,8 @@ var ldflags = ""
 // allow user to override go executable by running as GOEXE=xxx make ... on unix-like systems
 var goexe = "go"
 
-// Check is the default that fmt, vet, runs test and builds
-var Default = Check
+// Build is the default that fmt, vet, runs test and builds
+var Default = Build
 
 var Aliases = map[string]interface{}{
 	"test": TestRace,
@@ -37,14 +37,6 @@ func init() {
 	// We want to use Go 1.11 modules even if the source lives inside GOPATH.
 	// The default is "auto".
 	os.Setenv("GO111MODULE", "on")
-}
-
-// Build runs go mod download and then installs the binary.
-func Build() error {
-	if err := sh.Run("go", "mod", "download"); err != nil {
-		return err
-	}
-	return sh.Run("go", "install", "./...")
 }
 
 // Fmt run gofmt linter
@@ -143,19 +135,20 @@ func TestCoverHTML() error {
 	return sh.Run(goexe, "tool", "cover", "-html="+coverAll)
 }
 
-// Check run linters and tests
-func Check() {
+// Build run linters, tests, download modules and install
+func Build() error {
 	if strings.Contains(runtime.Version(), "1.8") {
 		// Go 1.8 doesn't play along with go test ./... and /vendor.
 		// We could fix that, but that would take time.
-		fmt.Printf("Skip Check on %s\n", runtime.Version())
-		return
+		fmt.Printf("Skip Build on %s\n", runtime.Version())
+		return nil
 	}
 
-	mg.Deps(Fmt, Vet)
-	// TODO: Enable once errors are fixed
-	mg.Deps(TestRace)
-	mg.Deps(Build)
+	mg.Deps(Fmt, Vet, TestRace)
+	if err := sh.Run("go", "mod", "download"); err != nil {
+		return err
+	}
+	return sh.Run("go", "install", "./...")
 }
 
 var (
