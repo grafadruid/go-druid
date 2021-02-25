@@ -25,6 +25,10 @@ var goexe = "go"
 // Check is the default that fmt, vet, runs test and builds
 var Default = Check
 
+var Aliases = map[string]interface{}{
+	"test": TestRace,
+}
+
 func init() {
 	if exe := os.Getenv("GOEXE"); exe != "" {
 		goexe = exe
@@ -41,28 +45,6 @@ func Build() error {
 		return err
 	}
 	return sh.Run("go", "install", "./...")
-}
-
-// Lint run golint linter
-// https://github.com/golang/lint
-func Lint() error {
-	pkgs, err := packages()
-	if err != nil {
-		return err
-	}
-	failed := false
-	for _, pkg := range pkgs {
-		// We don't actually want to fail this target if we find golint errors,
-		// so we don't pass -set_exit_status, but we still print out any failures.
-		if _, err := sh.Exec(nil, os.Stderr, nil, "golint", pkg); err != nil {
-			fmt.Printf("ERROR: running go lint on %q: %v\n", pkg, err)
-			failed = true
-		}
-	}
-	if failed {
-		return errors.New("errors running golint")
-	}
-	return nil
 }
 
 // Fmt run gofmt linter
@@ -170,9 +152,8 @@ func Check() {
 		return
 	}
 
-	mg.Deps(Fmt)
+	mg.Deps(Fmt, Vet)
 	// TODO: Enable once errors are fixed
-	// mg.Deps(Lint, Vet)
 	mg.Deps(TestRace)
 	mg.Deps(Build)
 }
