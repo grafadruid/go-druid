@@ -33,44 +33,39 @@ var (
 )
 
 type Client struct {
-	http          *retryablehttp.Client
-	baseURL       *url.URL
-	username      string
-	password      string
-	basicAuth     bool
-	skipTLSVerify bool
+	http      *retryablehttp.Client
+	baseURL   *url.URL
+	username  string
+	password  string
+	basicAuth bool
 }
 
 type clientOptions struct {
-	httpClient    *http.Client
-	username      string
-	password      string
-	backoff       retryablehttp.Backoff
-	retry         retryablehttp.CheckRetry
-	retryWaitMin  time.Duration
-	retryWaitMax  time.Duration
-	retryMax      int
-	skipTLSVerify bool
+	httpClient   *http.Client
+	username     string
+	password     string
+	backoff      retryablehttp.Backoff
+	retry        retryablehttp.CheckRetry
+	retryWaitMin time.Duration
+	retryWaitMax time.Duration
+	retryMax     int
 }
 
 type ClientOption func(*clientOptions)
 
 func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	opts := &clientOptions{
-		httpClient:    defaultHTTPClient(),
-		backoff:       defaultBackoff,
-		retry:         defaultRetry,
-		retryWaitMin:  defaultRetryWaitMin,
-		retryWaitMax:  defaultRetryWaitMax,
-		retryMax:      defaultRetryMax,
-		skipTLSVerify: defaultSkipTlsOption,
+		httpClient:   defaultHTTPClient(),
+		backoff:      defaultBackoff,
+		retry:        defaultRetry,
+		retryWaitMin: defaultRetryWaitMin,
+		retryWaitMax: defaultRetryWaitMax,
+		retryMax:     defaultRetryMax,
 	}
 	for _, opt := range options {
 		opt(opts)
 	}
-	if opts.skipTLSVerify {
-		InsecureSkipVerify(opts)
-	}
+
 	c := &Client{
 		http: &retryablehttp.Client{
 			Backoff:      opts.backoff,
@@ -80,23 +75,15 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 			RetryWaitMax: opts.retryWaitMax,
 			RetryMax:     opts.retryMax,
 		},
-		username:      opts.username,
-		password:      opts.password,
-		basicAuth:     opts.username != "" && opts.password != "",
-		skipTLSVerify: opts.skipTLSVerify,
+		username:  opts.username,
+		password:  opts.password,
+		basicAuth: opts.username != "" && opts.password != "",
 	}
 	if err := c.setBaseURL(baseURL); err != nil {
 		return nil, err
 	}
 
 	return c, nil
-}
-
-func InsecureSkipVerify(opts *clientOptions) {
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
-	}
-	opts.httpClient.Transport = &http.Transport{TLSClientConfig: tlsConfig}
 }
 
 func (c *Client) Close() error {
@@ -201,9 +188,11 @@ func WithBasicAuth(username, password string) ClientOption {
 	}
 }
 
-func WithSkipTLSVerify(skip bool) ClientOption {
+func WithSkipTLSVerify() ClientOption {
 	return func(opts *clientOptions) {
-		opts.skipTLSVerify = skip
+		opts.httpClient.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
 	}
 }
 
