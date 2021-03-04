@@ -24,7 +24,6 @@ const (
 	defaultRetryWaitMin          = 100 * time.Millisecond
 	defaultRetryWaitMax          = 3 * time.Second
 	defaultRetryMax              = 5
-	defaultSkipTlsOption         = false
 )
 
 var (

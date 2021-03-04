@@ -30,7 +30,7 @@ func TestNewClientWithSkipVerify(t *testing.T) {
 	d, err := NewClient("localhost:8082", druidOpts...)
 	assert.Nil(err, "error should be nil")
 	assert.NotNil(d, "client should not be nil")
-	assert.True(d.http.HTTPClient.Transport.(*http.Transport).TLSClientConfig.InsecureSkipVerify, "they should not be equal")
+	assert.True(d.http.HTTPClient.Transport.(*http.Transport).TLSClientConfig.InsecureSkipVerify, "Insecure verify should be true")
 }
 
 // TODO: at some point use https://golang.org/src/crypto/tls/example_test.go this to create server with bad cert and test
