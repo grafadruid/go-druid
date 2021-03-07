@@ -25,10 +25,6 @@ var goexe = "go"
 // Build is the default that fmt, vet, runs test and builds
 var Default = Build
 
-var Aliases = map[string]interface{}{
-	"test": TestRace,
-}
-
 func init() {
 	if exe := os.Getenv("GOEXE"); exe != "" {
 		goexe = exe
@@ -88,6 +84,12 @@ func Vet() error {
 	return nil
 }
 
+// Run tests
+func Test() error {
+	env := map[string]string{"GOFLAGS": testGoFlags()}
+	return runCmd(env, goexe, "test", "./...", buildFlags(), "-tags", buildTags())
+}
+
 // TestRace run tests with race detector
 func TestRace() error {
 	env := map[string]string{"GOFLAGS": testGoFlags()}
@@ -135,7 +137,7 @@ func TestCoverHTML() error {
 	return sh.Run(goexe, "tool", "cover", "-html="+coverAll)
 }
 
-// Build run linters, tests, download modules and install
+// Build run linters, vet and tests
 func Build() error {
 	if strings.Contains(runtime.Version(), "1.8") {
 		// Go 1.8 doesn't play along with go test ./... and /vendor.
@@ -144,11 +146,9 @@ func Build() error {
 		return nil
 	}
 
+	// TODO: Add lint after fixing errors
 	mg.Deps(Fmt, Vet, TestRace)
-	if err := sh.Run("go", "mod", "download"); err != nil {
-		return err
-	}
-	return sh.Run("go", "install", "./...")
+	return nil
 }
 
 var (
