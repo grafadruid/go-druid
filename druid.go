@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -182,6 +183,17 @@ func WithBasicAuth(username, password string) ClientOption {
 	return func(opts *clientOptions) {
 		opts.username = username
 		opts.password = password
+	}
+}
+
+func WithSkipTLSVerify() ClientOption {
+	return func(opts *clientOptions) {
+		if nil == opts.httpClient.Transport {
+			opts.httpClient.Transport = &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			}
+		}
+		opts.httpClient.Transport.(*http.Transport).TLSClientConfig.InsecureSkipVerify = true
 	}
 }
 

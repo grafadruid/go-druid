@@ -1,21 +1,22 @@
 package granularity
 
 import (
-	"github.com/grafadruid/go-druid/builder/testutil"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewDuration(t *testing.T) {
 	d := NewDuration()
 	d.SetDuration(time.Minute)
 	d.SetOrigin(time.Unix(1613779200, 0))
+	start, _ := time.Parse(time.RFC822, "19 Feb 21 19:00 EST")
 
-	expected := []byte(`{"type":"duration","duration":60000000000,"origin":"2021-02-19T16:00:00-08:00"}`)
-
-	built, err := Load(expected)
-	assert.Nil(t, err)
-
-	testutil.Compare(t, expected, d, built)
+	x := &Duration{
+		Base:     Base{Typ: "duration"},
+		Duration: 60000000000,
+		Origin:   start,
+	}
+	assert.Equal(t, x, d)
 }

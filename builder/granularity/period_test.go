@@ -1,10 +1,10 @@
 package granularity
 
 import (
-	"github.com/grafadruid/go-druid/builder/testutil"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewPeriod(t *testing.T) {
@@ -13,10 +13,13 @@ func TestNewPeriod(t *testing.T) {
 	p.SetTimeZone(`America/Chicago`)
 	p.SetPeriod(time.Minute)
 
-	expected := []byte(`{"type":"period","period":60000000000,"origin":"2021-02-19T16:00:00-08:00","timeZone":"America/Chicago"}`)
+	start, _ := time.Parse(time.RFC822, "19 Feb 21 19:00 EST")
 
-	built, err := Load(expected)
-	assert.Nil(t, err)
-
-	testutil.Compare(t, expected, p, built)
+	x := &Period{
+		Base:     Base{Typ: "period"},
+		Period:   60000000000,
+		Origin:   start,
+		TimeZone: "America/Chicago",
+	}
+	assert.Equal(t, x, p)
 }
