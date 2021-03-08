@@ -18,7 +18,10 @@ import (
 )
 
 func main() {
-	d, err := druid.NewClient("http://localhost:8082")
+	var druidOpts []druid.ClientOption
+	druidOpts = append(druidOpts, druid.WithSkipTLSVerify())
+
+	d, err := druid.NewClient("http://localhost:8082", druidOpts...)
 	if err != nil {
 		log.Fatal(err)
 	}
