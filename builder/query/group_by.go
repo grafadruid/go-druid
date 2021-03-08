@@ -23,7 +23,7 @@ type GroupBy struct {
 	PostAggregations []builder.PostAggregator `json:"postAggregations,omitempty"`
 	Having           builder.HavingSpec       `json:"having,omitempty"`
 	LimitSpec        builder.LimitSpec        `json:"limitSpec,omitempty"`
-	SubtotalsSpec    [][]string               `json:"subtotalsSpec",omitempty`
+	SubtotalsSpec    [][]string               `json:"subtotalsSpec,omitempty"`
 }
 
 func NewGroupBy() *GroupBy {
