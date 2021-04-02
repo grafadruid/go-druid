@@ -100,6 +100,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLast()
 	case "tDigestSketch":
 		a = NewTDigestSketch()
+	case "thetaSketch":
+		a = NewThetaSketch()
 	default:
 		return nil, errors.New("unsupported aggregation type")
 	}
