@@ -6,7 +6,7 @@ type ThetaSketch struct {
 	Base
 	FieldName          string `json:"fieldName,omitempty"`
 	IsInputThetaSketch bool   `json:"isInputThetaSketch,omitempty"`
-	Size               int64  `json:"size, omitempty"`
+	Size               int64  `json:"size,omitempty"`
 }
 
 // NewThetaSketch create a new instance of ThetaSketch

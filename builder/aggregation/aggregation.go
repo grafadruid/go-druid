@@ -72,6 +72,10 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewFloatSum()
 	case "histogram":
 		a = NewHistogram()
+	case "HLLSketchBuild":
+		a = NewHLLSketchBuild()
+	case "HLLSketchMerge":
+		a = NewHLLSketchMerge()
 	case "hyperUnique":
 		a = NewHyperUnique()
 	case "javascript":
