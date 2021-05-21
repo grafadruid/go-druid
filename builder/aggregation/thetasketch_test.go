@@ -2,8 +2,9 @@ package aggregation
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestThetaSketch(t *testing.T) {
@@ -13,7 +14,7 @@ func TestThetaSketch(t *testing.T) {
 	// "omitempty" will ignore boolean=false
 	expected := `{"type":"thetaSketch", "name":"output_name", "fieldName":"metric_name", "size":16384}`
 
-	thetaSketchJson, err := json.Marshal(thetaSketch)
+	thetaSketchJSON, err := json.Marshal(thetaSketch)
 	assert.Nil(t, err)
-	assert.JSONEq(t, expected, string(thetaSketchJson))
+	assert.JSONEq(t, expected, string(thetaSketchJSON))
 }
