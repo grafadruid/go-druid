@@ -32,6 +32,11 @@ func (l *Lookup) SetName(name string) *Lookup {
 	return l
 }
 
+func (l *Lookup) SetOutputName(outputName string) *Lookup {
+	l.Base.SetOutputName(outputName)
+	return l
+}
+
 func (l *Lookup) SetReplaceMissingValueWith(replaceMissingValueWith string) *Lookup {
 	l.ReplaceMissingValueWith = replaceMissingValueWith
 	return l
