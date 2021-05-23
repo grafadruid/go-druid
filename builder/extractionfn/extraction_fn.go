@@ -48,6 +48,8 @@ func Load(data []byte) (builder.ExtractionFn, error) {
 		e = NewPartial()
 	case "regex":
 		e = NewRegex()
+	case "registeredLookup":
+		e = NewRegisteredLookup()
 	case "searchQuery":
 		e = NewSearchQuery()
 	case "stringFormat":
