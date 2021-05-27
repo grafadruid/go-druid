@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -133,6 +134,8 @@ func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehtt
 	return r, nil
 }
 
+type DecodeStreamer interface{ DecodeStream(io.Reader) error }
+
 func (c *Client) Do(r *retryablehttp.Request, result interface{}) (*Response, error) {
 	resp, err := c.http.Do(r)
 	if err != nil {
@@ -144,6 +147,9 @@ func (c *Client) Do(r *retryablehttp.Request, result interface{}) (*Response, er
 		return nil, err
 	}
 	if result != nil {
+		if decoder, ok := result.(DecodeStreamer); ok {
+			return nil, decoder.DecodeStream(resp.Body)
+		}
 		if err = json.NewDecoder(resp.Body).Decode(result); err != nil {
 			return nil, err
 		}
