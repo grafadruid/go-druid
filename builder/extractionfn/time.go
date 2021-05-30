@@ -4,7 +4,7 @@ type Time struct {
 	Base
 	TimeFormat   string `json:"timeFormat,omitempty"`
 	ResultFormat string `json:"resultFormat,omitempty"`
-	Joda         bool   `json:"joda,omitempty"`
+	Joda         *bool  `json:"joda,omitempty"`
 }
 
 func NewTime() *Time {
@@ -24,6 +24,6 @@ func (t *Time) SetResultFormat(resultFormat string) *Time {
 }
 
 func (t *Time) SetJoda(joda bool) *Time {
-	t.Joda = joda
+	t.Joda = &joda
 	return t
 }

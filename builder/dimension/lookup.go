@@ -11,9 +11,9 @@ type Lookup struct {
 	Base
 	Name                    string                  `json:"name,omitempty"`
 	ReplaceMissingValueWith string                  `json:"replaceMissingValueWith,omitempty"`
-	RetainMissingValue      bool                    `json:"retainMissingValue,omitempty"`
+	RetainMissingValue      *bool                   `json:"retainMissingValue,omitempty"`
 	Lookup                  builder.LookupExtractor `json:"lookup,omitempty"`
-	Optimize                bool                    `json:"optimize,omitempty"`
+	Optimize                *bool                   `json:"optimize,omitempty"`
 }
 
 type RegisteredLookup struct {
@@ -43,7 +43,7 @@ func (l *Lookup) SetReplaceMissingValueWith(replaceMissingValueWith string) *Loo
 }
 
 func (l *Lookup) SetRetainMissingValue(retainMissingValue bool) *Lookup {
-	l.RetainMissingValue = retainMissingValue
+	l.RetainMissingValue = &retainMissingValue
 	return l
 }
 
@@ -53,7 +53,7 @@ func (l *Lookup) SetLookup(lookup builder.LookupExtractor) *Lookup {
 }
 
 func (l *Lookup) SetOptimize(optimize bool) *Lookup {
-	l.Optimize = optimize
+	l.Optimize = &optimize
 	return l
 }
 
@@ -62,9 +62,9 @@ func (l *Lookup) UnmarshalJSON(data []byte) error {
 		Base
 		Name                    string          `json:"name,omitempty"`
 		ReplaceMissingValueWith string          `json:"replaceMissingValueWith,omitempty"`
-		RetainMissingValue      bool            `json:"retainMissingValue,omitempty"`
+		RetainMissingValue      *bool           `json:"retainMissingValue,omitempty"`
 		Lookup                  json.RawMessage `json:"lookup,omitempty"`
-		Optimize                bool            `json:"optimize,omitempty"`
+		Optimize                *bool           `json:"optimize,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

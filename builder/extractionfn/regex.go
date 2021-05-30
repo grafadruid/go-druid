@@ -4,7 +4,7 @@ type Regex struct {
 	Base
 	Expr                    string `json:"expr,omitempty"`
 	Index                   int64  `json:"index,omitempty"`
-	ReplaceMissingValue     bool   `json:"replaceMissingValue,omitempty"`
+	ReplaceMissingValue     *bool  `json:"replaceMissingValue,omitempty"`
 	ReplaceMissingValueWith string `json:"replaceMissingValueWith,omitempty"`
 }
 
@@ -25,7 +25,7 @@ func (r *Regex) SetIndex(index int64) *Regex {
 }
 
 func (r *Regex) SetReplaceMissingValue(replaceMissingValue bool) *Regex {
-	r.ReplaceMissingValue = replaceMissingValue
+	r.ReplaceMissingValue = &replaceMissingValue
 	return r
 }
 

@@ -3,7 +3,7 @@ package lookup
 type Map struct {
 	Base
 	Map        map[string]string `json:"map,omitempty"`
-	IsOneToOne bool              `json:"isOneToOne,omitempty"`
+	IsOneToOne *bool             `json:"isOneToOne,omitempty"`
 }
 
 func NewMap() *Map {
@@ -18,6 +18,6 @@ func (m *Map) SetMap(mp map[string]string) *Map {
 }
 
 func (m *Map) SetIsOneToOne(i bool) *Map {
-	m.IsOneToOne = i
+	m.IsOneToOne = &i
 	return m
 }

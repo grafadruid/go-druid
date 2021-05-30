@@ -3,6 +3,7 @@ package query
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/filter"
@@ -13,7 +14,7 @@ import (
 
 type Timeseries struct {
 	Base
-	Descending       bool                     `json:"descending,omitempty"`
+	Descending       *bool                    `json:"descending,omitempty"`
 	VirtualColumns   []builder.VirtualColumn  `json:"virtualColumns,omitempty"`
 	Filter           builder.Filter           `json:"filter,omitempty"`
 	Granularity      builder.Granularity      `json:"granularity,omitempty"`
@@ -44,7 +45,7 @@ func (t *Timeseries) SetContext(context map[string]interface{}) *Timeseries {
 }
 
 func (t *Timeseries) SetDescending(descending bool) *Timeseries {
-	t.Descending = descending
+	t.Descending = &descending
 	return t
 }
 
@@ -81,7 +82,7 @@ func (t *Timeseries) SetLimit(limit int64) *Timeseries {
 func (t *Timeseries) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		Descending       bool              `json:"descending,omitempty"`
+		Descending       *bool             `json:"descending,omitempty"`
 		VirtualColumns   []json.RawMessage `json:"virtualColumns,omitempty"`
 		Filter           json.RawMessage   `json:"filter,omitempty"`
 		Granularity      json.RawMessage   `json:"granularity,omitempty"`

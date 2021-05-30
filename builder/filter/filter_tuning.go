@@ -2,7 +2,7 @@ package filter
 
 type FilterTuning struct {
 	Base
-	UseBitmapIndex                 bool  `json:"useBitmapIndex,omitempty"`
+	UseBitmapIndex                 *bool `json:"useBitmapIndex,omitempty"`
 	MinCardinalityToUseBitmapIndex int64 `json:"minCardinalityToUseBitmapIndex,omitempty"`
 	MaxCardinalityToUseBitmapIndex int64 `json:"maxCardinalityToUseBitmapIndex,omitempty"`
 }
@@ -14,7 +14,7 @@ func NewFilterTuning() *FilterTuning {
 }
 
 func (f *FilterTuning) SetUseBitmapIndex(useBitmapIndex bool) *FilterTuning {
-	f.UseBitmapIndex = useBitmapIndex
+	f.UseBitmapIndex = &useBitmapIndex
 	return f
 }
 

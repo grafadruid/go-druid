@@ -5,10 +5,10 @@ package extractionfn
 type RegisteredLookup struct {
 	Base
 	Lookup                  string `json:"lookup,omitempty"`
-	RetainMissingValue      bool   `json:"retainMissingValue,omitempty"`
+	RetainMissingValue      *bool  `json:"retainMissingValue,omitempty"`
 	ReplaceMissingValueWith string `json:"replaceMissingValueWith,omitempty"`
-	Injective               *bool  `json:"injective,omitempty"` // Use *bool to differentiate between missing value and false
-	Optimize                *bool  `json:"optimize,omitempty"`  // Use *bool to differentiate between missing value and false
+	Injective               *bool  `json:"injective,omitempty"`
+	Optimize                *bool  `json:"optimize,omitempty"`
 }
 
 func NewRegisteredLookup() *RegisteredLookup {
@@ -23,7 +23,7 @@ func (l *RegisteredLookup) SetLookup(lookup string) *RegisteredLookup {
 }
 
 func (l *RegisteredLookup) SetRetainMissingValue(retainMissingValue bool) *RegisteredLookup {
-	l.RetainMissingValue = retainMissingValue
+	l.RetainMissingValue = &retainMissingValue
 	return l
 }
 
