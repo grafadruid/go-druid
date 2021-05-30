@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -40,6 +41,10 @@ var (
 	// scheme specified in the URL is invalid. This error isn't typed
 	// specifically so we resort to matching on the error string.
 	schemeErrorRe = regexp.MustCompile(`unsupported protocol scheme`)
+
+	// We need to consume response bodies to maintain http connections, but
+	// limit the size we consume to respReadLimit.
+	respReadLimit = int64(4096)
 )
 
 type Client struct {
@@ -55,6 +60,7 @@ type clientOptions struct {
 	username     string
 	password     string
 	backoff      retryablehttp.Backoff
+	errorHandler retryablehttp.ErrorHandler
 	retry        retryablehttp.CheckRetry
 	retryWaitMin time.Duration
 	retryWaitMax time.Duration
@@ -74,6 +80,7 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	opts := &clientOptions{
 		httpClient:   defaultHTTPClient(),
 		backoff:      defaultBackoff,
+		errorHandler: defaultErrorHandler,
 		retry:        defaultRetry,
 		retryWaitMin: defaultRetryWaitMin,
 		retryWaitMax: defaultRetryWaitMax,
@@ -243,6 +250,15 @@ ABORT:
 	return false, err
 }
 
+func defaultErrorHandler(resp *http.Response, err error, numTries int) (*http.Response, error) {
+	// Drain and close the response body so the connection can be reused:
+	// https://pkg.go.dev/github.com/hashicorp/go-retryablehttp#ErrorHandler
+	defer resp.Body.Close()
+	io.Copy(ioutil.Discard, io.LimitReader(resp.Body, respReadLimit))
+
+	return resp, fmt.Errorf("Failed after %d attempt(s). Last error: %w", numTries, err)
+}
+
 func (c *Client) setBaseURL(urlStr string) error {
 	if !strings.HasSuffix(urlStr, "/") {
 		urlStr += "/"
@@ -290,6 +306,12 @@ func WithCustomBackoff(backoff retryablehttp.Backoff) ClientOption {
 func WithCustomRetry(retry retryablehttp.CheckRetry) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retry = retry
+	}
+}
+
+func WithCustomErrorHandler(h retryablehttp.ErrorHandler) ClientOption {
+	return func(opts *clientOptions) {
+		opts.errorHandler = h
 	}
 }
 
