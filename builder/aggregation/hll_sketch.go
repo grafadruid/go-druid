@@ -7,7 +7,7 @@ type HLLSketch struct {
 	FieldName  string `json:"fieldName,omitempty"`
 	LgK        int64  `json:"lgK,omitempty"`
 	TgtHLLType string `json:"tgtHllType,omitempty"`
-	Round      bool   `json:"round,omitempty"`
+	Round      *bool  `json:"round,omitempty"`
 }
 
 // NewHLLSketchBuild create a new instance of HLLSketch with type HLLSketchBuild
@@ -50,6 +50,6 @@ func (t *HLLSketch) SetTgtHLLType(tgtHLLType string) *HLLSketch {
 
 // SetRound set round.
 func (t *HLLSketch) SetRound(round bool) *HLLSketch {
-	t.Round = round
+	t.Round = &round
 	return t
 }

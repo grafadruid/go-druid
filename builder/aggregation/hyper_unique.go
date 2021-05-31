@@ -3,8 +3,8 @@ package aggregation
 type HyperUnique struct {
 	Base
 	FieldName          string `json:"fieldName,omitempty"`
-	IsInputHyperUnique bool   `json:"isInputHyperUnique,omitempty"`
-	Round              bool   `json:"round,omitempty"`
+	IsInputHyperUnique *bool  `json:"isInputHyperUnique,omitempty"`
+	Round              *bool  `json:"round,omitempty"`
 }
 
 func NewHyperUnique() *HyperUnique {
@@ -24,11 +24,11 @@ func (h *HyperUnique) SetFieldName(fieldName string) *HyperUnique {
 }
 
 func (h *HyperUnique) SetIsInputHyperUnique(isInputHyperUnique bool) *HyperUnique {
-	h.IsInputHyperUnique = isInputHyperUnique
+	h.IsInputHyperUnique = &isInputHyperUnique
 	return h
 }
 
 func (h *HyperUnique) SetRound(round bool) *HyperUnique {
-	h.Round = round
+	h.Round = &round
 	return h
 }

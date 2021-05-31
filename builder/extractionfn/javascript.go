@@ -3,7 +3,7 @@ package extractionfn
 type Javascript struct {
 	Base
 	Function  string `json:"function,omitempty"`
-	Injective bool   `json:"injective,omitempty"`
+	Injective *bool  `json:"injective,omitempty"`
 }
 
 func NewJavascript() *Javascript {
@@ -18,6 +18,6 @@ func (j *Javascript) SetFunction(function string) *Javascript {
 }
 
 func (j *Javascript) SetInjective(injective bool) *Javascript {
-	j.Injective = injective
+	j.Injective = &injective
 	return j
 }

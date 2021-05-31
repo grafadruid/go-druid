@@ -8,7 +8,7 @@ type SQL struct {
 	Base
 	Query        string         `json:"query,omitempty"`
 	ResultFormat string         `json:"resultFormat,omitempty"`
-	Header       bool           `json:"header,omitempty"`
+	Header       *bool          `json:"header,omitempty"`
 	Parameters   []SQLParameter `json:"parameters,omitempty"`
 }
 
@@ -39,7 +39,7 @@ func (s *SQL) SetResultFormat(resultFormat string) *SQL {
 }
 
 func (s *SQL) SetHeader(header bool) *SQL {
-	s.Header = header
+	s.Header = &header
 	return s
 }
 
@@ -53,7 +53,7 @@ func (s *SQL) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Query        string         `json:"query,omitempty"`
 		ResultFormat string         `json:"resultFormat,omitempty"`
-		Header       bool           `json:"header,omitempty"`
+		Header       *bool          `json:"header,omitempty"`
 		Parameters   []SQLParameter `json:"parameters,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {

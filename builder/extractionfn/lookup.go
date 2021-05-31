@@ -10,10 +10,10 @@ import (
 type Lookup struct {
 	Base
 	Lookup                  builder.LookupExtractor `json:"lookup,omitempty"`
-	RetainMissingValue      bool                    `json:"retainMissingValue,omitempty"`
+	RetainMissingValue      *bool                   `json:"retainMissingValue,omitempty"`
 	ReplaceMissingValueWith string                  `json:"replaceMissingValueWith,omitempty"`
-	Injective               bool                    `json:"injective,omitempty"`
-	Optimize                bool                    `json:"optimize,omitempty"`
+	Injective               *bool                   `json:"injective,omitempty"`
+	Optimize                *bool                   `json:"optimize,omitempty"`
 }
 
 func NewLookup() *Lookup {
@@ -28,7 +28,7 @@ func (l *Lookup) SetLookup(lookup builder.LookupExtractor) *Lookup {
 }
 
 func (l *Lookup) SetRetainMissingValue(retainMissingValue bool) *Lookup {
-	l.RetainMissingValue = retainMissingValue
+	l.RetainMissingValue = &retainMissingValue
 	return l
 }
 
@@ -38,22 +38,22 @@ func (l *Lookup) SetReplaceMissingValueWith(replaceMissingValueWith string) *Loo
 }
 
 func (l *Lookup) SetInjective(injective bool) *Lookup {
-	l.Injective = injective
+	l.Injective = &injective
 	return l
 }
 
 func (l *Lookup) SetOptimize(optimize bool) *Lookup {
-	l.Optimize = optimize
+	l.Optimize = &optimize
 	return l
 }
 func (l *Lookup) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
 		Lookup                  json.RawMessage `json:"lookup,omitempty"`
-		RetainMissingValue      bool            `json:"retainMissingValue,omitempty"`
+		RetainMissingValue      *bool           `json:"retainMissingValue,omitempty"`
 		ReplaceMissingValueWith string          `json:"replaceMissingValueWith,omitempty"`
-		Injective               bool            `json:"injective,omitempty"`
-		Optimize                bool            `json:"optimize,omitempty"`
+		Injective               *bool           `json:"injective,omitempty"`
+		Optimize                *bool           `json:"optimize,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
