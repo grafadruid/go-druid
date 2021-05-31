@@ -13,8 +13,8 @@ type Bound struct {
 	Dimension    string                 `json:"dimension,omitempty"`
 	Lower        string                 `json:"lower,omitempty"`
 	Upper        string                 `json:"upper,omitempty"`
-	LowerStrict  bool                   `json:"lowerStrict,omitempty"`
-	UpperStrict  bool                   `json:"upperStrict,omitempty"`
+	LowerStrict  *bool                  `json:"lowerStrict,omitempty"`
+	UpperStrict  *bool                  `json:"upperStrict,omitempty"`
 	ExtractionFn builder.ExtractionFn   `json:"extractionFn,omitempty"`
 	Ordering     types.StringComparator `json:"ordering,omitempty"`
 }
@@ -41,12 +41,12 @@ func (b *Bound) SetUpper(upper string) *Bound {
 }
 
 func (b *Bound) SetLowerStrict(lowerStrict bool) *Bound {
-	b.LowerStrict = lowerStrict
+	b.LowerStrict = &lowerStrict
 	return b
 }
 
 func (b *Bound) SetUpperStrict(upperStrict bool) *Bound {
-	b.UpperStrict = upperStrict
+	b.UpperStrict = &upperStrict
 	return b
 }
 
@@ -67,8 +67,8 @@ func (b *Bound) UnmarshalJSON(data []byte) error {
 		Dimension    string                 `json:"dimension,omitempty"`
 		Lower        string                 `json:"lower,omitempty"`
 		Upper        string                 `json:"upper,omitempty"`
-		LowerStrict  bool                   `json:"lowerStrict,omitempty"`
-		UpperStrict  bool                   `json:"upperStrict,omitempty"`
+		LowerStrict  *bool                  `json:"lowerStrict,omitempty"`
+		UpperStrict  *bool                  `json:"upperStrict,omitempty"`
 		ExtractionFn json.RawMessage        `json:"extractionFn,omitempty"`
 		Ordering     types.StringComparator `json:"ordering,omitempty"`
 	}

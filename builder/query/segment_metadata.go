@@ -2,6 +2,7 @@ package query
 
 import (
 	"encoding/json"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/toinclude"
 )
@@ -22,10 +23,10 @@ const (
 type SegmentMetadata struct {
 	Base
 	ToInclude              builder.ToInclude `json:"toInclude,omitempty"`
-	Merge                  bool              `json:"merge,omitempty"`
+	Merge                  *bool             `json:"merge,omitempty"`
 	AnalysisTypes          []AnalysisType    `json:"analysisTypes,omitempty"`
-	UsingDefaultInterval   bool              `json:"usingDefaultInterval,omitempty"`
-	LenientAggregatorMerge bool              `json:"lenientAggregatorMerge,omitempty"`
+	UsingDefaultInterval   *bool             `json:"usingDefaultInterval,omitempty"`
+	LenientAggregatorMerge *bool             `json:"lenientAggregatorMerge,omitempty"`
 }
 
 func NewSegmentMetadata() *SegmentMetadata {
@@ -55,7 +56,7 @@ func (s *SegmentMetadata) SetToInclude(toInclude builder.ToInclude) *SegmentMeta
 }
 
 func (s *SegmentMetadata) SetMerge(merge bool) *SegmentMetadata {
-	s.Merge = merge
+	s.Merge = &merge
 	return s
 }
 
@@ -65,12 +66,12 @@ func (s *SegmentMetadata) SetAnalysisTypes(analysisTypes []AnalysisType) *Segmen
 }
 
 func (s *SegmentMetadata) SetUsingDefaultInterval(usingDefaultInterval bool) *SegmentMetadata {
-	s.UsingDefaultInterval = usingDefaultInterval
+	s.UsingDefaultInterval = &usingDefaultInterval
 	return s
 }
 
 func (s *SegmentMetadata) SetLenientAggregatorMerge(lenientAggregatorMerge bool) *SegmentMetadata {
-	s.LenientAggregatorMerge = lenientAggregatorMerge
+	s.LenientAggregatorMerge = &lenientAggregatorMerge
 	return s
 }
 
@@ -78,10 +79,10 @@ func (s *SegmentMetadata) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
 		ToInclude              json.RawMessage `json:"toInclude,omitempty"`
-		Merge                  bool            `json:"merge,omitempty"`
+		Merge                  *bool           `json:"merge,omitempty"`
 		AnalysisTypes          []AnalysisType  `json:"analysisTypes,omitempty"`
-		UsingDefaultInterval   bool            `json:"usingDefaultInterval,omitempty"`
-		LenientAggregatorMerge bool            `json:"lenientAggregatorMerge,omitempty"`
+		UsingDefaultInterval   *bool           `json:"usingDefaultInterval,omitempty"`
+		LenientAggregatorMerge *bool           `json:"lenientAggregatorMerge,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

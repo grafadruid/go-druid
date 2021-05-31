@@ -28,7 +28,7 @@ type Scan struct {
 	Order          Order                   `json:"order,omitempty"`
 	Filter         builder.Filter          `json:"filter,omitempty"`
 	Columns        []string                `json:"columns,omitempty"`
-	Legacy         bool                    `json:"legacy,omitempty"`
+	Legacy         *bool                   `json:"legacy,omitempty"`
 }
 
 // NewScan returns *builder.Scan which can be used to build a scan query.
@@ -118,7 +118,7 @@ func (s *Scan) SetColumns(columns []string) *Scan {
 
 // SetLegacy sets the `druid.query.scan.legacy` field.
 func (s *Scan) SetLegacy(legacy bool) *Scan {
-	s.Legacy = legacy
+	s.Legacy = &legacy
 	return s
 }
 
@@ -134,7 +134,7 @@ func (s *Scan) UnmarshalJSON(data []byte) error {
 		Order          Order             `json:"order,omitempty"`
 		Filter         json.RawMessage   `json:"filter,omitempty"`
 		Columns        []string          `json:"columns,omitempty"`
-		Legacy         bool              `json:"legacy,omitempty"`
+		Legacy         *bool             `json:"legacy,omitempty"`
 	}
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return err

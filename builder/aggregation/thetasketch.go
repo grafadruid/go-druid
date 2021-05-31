@@ -5,7 +5,7 @@ package aggregation
 type ThetaSketch struct {
 	Base
 	FieldName          string `json:"fieldName,omitempty"`
-	IsInputThetaSketch bool   `json:"isInputThetaSketch,omitempty"`
+	IsInputThetaSketch *bool  `json:"isInputThetaSketch,omitempty"`
 	Size               int64  `json:"size,omitempty"`
 }
 
@@ -30,7 +30,7 @@ func (t *ThetaSketch) SetFieldName(fieldName string) *ThetaSketch {
 
 // SetIsInputThetaSketch set theta isInputThetaSketch
 func (t *ThetaSketch) SetIsInputThetaSketch(isInputThetaSketch bool) *ThetaSketch {
-	t.IsInputThetaSketch = isInputThetaSketch
+	t.IsInputThetaSketch = &isInputThetaSketch
 	return t
 }
 

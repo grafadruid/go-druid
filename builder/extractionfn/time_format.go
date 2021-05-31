@@ -13,7 +13,7 @@ type TimeFormat struct {
 	TimeZone    types.DateTimeZone  `json:"timeZone,omitempty"`
 	Locale      string              `json:"locale,omitempty"`
 	Granularity builder.Granularity `json:"granularity,omitempty"`
-	AsMillis    bool                `json:"asMillis,omitempty"`
+	AsMillis    *bool               `json:"asMillis,omitempty"`
 }
 
 func NewTimeFormat() *TimeFormat {
@@ -43,7 +43,7 @@ func (t *TimeFormat) SetGranularity(granularity builder.Granularity) *TimeFormat
 }
 
 func (t *TimeFormat) SetAsMillis(asMillis bool) *TimeFormat {
-	t.AsMillis = asMillis
+	t.AsMillis = &asMillis
 	return t
 }
 
@@ -54,7 +54,7 @@ func (t *TimeFormat) UnmarshalJSON(data []byte) error {
 		TimeZone    types.DateTimeZone `json:"timeZone,omitempty"`
 		Locale      string             `json:"locale,omitempty"`
 		Granularity json.RawMessage    `json:"granularity,omitempty"`
-		AsMillis    bool               `json:"asMillis,omitempty"`
+		AsMillis    *bool              `json:"asMillis,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err

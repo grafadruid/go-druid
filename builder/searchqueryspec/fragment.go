@@ -3,7 +3,7 @@ package searchqueryspec
 type Fragment struct {
 	Base
 	Value         string `json:"value,omitempty"`
-	CaseSensitive bool   `json:"caseSensitive,omitempty"`
+	CaseSensitive *bool  `json:"caseSensitive,omitempty"`
 }
 
 func NewFragment() *Fragment {
@@ -18,6 +18,6 @@ func (f *Fragment) SetValue(value string) *Fragment {
 }
 
 func (f *Fragment) SetCaseSensitive(caseSensitive bool) *Fragment {
-	f.CaseSensitive = caseSensitive
+	f.CaseSensitive = &caseSensitive
 	return f
 }

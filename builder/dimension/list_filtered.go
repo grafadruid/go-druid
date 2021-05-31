@@ -11,7 +11,7 @@ type ListFiltered struct {
 	Base
 	Delegate    builder.Dimension `json:"delegate,omitempty"`
 	Values      []string          `json:"values,omitempty"`
-	IsWhiteList bool              `json:"isWhiteList,omitempty"`
+	IsWhiteList *bool             `json:"isWhiteList,omitempty"`
 }
 
 func NewListFiltered() *ListFiltered {
@@ -46,7 +46,7 @@ func (l *ListFiltered) SetValues(values []string) *ListFiltered {
 }
 
 func (l *ListFiltered) SetIsWhiteList(isWhiteList bool) *ListFiltered {
-	l.IsWhiteList = isWhiteList
+	l.IsWhiteList = &isWhiteList
 	return l
 }
 
@@ -55,7 +55,7 @@ func (l *ListFiltered) UnmarshalJSON(data []byte) error {
 		Base
 		Delegate    json.RawMessage `json:"delegate,omitempty"`
 		Values      []string        `json:"values,omitempty"`
-		IsWhiteList bool            `json:"isWhiteList,omitempty"`
+		IsWhiteList *bool           `json:"isWhiteList,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
