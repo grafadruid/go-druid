@@ -13,12 +13,10 @@ func TestNewPeriod(t *testing.T) {
 	p.SetTimeZone(`America/Chicago`)
 	p.SetPeriod(time.Minute)
 
-	start, _ := time.Parse(time.RFC822, "19 Feb 21 19:00 EST")
-
 	x := &Period{
 		Base:     Base{Typ: "period"},
 		Period:   60000000000,
-		Origin:   start,
+		Origin:   time.Unix(1613779200, 0),
 		TimeZone: "America/Chicago",
 	}
 	assert.Equal(t, x, p)
