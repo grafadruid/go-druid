@@ -69,7 +69,7 @@ func tdigestSketchUsingBuilder() {
 }
 
 // tdigestSketchUsingRuneQuery example using Native Query as the starting point
-func tdigestSketchUsingNativeQuery() {
+func main() {
 	query := `{
 			"queryType": "groupBy",
 			"dataSource": {
