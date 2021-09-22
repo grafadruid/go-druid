@@ -1,15 +1,16 @@
-//go:build mage
-// +build mage
+//+build mage
 
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid"
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/aggregation"
 	"github.com/grafadruid/go-druid/builder/datasource"
+	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/granularity"
 	"github.com/grafadruid/go-druid/builder/intervals"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
@@ -32,36 +33,47 @@ func getConnection() *druid.Client {
 }
 
 /*
-	Prerequisite: These examples will work only if you have tdigest sketch data in your datastore.
+	Prerequisite: These examples will work only if you have doubles sketch data in your datastore.
 	To experiment, you can use the doubles_sketch_data.tsv file attached in this repo. It is a copy of  https://github.com/apache/druid/blob/master/extensions-contrib/tdigestsketch/src/test/resources/doubles_sketch_data.tsv
 */
 
-// tdigestSketchUsingBuilder example using Builder Pattern
-func tdigestSketchUsingBuilder() {
+// doublesSketchUsingBuilder example using Builder Pattern
+func doublesSketchUsingBuilder() {
 	d := getConnection()
-	table := datasource.NewTable().SetName("rollup-data")
+	table := datasource.NewTable().SetName("double-sketch")
 	i := intervals.NewInterval()
 	m := granularity.NewSimple().SetGranularity(granularity.All)
 	i.SetInterval(time.Unix(0, 0), time.Now())
 	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
 
-	// TDigest  Aggregation
-	// valueTDS is the field holding the tdigest data in Your datastore
-	// merged_sketch will hold the aggregated tdigest value
-	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
-	a := []builder.Aggregator{atds}
+	ads := aggregation.NewQuantilesDoublesSketch().SetName("a1:agg").SetFieldName("latencySketch").SetK(128)
+	a := []builder.Aggregator{ads}
 
 	//TDigest Post Aggregation
-	qf := postaggregation.NewQuantilesFromTDigestSketchField().
+	qf := postaggregation.NewQuantilesDoublesSketchToQuantileField().
 		SetType("fieldAccess").
-		SetFieldName("merged_sketch")
-	qa := postaggregation.NewQuantilesFromTDigestSketch().
+		SetFieldName("a1:agg").
+		SetName("tp90")
+	qa := postaggregation.NewQuantilesDoublesSketchToQuantile().
 		SetField(qf).
-		SetFractions([]float64{0.25, 0.5, 0.75, 0.9, 0.95, 0.99}). // add additional quantiles as needed
-		SetName("quantiles")
+		SetFraction(0.90). // add additional quantiles as needed
+		SetName("tp90")
 	pa := []builder.PostAggregator{qa}
 
 	ts := query.NewTimeseries().SetDataSource(table).SetIntervals(is).SetAggregations(a).SetPostAggregations(pa).SetGranularity(m).SetLimit(10)
+	di := dimension.NewDefault().SetDimension("svcAssetId")
+	da := []builder.Dimension{di}
+	gb := query.NewGroupBy().SetDimensions(da).SetDataSource(table).SetIntervals(is).
+		SetAggregations(a).
+		SetPostAggregations(pa).
+		SetGranularity(m)
+
+	tsJSON, _ := json.Marshal(ts)
+	log.Printf(string(tsJSON))
+
+	gbJSON, _ := json.Marshal(gb)
+	log.Printf(string(gbJSON))
+
 	var results interface{}
 	_, err := d.Query().Execute(ts, &results)
 	if err != nil {
@@ -71,37 +83,50 @@ func tdigestSketchUsingBuilder() {
 	spew.Dump(results)
 }
 
-// tdigestSketchUsingRuneQuery example using Native Query as the starting point
+// doublesSketchUsingRuneQuery example using Native Query as the starting point
 func main() {
 	query := `{
-			"queryType": "groupBy",
-			"dataSource": {
+		  "queryType": "groupBy",
+		  "dataSource": {
 			"type": "table",
-			"name": "rollup-data1"
-			},
-			"granularity": "ALL",
-			"dimensions": [],
-			"aggregations": [{
-				"type": "tDigestSketch",
-				"name": "merged_sketch",
-				"fieldName": "valuesTDS"
-			}],
-			"postAggregations": [{
-				"type": "quantilesFromTDigestSketch",
-				"name": "quantiles",
-				"fractions": [0, 0.5, 0.9,1],
-				"field": {
-					"type": "fieldAccess",
-					"fieldName": "merged_sketch"
-				}
-			}],
-			"intervals": {
+			"name": "double-sketch"
+		  },
+		  "granularity": "ALL",
+		  "dimensions": [
+			{
+			  "type": "default",
+			  "dimension": "uniqueId"
+			}
+		  ],
+		  "aggregations": [
+			{
+			  "type": "quantilesDoublesSketch",
+			  "name": "a1:agg",
+			  "fieldName": "latencySketch",
+			  "k": 128
+			}
+		  ],
+		  "postAggregations": [
+			{
+			  "type": "quantilesDoublesSketchToQuantile",
+			  "name": "tp90",
+			  "fraction": 0.9,
+			  "field": {
+				"type": "fieldAccess",
+				"name": "tp90",
+				"fieldName": "a1:agg"
+			  }
+			}
+		  ],
+		  "intervals": {
 			"type": "intervals",
 			"intervals": [
 			  "-146136543-09-08T08:23:32.096Z/146140482-04-24T15:36:27.903Z"
 			]
 		  }
 		}`
+
+	doublesSketchUsingBuilder()
 
 	d := getConnection()
 	var results interface{}
