@@ -8,7 +8,7 @@ import (
 )
 
 type Base struct {
-	Typ builder.ComponentType
+	Typ builder.ComponentType `json:"type,omitempty"`
 }
 
 func (b *Base) SetType(typ builder.ComponentType) *Base {
