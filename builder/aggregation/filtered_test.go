@@ -29,7 +29,6 @@ func TestLoadFilteredAggregator(t *testing.T) {
 			  },
 			  "name": "a1"
 			}`))
-	//fmt.Printf("%+v\n%+v\n%+v\n", f, f.(*Filtered).Filter, f.(*Filtered).Aggregator)
 	assert.NotNil(f)
 	assert.Nil(err, "error should be nil")
 }

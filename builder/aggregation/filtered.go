@@ -42,16 +42,16 @@ func (f *Filtered) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	_aggregator, err := Load(tmp.Aggregator)
+	a, err := Load(tmp.Aggregator)
 	if err != nil {
 		return err
 	}
-	_filter, err := filter.Load(tmp.Filter)
+	filter, err := filter.Load(tmp.Filter)
 	if err != nil {
 		return err
 	}
 	f.Base = tmp.Base
-	f.Aggregator = _aggregator
-	f.Filter = _filter
+	f.Aggregator = a
+	f.Filter = filter
 	return nil
 }
