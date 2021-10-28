@@ -128,6 +128,14 @@ func TestDefaultRetry(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
+
+	b = `invalid json`
+	expectedErr = fmt.Errorf("failed to read the response from Druid: invalid character 'i' looking for beginning of value")
+	resp = buildMockResp(500, b)
+	retry, err = defaultRetry(ctx, &resp, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr.Error(), err.Error())
+	assert.True(t, retry)
 }
 
 func buildMockResp(statusCode int, body string) http.Response {

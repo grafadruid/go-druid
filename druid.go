@@ -218,12 +218,12 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return true, fmt.Errorf("failed to read the response from Druid: %v", err)
+		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
 	var errResp druidErrorReponse
 	err = json.Unmarshal(body, &errResp)
 	if err != nil {
-		return true, fmt.Errorf("failed to read the response from Druid: %v", err)
+		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
 
 	// https://druid.apache.org/docs/latest/querying/querying.html#query-execution-failures
