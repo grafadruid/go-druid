@@ -218,12 +218,12 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return true, fmt.Errorf("Failed to read the response from Druid: %w", err)
+		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
 	var errResp druidErrorReponse
 	err = json.Unmarshal(body, &errResp)
 	if err != nil {
-		return true, fmt.Errorf("Failed to read the response from Druid: %w", err)
+		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
 
 	// https://druid.apache.org/docs/latest/querying/querying.html#query-execution-failures
@@ -239,15 +239,14 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 	case "Unknown exception":
 		goto ABORT
 	default:
-		return true, fmt.Errorf("Error response from Druid: %w", err)
+		return true, fmt.Errorf("error response from Druid: %+v", errResp)
 	}
 
 ABORT:
 	// When aborting the retry, the response body should be closed:
 	// https://pkg.go.dev/github.com/hashicorp/go-retryablehttp#CheckRetry
 	resp.Body.Close()
-	err = fmt.Errorf("Failed to query Druid: %+v", errResp)
-	return false, err
+	return false, fmt.Errorf("failed to query Druid: %+v", errResp)
 }
 
 func defaultErrorHandler(resp *http.Response, err error, numTries int) (*http.Response, error) {
