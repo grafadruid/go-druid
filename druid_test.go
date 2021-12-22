@@ -42,6 +42,8 @@ func TestNewClientWithSkipVerify(t *testing.T) {
 func TestDefaultRetry(t *testing.T) {
 	ctx := context.TODO()
 	var b string
+	var expectedErr error
+
 	resp := buildMockResp(200, b)
 	retry, err := defaultRetry(ctx, &resp, nil)
 	assert.Nil(t, err)
@@ -50,66 +52,90 @@ func TestDefaultRetry(t *testing.T) {
 	b = `{
 		"error": "SQL parse failed", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("failed to query Druid: {Error:SQL parse failed ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(400, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
 
 	b = `{
 		"error": "Plan validation failed", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("failed to query Druid: {Error:Plan validation failed ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(400, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
 
 	b = `{
 		"error": "Resource limit exceeded", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("error response from Druid: {Error:Resource limit exceeded ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(400, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.True(t, retry)
 
 	b = `{
 		"error": "Query capacity exceeded", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("error response from Druid: {Error:Query capacity exceeded ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(429, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.True(t, retry)
 
 	b = `{
 		"error": "Unsupported operation", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("failed to query Druid: {Error:Unsupported operation ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(501, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
 
 	b = `{
 		"error": "Query timeout", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("error response from Druid: {Error:Query timeout ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(504, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.True(t, retry)
 
 	b = `{
 		"error": "Query cancelled", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("failed to query Druid: {Error:Query cancelled ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(500, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
 
 	b = `{
 		"error": "Unknown exception", "errorMessage" : "Something bad happened."
 	}`
+	expectedErr = fmt.Errorf("failed to query Druid: {Error:Unknown exception ErrorMessage:Something bad happened. ErrorClass: Host:}")
 	resp = buildMockResp(500, b)
 	retry, err = defaultRetry(ctx, &resp, nil)
 	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr, err)
 	assert.False(t, retry)
+
+	b = `invalid json`
+	expectedErr = fmt.Errorf("failed to read the response from Druid: invalid character 'i' looking for beginning of value")
+	resp = buildMockResp(500, b)
+	retry, err = defaultRetry(ctx, &resp, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, expectedErr.Error(), err.Error())
+	assert.True(t, retry)
 }
 
 func buildMockResp(statusCode int, body string) http.Response {
