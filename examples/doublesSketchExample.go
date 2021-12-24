@@ -86,33 +86,39 @@ func doublesSketchUsingBuilder() {
 // doublesSketchUsingRuneQuery example using Native Query as the starting point
 func main() {
 	query := `{
-			"queryType": "groupBy",
-			"dataSource": {
-				"type": "table",
-				"name": "double-sketch"
-			},
-			"granularity": "ALL",
-			"dimensions": [{
+		  "queryType": "groupBy",
+		  "dataSource": {
+			"type": "table",
+			"name": "double-sketch"
+		  },
+		  "granularity": "ALL",
+		  "dimensions": [
+			{
 			  "type": "default",
 			  "dimension": "uniqueId"
-    		}],
-			"aggregations": [{
-				"type": "quantilesDoublesSketch",
-				"name": "a1:agg",
-				"fieldName": "latencySketch",
-				"k": 128
-			}],
-			"postAggregations": [{
-				"type": "quantilesDoublesSketchToQuantile",
+			}
+		  ],
+		  "aggregations": [
+			{
+			  "type": "quantilesDoublesSketch",
+			  "name": "a1:agg",
+			  "fieldName": "latencySketch",
+			  "k": 128
+			}
+		  ],
+		  "postAggregations": [
+			{
+			  "type": "quantilesDoublesSketchToQuantile",
+			  "name": "tp90",
+			  "fraction": 0.9,
+			  "field": {
+				"type": "fieldAccess",
 				"name": "tp90",
-				"fraction": 0.90,
-				"field": {
-					"type": "fieldAccess",
-					"name": "tp90",
-					"fieldName": "a1:agg"
-				}
-			}],
-			"intervals": {
+				"fieldName": "a1:agg"
+			  }
+			}
+		  ],
+		  "intervals": {
 			"type": "intervals",
 			"intervals": [
 			  "-146136543-09-08T08:23:32.096Z/146140482-04-24T15:36:27.903Z"
