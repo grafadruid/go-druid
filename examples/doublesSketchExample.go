@@ -20,7 +20,7 @@ import (
 )
 
 func getConnection() *druid.Client {
-	d, err := druid.NewClient("https://getafix-qal.odldruid-ppd.a.intuit.com")
+	d, err := druid.NewClient("http://localhost:8888")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,14 +33,14 @@ func getConnection() *druid.Client {
 }
 
 /*
-	Prerequisite: These examples will work only if you have tdigest sketch data in your datastore.
+	Prerequisite: These examples will work only if you have doubles sketch data in your datastore.
 	To experiment, you can use the doubles_sketch_data.tsv file attached in this repo. It is a copy of  https://github.com/apache/druid/blob/master/extensions-contrib/tdigestsketch/src/test/resources/doubles_sketch_data.tsv
 */
 
-// tdigestSketchUsingBuilder example using Builder Pattern
+// doublesSketchUsingBuilder example using Builder Pattern
 func doublesSketchUsingBuilder() {
 	d := getConnection()
-	table := datasource.NewTable().SetName("o11y-gsapi-apigw")
+	table := datasource.NewTable().SetName("double-sketch")
 	i := intervals.NewInterval()
 	m := granularity.NewSimple().SetGranularity(granularity.All)
 	i.SetInterval(time.Unix(0, 0), time.Now())
@@ -83,18 +83,18 @@ func doublesSketchUsingBuilder() {
 	spew.Dump(results)
 }
 
-// tdigestSketchUsingRuneQuery example using Native Query as the starting point
+// doublesSketchUsingRuneQuery example using Native Query as the starting point
 func main() {
 	query := `{
 			"queryType": "groupBy",
 			"dataSource": {
 				"type": "table",
-				"name": "o11y-gsapi-apigw"
+				"name": "double-sketch"
 			},
 			"granularity": "ALL",
 			"dimensions": [{
 			  "type": "default",
-			  "dimension": "svcAssetId"
+			  "dimension": "uniqueId"
     		}],
 			"aggregations": [{
 				"type": "quantilesDoublesSketch",
@@ -120,7 +120,7 @@ func main() {
 		  }
 		}`
 
-	//doublesSketchUsingBuilder()
+	doublesSketchUsingBuilder()
 
 	d := getConnection()
 	var results interface{}

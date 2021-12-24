@@ -40,13 +40,13 @@ func (q *QuantilesDoublesSketchToQuantile) SetField(field *QuantilesDoublesSketc
 	return q
 }
 
+// NewQuantilesDoublesSketchToQuantileField new instance of QuantilesDoublesSketchToQuantileField
 func NewQuantilesDoublesSketchToQuantileField() *QuantilesDoublesSketchToQuantileField {
-	qf := &QuantilesDoublesSketchToQuantileField{}
-	return qf
+	return &QuantilesDoublesSketchToQuantileField{}
 }
 
 // SetName set name
-func (qf *QuantilesDoublesSketchToQuantileField) SetName(name string) *QuantilesDoublesSketchToQuantileField{
+func (qf *QuantilesDoublesSketchToQuantileField) SetName(name string) *QuantilesDoublesSketchToQuantileField {
 	qf.Name = name
 	return qf
 }
