@@ -6,27 +6,27 @@ import (
 	"testing"
 )
 
-func TestQuantilesDoublesSketchToQuantile(t *testing.T) {
+func TestQuantilesDoublesSketchToQuantiles(t *testing.T) {
 	qf := NewQuantilesDoublesSketchField()
 	qf.SetType("fieldAccess").SetName("tp90").SetFieldName("a1:agg")
-	quantilesDoublesSketchToQuantile := NewQuantilesDoublesSketchToQuantile()
-	quantilesDoublesSketchToQuantile.SetName("tp90").SetField(qf).SetFraction(0.90)
+	quantilesDoublesSketchToQuantiles := NewQuantilesDoublesSketchToQuantiles()
+	quantilesDoublesSketchToQuantiles.SetName("tp90").SetField(qf).SetFractions([]float64{0.90})
 
 	// "omitempty" will ignore boolean=false
 	expected := `
 {
-  "type": "quantilesDoublesSketchToQuantile",
+  "type": "quantilesDoublesSketchToQuantiles",
   "name": "tp90",
   "field": {
     "type": "fieldAccess",
     "name": "tp90",
     "fieldName": "a1:agg"
   },
-  "fraction": 0.9
+  "fractions": [0.9]
 }
 `
 
-	quantilesDoublesSketchToQuantileJSON, err := json.Marshal(quantilesDoublesSketchToQuantile)
+	quantilesDoublesSketchToQuantileJSON, err := json.Marshal(quantilesDoublesSketchToQuantiles)
 	assert.Nil(t, err)
 	assert.JSONEq(t, expected, string(quantilesDoublesSketchToQuantileJSON))
 }
