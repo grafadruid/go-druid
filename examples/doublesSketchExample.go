@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -37,8 +38,8 @@ func getConnection() *druid.Client {
 	To experiment, you can use the doubles_sketch_data.tsv file attached in this repo. It is a copy of  https://github.com/apache/druid/blob/master/extensions-contrib/tdigestsketch/src/test/resources/doubles_sketch_data.tsv
 */
 
-// doublesSketchUsingBuilder example using Builder Pattern
-func doublesSketchUsingBuilder() {
+// doublesSketchBuilder example using Builder Pattern
+func doublesSketchBuilder() {
 	d := getConnection()
 	table := datasource.NewTable().SetName("double-sketch")
 	i := intervals.NewInterval()
@@ -49,15 +50,8 @@ func doublesSketchUsingBuilder() {
 	ads := aggregation.NewQuantilesDoublesSketch().SetName("a1:agg").SetFieldName("latencySketch").SetK(128)
 	a := []builder.Aggregator{ads}
 
-	//TDigest Post Aggregation
-	qf := postaggregation.NewQuantilesDoublesSketchToQuantileField().
-		SetType("fieldAccess").
-		SetFieldName("a1:agg").
-		SetName("tp90")
-	qa := postaggregation.NewQuantilesDoublesSketchToQuantile().
-		SetField(qf).
-		SetFraction(0.90). // add additional quantiles as needed
-		SetName("tp90")
+	// Doubles Sketch Post Aggregation
+	qa := toQuantile() // replace with toQuantiles(), toHistogramNumBins(), toHistogramSplitPoints() to try other post aggregations
 	pa := []builder.PostAggregator{qa}
 
 	ts := query.NewTimeseries().SetDataSource(table).SetIntervals(is).SetAggregations(a).SetPostAggregations(pa).SetGranularity(m).SetLimit(10)
@@ -81,6 +75,56 @@ func doublesSketchUsingBuilder() {
 	}
 
 	spew.Dump(results)
+}
+
+func toQuantile() *postaggregation.QuantilesDoublesSketchToQuantile {
+	qf := postaggregation.NewQuantilesDoublesSketchField().
+		SetType("fieldAccess").
+		SetFieldName("a1:agg").
+		SetName("P90")
+	qa := postaggregation.NewQuantilesDoublesSketchToQuantile().
+		SetField(qf).
+		SetFraction(0.90).
+		SetName("P90")
+	return qa
+}
+
+func toQuantiles() *postaggregation.QuantilesDoublesSketchToQuantiles {
+	qf := postaggregation.NewQuantilesDoublesSketchField().
+		SetType("fieldAccess").
+		SetFieldName("a1:agg").
+		SetName("P75P90")
+	qa := postaggregation.NewQuantilesDoublesSketchToQuantiles().
+		SetField(qf).
+		SetFractions([]float{0.75, 0.90}). // add additional quantiles as needed
+		SetName("P75P90")
+	return qa
+}
+
+func toHistogramNumBins() *postaggregation.QuantilesDoublesSketchToHistogram {
+	qf := postaggregation.NewQuantilesDoublesSketchField().
+		SetType("fieldAccess").
+		SetFieldName("a1:agg").
+		SetName("H")
+	// numBins and splitPoints can't be used at the same time
+	qa := postaggregation.NewQuantilesDoublesSketchToHistogram().
+		SetField(qf).
+		SetNumBins(2).
+		SetName("H")
+	return qa
+}
+
+func toHistogramSplitPoints() *postaggregation.QuantilesDoublesSketchToHistogram {
+	qf := postaggregation.NewQuantilesDoublesSketchField().
+		SetType("fieldAccess").
+		SetFieldName("a1:agg").
+		SetName("H")
+	// numBins and splitPoints can't be used at the same time
+	qa := postaggregation.NewQuantilesDoublesSketchToHistogram().
+		SetField(qf).
+		SetSplitPoints([]float64{0.5, 1.0, 1.5}).
+		SetName("H")
+	return qa
 }
 
 // doublesSketchUsingRuneQuery example using Native Query as the starting point
@@ -126,7 +170,7 @@ func main() {
 		  }
 		}`
 
-	doublesSketchUsingBuilder()
+	doublesSketchBuilder()
 
 	d := getConnection()
 	var results interface{}
