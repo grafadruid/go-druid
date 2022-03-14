@@ -104,6 +104,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewStringLast()
 	case "tDigestSketch":
 		a = NewTDigestSketch()
+	case "quantilesDoublesSketch":
+		a = NewQuantilesDoublesSketch()
 	case "thetaSketch":
 		a = NewThetaSketch()
 	default:
