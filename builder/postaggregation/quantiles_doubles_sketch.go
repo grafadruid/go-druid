@@ -1,6 +1,6 @@
 package postaggregation
 
-// QuantilesDoublesSketchField struct for Field in QuantilesDoublesSketchToHistogram
+// QuantilesDoublesSketchField struct for Field in QuantilesDoublesSketch Post Aggregators
 type QuantilesDoublesSketchField struct {
 	Type      string `json:"type,omitempty"`
 	Name      string `json:"name,omitempty"`
