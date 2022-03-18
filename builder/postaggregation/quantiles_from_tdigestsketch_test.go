@@ -10,18 +10,18 @@ func TestQuantilesFromTDigestSketch(t *testing.T) {
 	qf := NewQuantilesFromTDigestSketchField()
 	qf.SetType("fieldAccess").SetFieldName("merged_sketch")
 	quantilesFromTDigestSketch := NewQuantilesFromTDigestSketch()
-	quantilesFromTDigestSketch.SetName("tp90").SetField(qf).SetFractions([]float64{0.90})
+	quantilesFromTDigestSketch.SetName("tp75tp90").SetField(qf).SetFractions([]float64{0.75, 0.90})
 
 	// "omitempty" will ignore boolean=false
 	expected := `
 {
   "type": "quantilesFromTDigestSketch",
-  "name": "tp90",
+  "name": "tp75tp90",
   "field": {
     "type": "fieldAccess",
     "fieldName": "merged_sketch"
   },
-  "fractions": [0.9]
+  "fractions": [0.75, 0.9]
 }
 `
 
