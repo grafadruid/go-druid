@@ -86,7 +86,7 @@ func tdigestSketchQuantilePostAggUsingBuilder() {
 	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
 	a := []builder.Aggregator{atds}
 
-	//TDigest Post Aggregation Quantiles
+	//TDigest Post Aggregation Quantile
 	qf := postaggregation.NewQuantileFromTDigestSketchField().
 		SetType("fieldAccess").
 		SetFieldName("merged_sketch")
