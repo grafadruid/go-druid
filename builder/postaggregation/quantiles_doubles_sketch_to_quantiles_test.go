@@ -10,7 +10,7 @@ func TestQuantilesDoublesSketchToQuantiles(t *testing.T) {
 	qf := NewQuantilesDoublesSketchField()
 	qf.SetType("fieldAccess").SetName("tp90").SetFieldName("a1:agg")
 	quantilesDoublesSketchToQuantiles := NewQuantilesDoublesSketchToQuantiles()
-	quantilesDoublesSketchToQuantiles.SetName("tp90").SetField(qf).SetFractions([]float64{0.90})
+	quantilesDoublesSketchToQuantiles.SetName("tp90").SetField(qf).SetFractions([]float64{0.75, 0.90})
 
 	// "omitempty" will ignore boolean=false
 	expected := `
@@ -22,7 +22,7 @@ func TestQuantilesDoublesSketchToQuantiles(t *testing.T) {
     "name": "tp90",
     "fieldName": "a1:agg"
   },
-  "fractions": [0.9]
+  "fractions": [0.75, 0.9]
 }
 `
 
