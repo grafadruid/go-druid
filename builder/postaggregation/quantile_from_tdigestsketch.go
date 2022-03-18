@@ -2,6 +2,7 @@ package postaggregation
 
 // QuantileFromTDigestSketch struct based on
 // PostAggregator section in https://druid.apache.org/docs/latest/development/extensions-contrib/tdigestsketch-quantiles.html
+// See the "Similar to quantilesFromTDigestSketch except it takes in a single fraction for computing quantile" section
 type QuantileFromTDigestSketch struct {
 	Base
 	Fraction float64                         `json:"fraction,omitempty"`
