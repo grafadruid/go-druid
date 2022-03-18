@@ -26,7 +26,7 @@ func TestQuantilesDoublesSketchToQuantiles(t *testing.T) {
 }
 `
 
-	quantilesDoublesSketchToQuantileJSON, err := json.Marshal(quantilesDoublesSketchToQuantiles)
+	quantilesDoublesSketchToQuantilesJSON, err := json.Marshal(quantilesDoublesSketchToQuantiles)
 	assert.Nil(t, err)
-	assert.JSONEq(t, expected, string(quantilesDoublesSketchToQuantileJSON))
+	assert.JSONEq(t, expected, string(quantilesDoublesSketchToQuantilesJSON))
 }
