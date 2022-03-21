@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -35,8 +36,8 @@ func getConnection() *druid.Client {
 	To experiment, you can use the doubles_sketch_data.tsv file attached in this repo. It is a copy of  https://github.com/apache/druid/blob/master/extensions-contrib/tdigestsketch/src/test/resources/doubles_sketch_data.tsv
 */
 
-// tdigestSketchUsingBuilder example using Builder Pattern
-func tdigestSketchUsingBuilder() {
+// tdigestSketchQuantilesPostAggUsingBuilder example using Builder Pattern
+func tdigestSketchQuantilesPostAggUsingBuilder() {
 	d := getConnection()
 	table := datasource.NewTable().SetName("rollup-data")
 	i := intervals.NewInterval()
@@ -50,7 +51,7 @@ func tdigestSketchUsingBuilder() {
 	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
 	a := []builder.Aggregator{atds}
 
-	//TDigest Post Aggregation
+	//TDigest Post Aggregation Quantiles
 	qf := postaggregation.NewQuantilesFromTDigestSketchField().
 		SetType("fieldAccess").
 		SetFieldName("merged_sketch")
@@ -58,6 +59,41 @@ func tdigestSketchUsingBuilder() {
 		SetField(qf).
 		SetFractions([]float64{0.25, 0.5, 0.75, 0.9, 0.95, 0.99}). // add additional quantiles as needed
 		SetName("quantiles")
+	pa := []builder.PostAggregator{qa}
+
+	ts := query.NewTimeseries().SetDataSource(table).SetIntervals(is).SetAggregations(a).SetPostAggregations(pa).SetGranularity(m).SetLimit(10)
+	var results interface{}
+	_, err := d.Query().Execute(ts, &results)
+	if err != nil {
+		log.Fatalf("Execute failed, %s", err)
+	}
+
+	spew.Dump(results)
+}
+
+// tdigestSketchQuantilePostAggUsingBuilder example using Builder Pattern
+func tdigestSketchQuantilePostAggUsingBuilder() {
+	d := getConnection()
+	table := datasource.NewTable().SetName("rollup-data")
+	i := intervals.NewInterval()
+	m := granularity.NewSimple().SetGranularity(granularity.All)
+	i.SetInterval(time.Unix(0, 0), time.Now())
+	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
+
+	// TDigest  Aggregation
+	// valueTDS is the field holding the tdigest data in Your datastore
+	// merged_sketch will hold the aggregated tdigest value
+	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
+	a := []builder.Aggregator{atds}
+
+	//TDigest Post Aggregation Quantile
+	qf := postaggregation.NewQuantileFromTDigestSketchField().
+		SetType("fieldAccess").
+		SetFieldName("merged_sketch")
+	qa := postaggregation.NewQuantileFromTDigestSketch().
+		SetField(qf).
+		SetFraction(0.9).
+		SetName("quantile")
 	pa := []builder.PostAggregator{qa}
 
 	ts := query.NewTimeseries().SetDataSource(table).SetIntervals(is).SetAggregations(a).SetPostAggregations(pa).SetGranularity(m).SetLimit(10)
