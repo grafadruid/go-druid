@@ -2,8 +2,8 @@ package havingspec
 
 type GreaterThan struct {
 	Base
-	Aggregation string  `json:"aggregation,omitempty"`
-	Value       float64 `json:"value,omitempty"`
+	Aggregation string   `json:"aggregation,omitempty"`
+	Value       *float64 `json:"value,omitempty"`
 }
 
 func NewGreaterThan() *GreaterThan {
@@ -18,6 +18,6 @@ func (g *GreaterThan) SetAggregation(aggregation string) *GreaterThan {
 }
 
 func (g *GreaterThan) SetValue(value float64) *GreaterThan {
-	g.Value = value
+	g.Value = &value
 	return g
 }

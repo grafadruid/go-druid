@@ -5,7 +5,7 @@ package postaggregation
 // See the "Similar to quantilesFromTDigestSketch except it takes in a single fraction for computing quantile" section
 type QuantileFromTDigestSketch struct {
 	Base
-	Fraction float64                         `json:"fraction,omitempty"`
+	Fraction *float64                        `json:"fraction,omitempty"`
 	Field    *QuantileFromTDigestSketchField `json:"field,omitempty"`
 }
 
@@ -30,7 +30,7 @@ func (q *QuantileFromTDigestSketch) SetName(name string) *QuantileFromTDigestSke
 
 // SetFraction set fraction
 func (q *QuantileFromTDigestSketch) SetFraction(fraction float64) *QuantileFromTDigestSketch {
-	q.Fraction = fraction
+	q.Fraction = &fraction
 	return q
 }
 
