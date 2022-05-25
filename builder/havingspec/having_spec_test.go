@@ -26,3 +26,32 @@ func TestEqualTo(t *testing.T) {
 	assert.Nil(t, err)
 	assert.JSONEq(t, `{"aggregation":"agg", "type":"equalTo", "value":0}`, string(got))
 }
+
+func TestGreaterThan(t *testing.T) {
+	having := NewGreaterThan()
+	having.SetValue(1)
+	having.SetAggregation("agg")
+
+	got, err := json.Marshal(having)
+	assert.Nil(t, err)
+	assert.JSONEq(t, `{"aggregation":"agg", "type":"greaterThan", "value":1}`, string(got))
+}
+
+func TestLessThan(t *testing.T) {
+	having := NewLessThan()
+	having.SetValue(3)
+	having.SetAggregation("agg")
+
+	got, err := json.Marshal(having)
+	assert.Nil(t, err)
+	assert.JSONEq(t, `{"aggregation":"agg", "type":"lessThan", "value":3}`, string(got))
+}
+
+func TestLessThan_OmitEmpty(t *testing.T) {
+	having := NewLessThan()
+	having.SetAggregation("agg")
+
+	got, err := json.Marshal(having)
+	assert.Nil(t, err)
+	assert.JSONEq(t, `{"aggregation":"agg", "type":"lessThan"}`, string(got))
+}
