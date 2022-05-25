@@ -2,8 +2,8 @@ package extractionfn
 
 type Bucket struct {
 	Base
-	Size   float64 `json:"size,omitempty"`
-	Offset float64 `json:"offset,omitempty"`
+	Size   *float64 `json:"size,omitempty"`
+	Offset *float64 `json:"offset,omitempty"`
 }
 
 func NewBucket() *Bucket {
@@ -13,11 +13,11 @@ func NewBucket() *Bucket {
 }
 
 func (b *Bucket) SetSize(size float64) *Bucket {
-	b.Size = size
+	b.Size = &size
 	return b
 }
 
 func (b *Bucket) SetOffset(offset float64) *Bucket {
-	b.Offset = offset
+	b.Offset = &offset
 	return b
 }
