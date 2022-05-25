@@ -2,8 +2,8 @@ package havingspec
 
 type EqualTo struct {
 	Base
-	Aggregation string  `json:"aggregation,omitempty"`
-	Value       float64 `json:"value,omitempty"`
+	Aggregation string   `json:"aggregation,omitempty"`
+	Value       *float64 `json:"value,omitempty"`
 }
 
 func NewEqualTo() *EqualTo {
@@ -18,6 +18,6 @@ func (e *EqualTo) SetAggregation(aggregation string) *EqualTo {
 }
 
 func (e *EqualTo) SetValue(value float64) *EqualTo {
-	e.Value = value
+	e.Value = &value
 	return e
 }

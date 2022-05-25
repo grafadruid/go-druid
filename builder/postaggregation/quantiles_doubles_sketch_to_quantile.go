@@ -5,7 +5,7 @@ package postaggregation
 type QuantilesDoublesSketchToQuantile struct {
 	Base
 	Field    *QuantilesDoublesSketchField `json:"field,omitempty"`
-	Fraction float64                      `json:"fraction,omitempty"`
+	Fraction *float64                     `json:"fraction,omitempty"`
 }
 
 // NewQuantilesDoublesSketchToQuantile new instance of QuantilesDoublesSketchToHistogram
@@ -23,7 +23,7 @@ func (q *QuantilesDoublesSketchToQuantile) SetName(name string) *QuantilesDouble
 
 // SetFraction set fraction
 func (q *QuantilesDoublesSketchToQuantile) SetFraction(fraction float64) *QuantilesDoublesSketchToQuantile {
-	q.Fraction = fraction
+	q.Fraction = &fraction
 	return q
 }
 

@@ -2,7 +2,7 @@ package postaggregation
 
 type Constant struct {
 	Base
-	Value float64 `json:"value,omitempty"`
+	Value *float64 `json:"value,omitempty"`
 }
 
 func NewConstant() *Constant {
@@ -17,6 +17,6 @@ func (c *Constant) SetName(name string) *Constant {
 }
 
 func (c *Constant) SetValue(value float64) *Constant {
-	c.Value = value
+	c.Value = &value
 	return c
 }
