@@ -60,23 +60,21 @@ func TestIntervals_Load(t *testing.T) {
 }
 
 func TestIntervals_MarshalJSON(t *testing.T) {
-	//assert := assert.New(t)
+	location, _ := time.LoadLocation("UTC")
+	start, _ := time.ParseInLocation(time.RFC3339Nano,
+		"2022-06-16T08:28:53.33441Z",
+		location)
+	end, _ := time.ParseInLocation(time.RFC3339Nano,
+		"2022-06-16T15:28:53.33441Z",
+		location)
+	// simple interval
+	interval := NewInterval().SetInterval(start,
+		end)
+	// complex intervals
+	intervals := NewIntervals().SetIntervals([]*Interval{interval})
 
-	t.Run("marshal generates complex interval type",
+	t.Run("simple interval returns a string",
 		func(t *testing.T) {
-			location, _ := time.LoadLocation("UTC")
-			start, _ := time.ParseInLocation(time.RFC3339Nano,
-				"2022-06-16T08:28:53.33441Z",
-				location)
-			end, _ := time.ParseInLocation(time.RFC3339Nano,
-				"2022-06-16T15:28:53.33441Z",
-				location)
-			// simple interval
-			interval := NewInterval().SetInterval(start,
-				end)
-			// complex intervals
-			intervals := NewIntervals().SetIntervals([]*Interval{interval})
-
 			f, err := json.Marshal(interval)
 			if err != nil {
 				fmt.Println(err.Error())
@@ -87,8 +85,11 @@ func TestIntervals_MarshalJSON(t *testing.T) {
 				`"2022-06-16T08:28:53.33441Z/2022-06-16T15:28:53.33441Z"`,
 				string(f),
 				"simple interval returns a string")
+		})
 
-			f, err = json.Marshal(intervals)
+	t.Run("marshal generates complex interval type",
+		func(t *testing.T) {
+			f, err := json.Marshal(intervals)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
