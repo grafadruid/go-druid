@@ -2,7 +2,6 @@ package filter
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/intervals"
 	"github.com/stretchr/testify/assert"
@@ -38,15 +37,44 @@ func TestNewInterval(t *testing.T) {
 	filterInterval := NewInterval().SetIntervals([]*intervals.Interval{i}).SetDimension("__time")
 	filters := NewOr().SetFields([]builder.Filter{filter1, filterInterval})
 
-	f, err := json.Marshal(filters)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	t.Run("marshal filter with interval",
+		func(t *testing.T) {
+			f, err := json.Marshal(filters)
+			assert.Nil(t,
+				err)
 
-	assert.Nil(t,
-		err)
-	assert.Equal(t,
-		`{"type":"or","fields":[{"type":"selector","dimension":"countryName","value":"France"},{"type":"interval","dimension":"__time","intervals":["2022-06-16T08:28:53.33441Z/2022-06-16T15:28:53.33441Z"]}]}`,
-		string(f),
-		"filter with time interval")
+			assert.Nil(t,
+				err)
+			assert.Equal(t,
+				`{"type":"or","fields":[{"type":"selector","dimension":"countryName","value":"France"},{"type":"interval","dimension":"__time","intervals":["2022-06-16T08:28:53.33441Z/2022-06-16T15:28:53.33441Z"]}]}`,
+				string(f),
+				"filter with time interval")
+		})
+
+	t.Run("marshal load marshal filter with interval",
+		func(t *testing.T) {
+			f, err := json.Marshal(filters)
+			assert.Nil(t,
+				err)
+
+			filterWithIntervalObj, err := Load(f)
+			assert.Nil(t,
+				err)
+			assert.NotNil(t,
+				filterWithIntervalObj)
+			assert.Equal(t,
+				filters,
+				filterWithIntervalObj)
+
+			fJson, err := json.Marshal(filterWithIntervalObj)
+			assert.Nil(t,
+				err)
+
+			assert.Nil(t,
+				err)
+			assert.Equal(t,
+				`{"type":"or","fields":[{"type":"selector","dimension":"countryName","value":"France"},{"type":"interval","dimension":"__time","intervals":["2022-06-16T08:28:53.33441Z/2022-06-16T15:28:53.33441Z"]}]}`,
+				string(fJson),
+				"filter with time interval")
+		})
 }
