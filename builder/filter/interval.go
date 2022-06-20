@@ -10,10 +10,10 @@ import (
 
 type Interval struct {
 	Base
-	Dimension    string               `json:"dimension,omitempty"`
-	Intervals    builder.Intervals    `json:"intervals,omitempty"`
-	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
-	FilterTuning *FilterTuning        `json:"filterTuning,omitempty"`
+	Dimension    string                `json:"dimension,omitempty"`
+	Intervals    []*intervals.Interval `json:"intervals,omitempty"`
+	ExtractionFn builder.ExtractionFn  `json:"extractionFn,omitempty"`
+	FilterTuning *FilterTuning         `json:"filterTuning,omitempty"`
 }
 
 func NewInterval() *Interval {
@@ -27,7 +27,7 @@ func (i *Interval) SetDimension(dimension string) *Interval {
 	return i
 }
 
-func (i *Interval) SetIntervals(intervals builder.Intervals) *Interval {
+func (i *Interval) SetIntervals(intervals []*intervals.Interval) *Interval {
 	i.Intervals = intervals
 	return i
 }
@@ -51,7 +51,8 @@ func (i *Interval) UnmarshalJSON(data []byte) error {
 		ExtractionFn json.RawMessage `json:"extractionFn,omitempty"`
 		FilterTuning *FilterTuning   `json:"filterTuning,omitempty"`
 	}
-	if err = json.Unmarshal(data, &tmp); err != nil {
+	if err = json.Unmarshal(data,
+		&tmp); err != nil {
 		return err
 	}
 	var e builder.ExtractionFn
@@ -61,9 +62,10 @@ func (i *Interval) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
-	var ii builder.Intervals
+	var ii []*intervals.Interval
 	if tmp.Intervals != nil {
-		ii, err = intervals.Load(tmp.Intervals)
+		err = json.Unmarshal(tmp.Intervals,
+			&ii)
 		if err != nil {
 			return err
 		}
