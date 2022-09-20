@@ -34,7 +34,8 @@ func Load(data []byte) (builder.PostAggregator, error) {
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
-	if err := json.Unmarshal(data, &t); err != nil {
+	if err := json.Unmarshal(data,
+		&t); err != nil {
 		return nil, err
 	}
 	switch t.Typ {
@@ -60,12 +61,19 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewLongGreatest()
 	case "longLeast":
 		p = NewLongLeast()
+	case "quantileFromTDigestSketch":
+		p = NewQuantileFromTDigestSketch()
 	case "quantilesFromTDigestSketch":
 		p = NewQuantilesFromTDigestSketch()
 	case "quantilesDoublesSketchToQuantile":
 		p = NewQuantilesDoublesSketchToQuantile()
+	case "quantilesDoublesSketchToQuantiles":
+		p = NewQuantilesDoublesSketchToQuantiles()
+	case "quantilesDoublesSketchToHistogram":
+		p = NewQuantilesDoublesSketchToHistogram()
 	default:
 		return nil, errors.New("unsupported postaggregation type")
 	}
-	return p, json.Unmarshal(data, &p)
+	return p, json.Unmarshal(data,
+		&p)
 }
