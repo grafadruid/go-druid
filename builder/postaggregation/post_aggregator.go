@@ -34,8 +34,7 @@ func Load(data []byte) (builder.PostAggregator, error) {
 	var t struct {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
-	if err := json.Unmarshal(data,
-		&t); err != nil {
+	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
 	switch t.Typ {
@@ -74,6 +73,5 @@ func Load(data []byte) (builder.PostAggregator, error) {
 	default:
 		return nil, errors.New("unsupported postaggregation type")
 	}
-	return p, json.Unmarshal(data,
-		&p)
+	return p, json.Unmarshal(data, &p)
 }
