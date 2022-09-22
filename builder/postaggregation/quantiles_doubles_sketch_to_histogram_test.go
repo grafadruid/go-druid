@@ -13,7 +13,7 @@ func TestQuantilesDoublesSketchToHistogram_SetNumBins(t *testing.T) {
 	quantilesDoublesSketchToHistogram.SetName("h").SetField(qf).SetNumBins(2)
 
 	// "omitempty" will ignore boolean=false
-	expected := `
+	quantilesDoublesSketchToHistogramJSON := `
 {
   "type": "quantilesDoublesSketchToHistogram",
   "name": "h",
@@ -26,9 +26,25 @@ func TestQuantilesDoublesSketchToHistogram_SetNumBins(t *testing.T) {
 }
 `
 
-	quantilesDoublesSketchToHistogramJSON, err := json.Marshal(quantilesDoublesSketchToHistogram)
-	assert.Nil(t, err)
-	assert.JSONEq(t, expected, string(quantilesDoublesSketchToHistogramJSON))
+	t.Run("build quantilesDoublesSketchToHistogram",
+		func(t *testing.T) {
+			postAggJSON, err := json.Marshal(quantilesDoublesSketchToHistogram)
+			assert.Nil(t,
+				err)
+			assert.JSONEq(t,
+				string(postAggJSON),
+				quantilesDoublesSketchToHistogramJSON)
+		})
+
+	t.Run("load quantilesDoublesSketchToHistogram",
+		func(t *testing.T) {
+			postAgg, err := Load([]byte(quantilesDoublesSketchToHistogramJSON))
+			assert.Nil(t,
+				err)
+			assert.Equal(t,
+				quantilesDoublesSketchToHistogram,
+				postAgg)
+		})
 }
 
 func TestQuantilesDoublesSketchToHistogram_SetSplitPoints(t *testing.T) {
@@ -38,7 +54,7 @@ func TestQuantilesDoublesSketchToHistogram_SetSplitPoints(t *testing.T) {
 	quantilesDoublesSketchToHistogram.SetName("h").SetField(qf).SetSplitPoints([]float64{0.5, 1.5, 2.0})
 
 	// "omitempty" will ignore boolean=false
-	expected := `
+	quantilesDoublesSketchToHistogramJSON := `
 {
   "type": "quantilesDoublesSketchToHistogram",
   "name": "h",
@@ -51,7 +67,23 @@ func TestQuantilesDoublesSketchToHistogram_SetSplitPoints(t *testing.T) {
 }
 `
 
-	quantilesDoublesSketchToHistogramJSON, err := json.Marshal(quantilesDoublesSketchToHistogram)
-	assert.Nil(t, err)
-	assert.JSONEq(t, expected, string(quantilesDoublesSketchToHistogramJSON))
+	t.Run("build quantilesDoublesSketchToHistogram",
+		func(t *testing.T) {
+			postAggJSON, err := json.Marshal(quantilesDoublesSketchToHistogram)
+			assert.Nil(t,
+				err)
+			assert.JSONEq(t,
+				string(postAggJSON),
+				quantilesDoublesSketchToHistogramJSON)
+		})
+
+	t.Run("load quantilesDoublesSketchToHistogram",
+		func(t *testing.T) {
+			postAgg, err := Load([]byte(quantilesDoublesSketchToHistogramJSON))
+			assert.Nil(t,
+				err)
+			assert.Equal(t,
+				quantilesDoublesSketchToHistogram,
+				postAgg)
+		})
 }

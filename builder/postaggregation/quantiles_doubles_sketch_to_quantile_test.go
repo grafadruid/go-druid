@@ -13,7 +13,7 @@ func TestQuantilesDoublesSketchToQuantile(t *testing.T) {
 	quantilesDoublesSketchToQuantile.SetName("tp90").SetField(qf).SetFraction(0.90)
 
 	// "omitempty" will ignore boolean=false
-	expected := `
+	quantilesDoublesSketchToQuantileJSON := `
 {
   "type": "quantilesDoublesSketchToQuantile",
   "name": "tp90",
@@ -26,7 +26,23 @@ func TestQuantilesDoublesSketchToQuantile(t *testing.T) {
 }
 `
 
-	quantilesDoublesSketchToQuantileJSON, err := json.Marshal(quantilesDoublesSketchToQuantile)
-	assert.Nil(t, err)
-	assert.JSONEq(t, expected, string(quantilesDoublesSketchToQuantileJSON))
+	t.Run("build quantilesDoublesSketchToQuantile",
+		func(t *testing.T) {
+			postAggJSON, err := json.Marshal(quantilesDoublesSketchToQuantile)
+			assert.Nil(t,
+				err)
+			assert.JSONEq(t,
+				string(postAggJSON),
+				quantilesDoublesSketchToQuantileJSON)
+		})
+
+	t.Run("load quantilesDoublesSketchToQuantile",
+		func(t *testing.T) {
+			postAgg, err := Load([]byte(quantilesDoublesSketchToQuantileJSON))
+			assert.Nil(t,
+				err)
+			assert.Equal(t,
+				quantilesDoublesSketchToQuantile,
+				postAgg)
+		})
 }
