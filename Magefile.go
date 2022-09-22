@@ -22,7 +22,6 @@ var ldflags = ""
 
 // allow user to override go executable by running as GOEXE=xxx make ... on unix-like systems
 var goexe = "go"
-var goCmd = mg.GoCmd()
 
 // Build is the default that fmt, vet, runs test and builds
 var Default = Build
@@ -136,7 +135,7 @@ func TestCoverHTML() error {
 	if err := f.Close(); err != nil {
 		return err
 	}
-	return sh.RunV(goexe, "tool", "cover", "-html="+coverAll)
+	return sh.Run(goexe, "tool", "cover", "-html="+coverAll)
 }
 
 // Build run linters, vet and tests
