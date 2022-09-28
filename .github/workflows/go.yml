@@ -7,45 +7,47 @@ on:
     branches: [ "master" ]
 
 jobs:
-
-  build:
+  cross-build-test:
     strategy:
+      fail-fast: false
       matrix:
-        go-version: [1.17, 1.18, 1.19]
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go-version }}
-
-    - uses: actions/checkout@v3
-
-    - name: Build
-      run: go build -v ./...
-
-  test:
-    name: test
+        goos: ['android', 'linux', 'solaris', 'illumos', 'dragonfly', 'freebsd', 'openbsd', 'plan9', 'windows', 'darwin', 'netbsd']
+        go-version: ['1.17', '1.18', '1.19']
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
-    - uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
 
-    - uses: actions/checkout@v3
+      - name: Install mage
+        run: |
+          git clone https://github.com/magefile/mage
+          cd mage
+          go run bootstrap.go install
+          cd ./..
 
-    - name: Install mage
-      run: |
-        git clone https://github.com/magefile/mage
-        cd mage
-        go run bootstrap.go install
-        cd ./..
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v3
 
-    - name: Test
-      run: mage test
+      - name: Print Go version and environment
+        id: vars
+        run: |
+          printf "Using go at: $(which go)\n"
+          printf "Go version: $(go version)\n"
+          printf "\n\nGo environment:\n\n"
+          go env
+          printf "\n\nSystem environment:\n\n"
+          env
 
-    - name: Vet
-      run: mage vet
+      - name: Build
+        run: |
+          GOOS=$GOOS mage -v build 2> /dev/null
+          if [ $? -ne 0 ]; then
+            echo "::warning ::$GOOS Build Failed"
+            exit 0
+          fi
     
   golangci:
     name: lint
