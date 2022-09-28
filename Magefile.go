@@ -149,7 +149,7 @@ func Build() error {
 
 	// TODO: Add lint after fixing errors
 	mg.Deps(Fmt, Vet, TestRace)
-	return nil
+	return sh.RunV(goexe, "build", "-ldflags="+ldflags, "./...")
 }
 
 var (
