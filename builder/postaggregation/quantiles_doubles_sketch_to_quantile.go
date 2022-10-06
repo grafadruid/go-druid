@@ -8,7 +8,7 @@ type QuantilesDoublesSketchToQuantile struct {
 	Fraction *float64                     `json:"fraction,omitempty"`
 }
 
-// NewQuantilesDoublesSketchToQuantile new instance of QuantilesDoublesSketchToHistogram
+// NewQuantilesDoublesSketchToQuantile new instance of QuantilesDoublesSketchToQuantile
 func NewQuantilesDoublesSketchToQuantile() *QuantilesDoublesSketchToQuantile {
 	q := &QuantilesDoublesSketchToQuantile{}
 	q.SetType("quantilesDoublesSketchToQuantile")
