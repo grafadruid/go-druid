@@ -16,7 +16,7 @@ type QueryService struct {
 	client *Client
 }
 
-func (q *QueryService) Execute(qry builder.Query, result interface{}, headers http.Header) (*Response, error) {
+func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ...http.Header) (*Response, error) {
 	var path string
 	switch qry.Type() {
 	case "sql":
@@ -28,9 +28,11 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ht
 	if err != nil {
 		return nil, err
 	}
-	for k, v := range headers {
-		for _, vv := range v {
-			r.Header.Set(k, vv)
+	if len(headers) >= 1 {
+		for k, v := range headers[0] {
+			for _, vv := range v {
+				r.Header.Set(k, vv)
+			}
 		}
 	}
 	resp, err := q.client.Do(r, result)
