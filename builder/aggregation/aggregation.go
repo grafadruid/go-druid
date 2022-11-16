@@ -108,6 +108,8 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewQuantilesDoublesSketch()
 	case "thetaSketch":
 		a = NewThetaSketch()
+	case "expression":
+		a = NewExpression()
 	default:
 		return nil, errors.New("unsupported aggregation type")
 	}
