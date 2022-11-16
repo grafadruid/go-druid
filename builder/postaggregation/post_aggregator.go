@@ -70,6 +70,12 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewQuantilesDoublesSketchToQuantiles()
 	case "quantilesDoublesSketchToHistogram":
 		p = NewQuantilesDoublesSketchToHistogram()
+	case "quantilesDoublesSketchToRank":
+		p = NewQuantilesDoublesSketchToRank()
+	case "quantilesDoublesSketchToCDF":
+		p = NewQuantilesDoublesSketchToCDF()
+	case "quantilesDoublesSketchToString":
+		p = NewQuantilesDoublesSketchToString()
 	default:
 		return nil, errors.New("unsupported postaggregation type")
 	}
