@@ -6,10 +6,12 @@ import (
 
 type SQL struct {
 	Base
-	Query        string         `json:"query,omitempty"`
-	ResultFormat string         `json:"resultFormat,omitempty"`
-	Header       *bool          `json:"header,omitempty"`
-	Parameters   []SQLParameter `json:"parameters,omitempty"`
+	Query          string         `json:"query,omitempty"`
+	ResultFormat   string         `json:"resultFormat,omitempty"`
+	Header         *bool          `json:"header,omitempty"`
+	TypesHeader    *bool          `json:"typesHeader,omitempty"`
+	SqlTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
+	Parameters     []SQLParameter `json:"parameters,omitempty"`
 }
 
 type SQLParameter struct {
@@ -43,6 +45,16 @@ func (s *SQL) SetHeader(header bool) *SQL {
 	return s
 }
 
+func (s *SQL) SetTypesHeader(typesHeader bool) *SQL {
+	s.TypesHeader = &typesHeader
+	return s
+}
+
+func (s *SQL) SetSqlTypesHeader(sqlTypesHeader bool) *SQL {
+	s.SqlTypesHeader = &sqlTypesHeader
+	return s
+}
+
 func (s *SQL) SetParameters(parameters []SQLParameter) *SQL {
 	s.Parameters = parameters
 	return s
@@ -51,10 +63,12 @@ func (s *SQL) SetParameters(parameters []SQLParameter) *SQL {
 func (s *SQL) UnmarshalJSON(data []byte) error {
 	var err error
 	var tmp struct {
-		Query        string         `json:"query,omitempty"`
-		ResultFormat string         `json:"resultFormat,omitempty"`
-		Header       *bool          `json:"header,omitempty"`
-		Parameters   []SQLParameter `json:"parameters,omitempty"`
+		Query          string         `json:"query,omitempty"`
+		ResultFormat   string         `json:"resultFormat,omitempty"`
+		Header         *bool          `json:"header,omitempty"`
+		TypesHeader    *bool          `json:"typesHeader,omitempty"`
+		SqlTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
+		Parameters     []SQLParameter `json:"parameters,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
@@ -63,6 +77,8 @@ func (s *SQL) UnmarshalJSON(data []byte) error {
 	s.Query = tmp.Query
 	s.ResultFormat = tmp.ResultFormat
 	s.Header = tmp.Header
+	s.TypesHeader = tmp.TypesHeader
+	s.SqlTypesHeader = tmp.SqlTypesHeader
 	s.Parameters = tmp.Parameters
 	return err
 }
