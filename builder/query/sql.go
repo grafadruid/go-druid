@@ -10,7 +10,7 @@ type SQL struct {
 	ResultFormat   string         `json:"resultFormat,omitempty"`
 	Header         *bool          `json:"header,omitempty"`
 	TypesHeader    *bool          `json:"typesHeader,omitempty"`
-	SqlTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
+	SQLTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
 	Parameters     []SQLParameter `json:"parameters,omitempty"`
 }
 
@@ -50,8 +50,8 @@ func (s *SQL) SetTypesHeader(typesHeader bool) *SQL {
 	return s
 }
 
-func (s *SQL) SetSqlTypesHeader(sqlTypesHeader bool) *SQL {
-	s.SqlTypesHeader = &sqlTypesHeader
+func (s *SQL) SetSQLTypesHeader(sqlTypesHeader bool) *SQL {
+	s.SQLTypesHeader = &sqlTypesHeader
 	return s
 }
 
@@ -67,7 +67,7 @@ func (s *SQL) UnmarshalJSON(data []byte) error {
 		ResultFormat   string         `json:"resultFormat,omitempty"`
 		Header         *bool          `json:"header,omitempty"`
 		TypesHeader    *bool          `json:"typesHeader,omitempty"`
-		SqlTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
+		SQLTypesHeader *bool          `json:"sqlTypesHeader,omitempty"`
 		Parameters     []SQLParameter `json:"parameters,omitempty"`
 	}
 	if err := json.Unmarshal(data, &tmp); err != nil {
@@ -78,7 +78,7 @@ func (s *SQL) UnmarshalJSON(data []byte) error {
 	s.ResultFormat = tmp.ResultFormat
 	s.Header = tmp.Header
 	s.TypesHeader = tmp.TypesHeader
-	s.SqlTypesHeader = tmp.SqlTypesHeader
+	s.SQLTypesHeader = tmp.SQLTypesHeader
 	s.Parameters = tmp.Parameters
 	return err
 }
