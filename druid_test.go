@@ -3,6 +3,7 @@ package druid
 import (
 	"context"
 	"fmt"
+	"github.com/grafadruid/go-druid/builder/query"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -136,6 +137,31 @@ func TestDefaultRetry(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, expectedErr.Error(), err.Error())
 	assert.True(t, retry)
+}
+
+func TestSQL(t *testing.T) {
+	assert := assert.New(t)
+	d, err := NewClient("http://localhost:8888")
+	assert.Nil(err, "error should be nil")
+	assert.NotNil(d, "client should not be nil")
+	var results []map[string]string
+	query := query.NewSQL().SetQuery(`
+SELECT
+  "__time",
+  "isRobot",
+  "channel",
+  "flags",
+  "isUnpatrolled",
+  "page"
+FROM "wikipedia" limit 1
+`)
+	_, err = d.Query().Execute(query, &results)
+	assert.Nil(err, "error should be nil")
+	assert.True(len(results) == 1)
+}
+
+type resultTest struct {
+	result map[string]string
 }
 
 func buildMockResp(statusCode int, body string) http.Response {
