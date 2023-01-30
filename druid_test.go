@@ -160,10 +160,6 @@ FROM "wikipedia" limit 1
 	assert.True(len(results) == 1)
 }
 
-type resultTest struct {
-	result map[string]string
-}
-
 func buildMockResp(statusCode int, body string) http.Response {
 	var st string
 	switch statusCode {
