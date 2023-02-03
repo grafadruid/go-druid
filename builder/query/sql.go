@@ -15,8 +15,8 @@ type SQL struct {
 }
 
 type SQLParameter struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
+	Type  string      `json:"type,omitempty"`
+	Value interface{} `json:"value,omitempty"`
 }
 
 func NewSQL() *SQL {
@@ -25,8 +25,11 @@ func NewSQL() *SQL {
 	return s
 }
 
-func NewSQLParameter() *SQLParameter {
-	p := &SQLParameter{}
+func NewSQLParameter(Type string, Value interface{}) SQLParameter {
+	p := SQLParameter{
+		Type:  Type,
+		Value: Value,
+	}
 	return p
 }
 
@@ -57,6 +60,11 @@ func (s *SQL) SetSQLTypesHeader(sqlTypesHeader bool) *SQL {
 
 func (s *SQL) SetParameters(parameters []SQLParameter) *SQL {
 	s.Parameters = parameters
+	return s
+}
+
+func (s *SQL) SetContext(context map[string]interface{}) *SQL {
+	s.Base.SetContext(context)
 	return s
 }
 
