@@ -20,7 +20,7 @@ func main() {
 	param = append(param, query.NewSQLParameter("VARCHAR", "Salo Toraut"))
 	param = append(param, query.NewSQLParameter("VARCHAR", "NB"))
 	param = append(param, query.NewSQLParameter("VARCHAR", "false")) // BOOLEAN type fails the convent in api.
-	param = append(param, query.NewSQLParameter("INTEGER", 31))      // This is why I changed the type of values to interface.
+	param = append(param, query.NewSQLParameter("INTEGER", 31))
 	context := make(map[string]interface{})
 	context["sqlTimeZone"] = "America/Los_Angeles"
 	query := query.NewSQL().SetQuery(

@@ -11,7 +11,7 @@ func TestSelectSQL(t *testing.T) {
 	param = append(param, NewSQLParameter("VARCHAR", "Salo Toraut"))
 	param = append(param, NewSQLParameter("VARCHAR", "NB"))
 	param = append(param, NewSQLParameter("BOOLEAN", "false"))
-	param = append(param, NewSQLParameter("INTEGER", 31)) // This is why I changed the type of values to interface.
+	param = append(param, NewSQLParameter("INTEGER", 31))
 	param = append(param, NewSQLParameter("TIMESTAMP", "2016-06-27T00:00:11.080Z"))
 	query := NewSQL().SetQuery(
 		`SELECT * FROM "wikipedia" WHERE page=? AND flags=? AND isUnpatrolled=?  AND delta=? AND __time=?`).SetParameters(param)
