@@ -2,7 +2,7 @@ package extractionfn
 
 type Substring struct {
 	Base
-	Index  int64 `json:"index,omitempty"`
+	Index  int64 `json:"index"` // If omitempty is present, it disappears from json when index is 0
 	Length int64 `json:"length,omitempty"`
 }
 
