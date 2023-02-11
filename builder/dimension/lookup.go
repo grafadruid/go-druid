@@ -37,6 +37,11 @@ func (l *Lookup) SetOutputName(outputName string) *Lookup {
 	return l
 }
 
+func (l *Lookup) SetDimension(dimensionName string) *Lookup {
+	l.Base.SetDimension(dimensionName)
+	return l
+}
+
 func (l *Lookup) SetReplaceMissingValueWith(replaceMissingValueWith string) *Lookup {
 	l.ReplaceMissingValueWith = replaceMissingValueWith
 	return l
