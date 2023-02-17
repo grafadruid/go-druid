@@ -8,7 +8,7 @@ import (
 
 type Query struct {
 	Base
-	Query builder.Query `json:"-,omitempty"`
+	Query builder.Query `json:"query,omitempty"`
 }
 
 func NewQuery() *Query {
@@ -17,8 +17,9 @@ func NewQuery() *Query {
 	return q
 }
 
-func (q *Query) SetQuery(qry builder.Query) {
+func (q *Query) SetQuery(qry builder.Query) *Query {
 	q.Query = qry
+	return q
 }
 
 func (q *Query) UnmarshalJSONWithQueryLoader(data []byte, loader func(data []byte) (builder.Query, error)) error {
