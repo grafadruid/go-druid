@@ -3,7 +3,6 @@ package aggregation
 import (
 	"encoding/json"
 	"errors"
-
 	"github.com/grafadruid/go-druid/builder"
 )
 
@@ -108,8 +107,10 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewQuantilesDoublesSketch()
 	case "thetaSketch":
 		a = NewThetaSketch()
+	case "":
+		return nil, errors.New("missing aggregation type")
 	default:
-		return nil, errors.New("unsupported aggregation type")
+		a = NewGeneric(t.Typ)
 	}
 	return a, json.Unmarshal(data, &a)
 }
