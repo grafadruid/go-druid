@@ -76,8 +76,10 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewQuantilesDoublesSketchToCDF()
 	case "quantilesDoublesSketchToString":
 		p = NewQuantilesDoublesSketchToString()
+	case "":
+		return nil, errors.New("missing postaggregation type")
 	default:
-		return nil, errors.New("unsupported postaggregation type")
+		p = NewGeneric(t.Typ)
 	}
 	return p, json.Unmarshal(data, &p)
 }
