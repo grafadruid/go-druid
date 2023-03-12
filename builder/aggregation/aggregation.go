@@ -3,6 +3,7 @@ package aggregation
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/grafadruid/go-druid/builder"
 )
 
