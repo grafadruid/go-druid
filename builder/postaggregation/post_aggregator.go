@@ -79,7 +79,7 @@ func Load(data []byte) (builder.PostAggregator, error) {
 	case "":
 		return nil, errors.New("missing postaggregation type")
 	default:
-		p = NewGeneric(t.Typ)
+		p = builder.NewGeneric(t.Typ)
 	}
 	return p, json.Unmarshal(data, &p)
 }

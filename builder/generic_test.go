@@ -1,4 +1,4 @@
-package aggregation
+package builder
 
 import (
 	"encoding/json"

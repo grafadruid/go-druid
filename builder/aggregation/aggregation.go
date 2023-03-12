@@ -111,7 +111,7 @@ func Load(data []byte) (builder.Aggregator, error) {
 	case "":
 		return nil, errors.New("missing aggregation type")
 	default:
-		a = NewGeneric(t.Typ)
+		a = builder.NewGeneric(t.Typ)
 	}
 	return a, json.Unmarshal(data, &a)
 }

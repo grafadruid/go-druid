@@ -216,7 +216,7 @@ func TestLoadValidAggregation(t *testing.T) {
 		{
 			name:     "unknown aggregator",
 			jsonData: `{"type": "blahblahType"}`,
-			expected: NewGeneric("blahblahType"),
+			expected: builder.NewGeneric("blahblahType"),
 		},
 	}
 	for _, test := range tests {
