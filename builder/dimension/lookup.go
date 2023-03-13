@@ -2,6 +2,7 @@ package dimension
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder/types"
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/lookup"
@@ -14,6 +15,22 @@ type Lookup struct {
 	RetainMissingValue      *bool                   `json:"retainMissingValue,omitempty"`
 	Lookup                  builder.LookupExtractor `json:"lookup,omitempty"`
 	Optimize                *bool                   `json:"optimize,omitempty"`
+}
+
+func (l *Lookup) GetDimension() string {
+	return l.Base.Dimension
+}
+
+func (l *Lookup) GetOutputName() string {
+	return l.Base.OutputName
+}
+
+func (l *Lookup) GetOutputType() types.OutputType {
+	return l.Base.OutputType
+}
+
+func (l *Lookup) GetExtractionFn() builder.ExtractionFn {
+	return nil
 }
 
 type RegisteredLookup struct {
@@ -37,8 +54,8 @@ func (l *Lookup) SetOutputName(outputName string) *Lookup {
 	return l
 }
 
-func (l *Lookup) SetDimension(dimensionName string) *Lookup {
-	l.Base.SetDimension(dimensionName)
+func (l *Lookup) SetDimension(dimension string) *Lookup {
+	l.Base.SetDimension(dimension)
 	return l
 }
 

@@ -13,6 +13,22 @@ type RegexFiltered struct {
 	Pattern  string            `json:"pattern,omitempty"`
 }
 
+func (r *RegexFiltered) GetDimension() string {
+	return r.Base.Dimension
+}
+
+func (r *RegexFiltered) GetOutputName() string {
+	return r.Base.OutputName
+}
+
+func (r *RegexFiltered) GetOutputType() types.OutputType {
+	return r.Base.OutputType
+}
+
+func (r *RegexFiltered) GetExtractionFn() builder.ExtractionFn {
+	return nil
+}
+
 func NewRegexFiltered() *RegexFiltered {
 	r := &RegexFiltered{}
 	r.SetType("regexFiltered")

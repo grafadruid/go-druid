@@ -14,6 +14,22 @@ type ListFiltered struct {
 	IsWhiteList *bool             `json:"isWhiteList,omitempty"`
 }
 
+func (l *ListFiltered) GetDimension() string {
+	return l.Base.Dimension
+}
+
+func (l *ListFiltered) GetOutputName() string {
+	return l.Base.OutputName
+}
+
+func (l *ListFiltered) GetOutputType() types.OutputType {
+	return l.Base.OutputType
+}
+
+func (l *ListFiltered) GetExtractionFn() builder.ExtractionFn {
+	return nil
+}
+
 func NewListFiltered() *ListFiltered {
 	l := &ListFiltered{}
 	l.SetType("listFiltered")

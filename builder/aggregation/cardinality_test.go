@@ -2,6 +2,7 @@ package aggregation
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/extractionfn"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +17,7 @@ func TestCardinality(t *testing.T) {
 		SetExtractionFn(substringExtra)
 
 	cardinality.SetName("distinct_last_name_first_char").
-		SetFields([]interface{}{extraction}).SetByRow(true).SetRound(false)
+		SetFields([]builder.DimensionSpec{extraction}).SetByRow(true).SetRound(false)
 	expected := `{
   "type": "cardinality",
   "name": "distinct_last_name_first_char",

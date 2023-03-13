@@ -1,5 +1,7 @@
 package builder
 
+import "github.com/grafadruid/go-druid/builder/types"
+
 type ComponentType = string
 
 type Query interface {
@@ -20,6 +22,18 @@ type DataSource interface {
 
 type Dimension interface {
 	Type() ComponentType
+}
+
+type DimensionSpec interface {
+	Dimension
+	GetDimension() string
+	GetOutputName() string
+	GetOutputType() types.OutputType
+	GetExtractionFn() ExtractionFn // Deprecated
+}
+
+type BaseFilteredDimensionSpec interface {
+	DimensionSpec
 }
 
 type ExtractionFn interface {
