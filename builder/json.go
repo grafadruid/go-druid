@@ -1,39 +1,37 @@
 package builder
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
-type Generic struct {
+type JSON struct {
 	Typ    ComponentType
 	Fields map[string]interface{}
 }
 
-func NewGeneric(typ string) *Generic {
-	g := &Generic{Fields: make(map[string]interface{})}
+func NewJSON(typ string) *JSON {
+	g := &JSON{Fields: make(map[string]interface{})}
 	g.SetType(typ)
 	return g
 }
 
 // Methods for compatibility
 
-func (g *Generic) Type() ComponentType {
+func (g *JSON) Type() ComponentType {
 	return g.Typ
 }
 
-func (g *Generic) SetType(typ string) *Generic {
+func (g *JSON) SetType(typ string) *JSON {
 	g.Typ = typ
 	return g
 }
 
-func (g *Generic) SetName(name string) *Generic {
+func (g *JSON) SetName(name string) *JSON {
 	g.SetField("name", name)
 	return g
 }
 
 // Generic methods
 
-func (g *Generic) SetField(name string, value interface{}) *Generic {
+func (g *JSON) SetField(name string, value interface{}) *JSON {
 	switch name {
 	case "type":
 		g.SetType(value.(ComponentType))
@@ -43,7 +41,7 @@ func (g *Generic) SetField(name string, value interface{}) *Generic {
 	return g
 }
 
-func (g *Generic) SetFields(fields map[string]interface{}) *Generic {
+func (g *JSON) SetFields(fields map[string]interface{}) *JSON {
 	if typ, present := fields["type"]; present {
 		g.SetType(typ.(ComponentType))
 		delete(fields, "type")
@@ -53,14 +51,14 @@ func (g *Generic) SetFields(fields map[string]interface{}) *Generic {
 	return g
 }
 
-func (g *Generic) MergeFields(fields map[string]interface{}) *Generic {
+func (g *JSON) MergeFields(fields map[string]interface{}) *JSON {
 	for name, value := range fields {
 		g.SetField(name, value)
 	}
 	return g
 }
 
-func (g *Generic) MarshalJSON() ([]byte, error) {
+func (g *JSON) MarshalJSON() ([]byte, error) {
 	// Reuse Fields map to avoid allocating a new one if it fits the capacity
 	if g.Typ != "" {
 		g.Fields["type"] = g.Typ
@@ -73,7 +71,7 @@ func (g *Generic) MarshalJSON() ([]byte, error) {
 	return data, err
 }
 
-func (g *Generic) UnmarshalJSON(bytes []byte) error {
+func (g *JSON) UnmarshalJSON(bytes []byte) error {
 	err := json.Unmarshal(bytes, &g.Fields)
 
 	if typ, present := g.Fields["type"]; present {
