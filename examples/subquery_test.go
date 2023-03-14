@@ -68,7 +68,6 @@ func TestSubQueryScan(t *testing.T) {
   "filter": {
     "dimension": "countryName",
     "extractionFn": {
-      "locale": "",
       "type": "lower"
     },
     "type": "selector",
@@ -81,7 +80,7 @@ func TestSubQueryScan(t *testing.T) {
     ]
   },
   "limit": 10,
-  "order": "DESCENDING",
+  "order": "NONE",
   "queryType": "scan"
 }`
 	location, _ := time.LoadLocation("UTC")
@@ -105,7 +104,7 @@ func TestSubQueryScan(t *testing.T) {
 		SetIntervals(interval)
 	datasource := datasource2.NewQuery().SetQuery(datasourceSubQuery)
 	scan := query.NewScan()
-	queryTest := scan.SetOrder(query.Descending).SetLimit(10).SetIntervals(interval).SetFilter(a).
+	queryTest := scan.SetOrder(query.None).SetLimit(10).SetIntervals(interval).SetFilter(a).
 		SetColumns([]string{"__time", "channel", "cityName", "comment", "count", "countryIsoCode",
 			"diffUrl", "flags", "isAnonymous", "isMinor", "isNew", "isRobot", "isUnpatrolled",
 			"metroCode", "namespace", "page", "regionIsoCode", "regionName", "sum_added",
@@ -201,4 +200,30 @@ func TestSubQueryTimeseries(t *testing.T) {
 
 	assert.JSONEq(t, expected, string(queryTestJSON))
 
+}
+
+func TestDiffBuilderAndString(t *testing.T) {
+	expected := `{"type":"query","query":{"queryType":"scan","dataSource":{"type":"table","name":"A"},"columns":["AT"],"intervals":{"type":"intervals","intervals":["1980-06-12T22:30:00Z/2020-01-26T23:00:00Z"]}}}`
+
+	location, _ := time.LoadLocation("UTC")
+
+	start, _ := time.ParseInLocation(time.RFC3339Nano,
+		"1980-06-12T22:30:00.000Z",
+		location)
+	end, _ := time.ParseInLocation(time.RFC3339Nano,
+		"2020-01-26T23:00:00.000Z",
+		location)
+	i := intervals.NewInterval()
+	i.SetInterval(start, end)
+	interval := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
+
+	datasourceSubQuery := query.NewScan().
+		SetDataSource(datasource2.NewTable().SetName("A")).SetColumns([]string{"AT"}).
+		SetIntervals(interval)
+
+	datasource := datasource2.NewQuery().SetQuery(datasourceSubQuery)
+
+	expressionJSON, err := json.Marshal(datasource)
+	assert.Nil(t, err)
+	assert.JSONEq(t, expected, string(expressionJSON))
 }

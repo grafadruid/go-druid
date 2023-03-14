@@ -69,9 +69,7 @@ func MakeScanSubQuery() *query.Scan {
 			"metroCode", "namespace", "page", "regionIsoCode", "regionName", "sum_added",
 			"sum_commentLength", "sum_deleted", "sum_delta", "sum_deltaBucket", "user"}).
 		SetBatchSize(20480).
-		SetDataSource(datasource)
-	// If you include ordering, you'll get an error.
-	// .SetOrder(query.Descending)
+		SetDataSource(datasource).SetOrder(query.None)
 	return queryTest
 }
 

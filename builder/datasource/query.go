@@ -2,7 +2,6 @@ package datasource
 
 import (
 	"encoding/json"
-
 	"github.com/grafadruid/go-druid/builder"
 )
 
