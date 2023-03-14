@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestNewJSON(t *testing.T) {
-	component := NewJSON("customComponent")
+func TestNewSpec(t *testing.T) {
+	component := NewSpec("customComponent")
 
 	expected := `{"type":"customComponent"}`
 
@@ -17,14 +17,14 @@ func TestNewJSON(t *testing.T) {
 	assert.JSONEq(t, expected, string(componentJSON))
 }
 
-func TestJSON_SetField(t *testing.T) {
+func TestSpec_SetField(t *testing.T) {
 	t.Run("common field", func(t *testing.T) {
-		withSpecificMethod := NewJSON("customComponent")
+		withSpecificMethod := NewSpec("customComponent")
 		withSpecificMethod.
 			SetType("overriddenComponent").
 			SetName("op")
 
-		withSetFieldMethod := NewJSON("customComponent").
+		withSetFieldMethod := NewSpec("customComponent").
 			SetField("type", "overriddenComponent").
 			SetField("name", "op")
 
@@ -38,7 +38,7 @@ func TestJSON_SetField(t *testing.T) {
 		assert.JSONEq(t, expected, string(componentJSON))
 	})
 	t.Run("any field", func(t *testing.T) {
-		component := NewJSON("customComponent").SetField("foo", "bar")
+		component := NewSpec("customComponent").SetField("foo", "bar")
 
 		expected := `{"type":"customComponent","foo":"bar"}`
 
@@ -49,8 +49,8 @@ func TestJSON_SetField(t *testing.T) {
 	})
 }
 
-func TestJSON_MergeFields(t *testing.T) {
-	component := NewJSON("customComponent").
+func TestSpec_MergeFields(t *testing.T) {
+	component := NewSpec("customComponent").
 		SetField("one", "direct").
 		SetField("two", "direct").
 		MergeFields(map[string]interface{}{
@@ -66,8 +66,8 @@ func TestJSON_MergeFields(t *testing.T) {
 	assert.JSONEq(t, expected, string(componentJSON))
 }
 
-func TestJSON_SetFields(t *testing.T) {
-	component := NewJSON("customComponent").
+func TestSpec_SetFields(t *testing.T) {
+	component := NewSpec("customComponent").
 		SetField("one", "direct").
 		SetField("two", "direct").
 		SetFields(map[string]interface{}{

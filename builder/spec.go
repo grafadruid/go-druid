@@ -2,36 +2,36 @@ package builder
 
 import "encoding/json"
 
-type JSON struct {
+type Spec struct {
 	Typ    ComponentType
 	Fields map[string]interface{}
 }
 
-func NewJSON(typ string) *JSON {
-	g := &JSON{Fields: make(map[string]interface{})}
+func NewSpec(typ string) *Spec {
+	g := &Spec{Fields: make(map[string]interface{})}
 	g.SetType(typ)
 	return g
 }
 
 // Methods for compatibility
 
-func (g *JSON) Type() ComponentType {
+func (g *Spec) Type() ComponentType {
 	return g.Typ
 }
 
-func (g *JSON) SetType(typ string) *JSON {
+func (g *Spec) SetType(typ string) *Spec {
 	g.Typ = typ
 	return g
 }
 
-func (g *JSON) SetName(name string) *JSON {
+func (g *Spec) SetName(name string) *Spec {
 	g.SetField("name", name)
 	return g
 }
 
 // Generic methods
 
-func (g *JSON) SetField(name string, value interface{}) *JSON {
+func (g *Spec) SetField(name string, value interface{}) *Spec {
 	switch name {
 	case "type":
 		g.SetType(value.(ComponentType))
@@ -41,7 +41,7 @@ func (g *JSON) SetField(name string, value interface{}) *JSON {
 	return g
 }
 
-func (g *JSON) SetFields(fields map[string]interface{}) *JSON {
+func (g *Spec) SetFields(fields map[string]interface{}) *Spec {
 	if typ, present := fields["type"]; present {
 		g.SetType(typ.(ComponentType))
 		delete(fields, "type")
@@ -51,14 +51,14 @@ func (g *JSON) SetFields(fields map[string]interface{}) *JSON {
 	return g
 }
 
-func (g *JSON) MergeFields(fields map[string]interface{}) *JSON {
+func (g *Spec) MergeFields(fields map[string]interface{}) *Spec {
 	for name, value := range fields {
 		g.SetField(name, value)
 	}
 	return g
 }
 
-func (g *JSON) MarshalJSON() ([]byte, error) {
+func (g *Spec) MarshalJSON() ([]byte, error) {
 	// Reuse Fields map to avoid allocating a new one if it fits the capacity
 	if g.Typ != "" {
 		g.Fields["type"] = g.Typ
@@ -71,7 +71,7 @@ func (g *JSON) MarshalJSON() ([]byte, error) {
 	return data, err
 }
 
-func (g *JSON) UnmarshalJSON(bytes []byte) error {
+func (g *Spec) UnmarshalJSON(bytes []byte) error {
 	err := json.Unmarshal(bytes, &g.Fields)
 
 	if typ, present := g.Fields["type"]; present {
