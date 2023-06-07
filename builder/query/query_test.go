@@ -81,3 +81,25 @@ func TestAllSetterSQL(t *testing.T) {
 	assert.JSONEq(t, expected, string(expressionJSON))
 
 }
+
+func TestScanUnmarshalJson(t *testing.T) {
+	expected := `{
+    "queryType": "scan",
+    "dataSource": {
+      "type": "table",
+      "name": "A"
+    },
+    "columns": [
+      "AT"
+    ],
+    "intervals": {
+      "type": "intervals",
+      "intervals": [
+        "1980-06-12T22:30:00.000Z/2020-01-26T23:00:00.000Z"
+      ]
+    }
+  }`
+	scan := NewScan()
+	err := scan.UnmarshalJSON([]byte(expected))
+	assert.Nil(t, err)
+}

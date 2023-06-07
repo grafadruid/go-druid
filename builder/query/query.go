@@ -59,11 +59,11 @@ func (b *Base) UnmarshalJSON(data []byte) error {
 	}
 	if b.Type() != "sql" {
 		d, err := datasource.Load(tmp.DataSource)
+		if err != nil && d.Type() == "query" {
+			err = d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.DataSource, Load) // cycle import
+		}
 		if err != nil {
 			return err
-		}
-		if d.Type() == "query" {
-			d.(*datasource.Query).UnmarshalJSONWithQueryLoader(tmp.DataSource, Load)
 		}
 		b.DataSource = d
 		var i builder.Intervals
