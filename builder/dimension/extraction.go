@@ -12,6 +12,22 @@ type Extraction struct {
 	ExtractionFn builder.ExtractionFn `json:"extractionFn,omitempty"`
 }
 
+func (e *Extraction) GetDimension() string {
+	return e.Base.Dimension
+}
+
+func (e *Extraction) GetOutputName() string {
+	return e.Base.OutputName
+}
+
+func (e *Extraction) GetOutputType() types.OutputType {
+	return e.Base.OutputType
+}
+
+func (e *Extraction) GetExtractionFn() builder.ExtractionFn {
+	return e.ExtractionFn
+}
+
 func NewExtraction() *Extraction {
 	e := &Extraction{}
 	e.SetType("extraction")

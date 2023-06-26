@@ -13,6 +13,22 @@ type PrefixFiltered struct {
 	Prefix   string            `json:"prefix,omitempty"`
 }
 
+func (p *PrefixFiltered) GetDimension() string {
+	return p.Base.Dimension
+}
+
+func (p *PrefixFiltered) GetOutputName() string {
+	return p.Base.OutputName
+}
+
+func (p *PrefixFiltered) GetOutputType() types.OutputType {
+	return p.Base.OutputType
+}
+
+func (p *PrefixFiltered) GetExtractionFn() builder.ExtractionFn {
+	return nil
+}
+
 func NewPrefixFiltered() *PrefixFiltered {
 	p := &PrefixFiltered{}
 	p.SetType("prefixFiltered")

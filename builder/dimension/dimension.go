@@ -39,8 +39,8 @@ func (b *Base) Type() builder.ComponentType {
 	return b.Typ
 }
 
-func Load(data []byte) (builder.Dimension, error) {
-	var d builder.Dimension
+func Load(data []byte) (builder.DimensionSpec, error) {
+	var d builder.DimensionSpec
 	if string(data) == "null" {
 		return d, nil
 	}

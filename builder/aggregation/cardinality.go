@@ -1,10 +1,14 @@
 package aggregation
 
+import "github.com/grafadruid/go-druid/builder"
+
+// Cardinality Each individual element of the "fields" list can be a String or DimensionSpec.
+// A String dimension in the fields list is equivalent to a DefaultDimensionSpec (no transformations).
 type Cardinality struct {
 	Base
-	Fields []string `json:"fields,omitempty"`
-	ByRow  *bool    `json:"byRow,omitempty"`
-	Round  *bool    `json:"round,omitempty"`
+	Fields []builder.DimensionSpec `json:"fields,omitempty"`
+	ByRow  *bool                   `json:"byRow,omitempty"`
+	Round  *bool                   `json:"round,omitempty"`
 }
 
 func NewCardinality() *Cardinality {
@@ -18,7 +22,7 @@ func (c *Cardinality) SetName(name string) *Cardinality {
 	return c
 }
 
-func (c *Cardinality) SetFields(fields []string) *Cardinality {
+func (c *Cardinality) SetFields(fields []builder.DimensionSpec) *Cardinality {
 	c.Fields = fields
 	return c
 }
