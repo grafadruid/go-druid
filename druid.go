@@ -48,23 +48,25 @@ var (
 )
 
 type Client struct {
-	http      *retryablehttp.Client
-	baseURL   *url.URL
-	username  string
-	password  string
-	basicAuth bool
+	http              *retryablehttp.Client
+	baseURL           *url.URL
+	username          string
+	password          string
+	basicAuth         bool
+	polarisConnection bool
 }
 
 type clientOptions struct {
-	httpClient   *http.Client
-	username     string
-	password     string
-	backoff      retryablehttp.Backoff
-	errorHandler retryablehttp.ErrorHandler
-	retry        retryablehttp.CheckRetry
-	retryWaitMin time.Duration
-	retryWaitMax time.Duration
-	retryMax     int
+	httpClient        *http.Client
+	username          string
+	password          string
+	backoff           retryablehttp.Backoff
+	errorHandler      retryablehttp.ErrorHandler
+	retry             retryablehttp.CheckRetry
+	retryWaitMin      time.Duration
+	retryWaitMax      time.Duration
+	retryMax          int
+	polarisConnection bool
 }
 
 type ClientOption func(*clientOptions)
@@ -89,6 +91,7 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 	for _, opt := range options {
 		opt(opts)
 	}
+
 	c := &Client{
 		http: &retryablehttp.Client{
 			Backoff:      opts.backoff,
@@ -98,9 +101,10 @@ func NewClient(baseURL string, options ...ClientOption) (*Client, error) {
 			RetryWaitMax: opts.retryWaitMax,
 			RetryMax:     opts.retryMax,
 		},
-		username:  opts.username,
-		password:  opts.password,
-		basicAuth: opts.username != "" && opts.password != "",
+		username:          opts.username,
+		password:          opts.password,
+		basicAuth:         opts.username != "" && opts.password != "",
+		polarisConnection: opts.polarisConnection,
 	}
 	if err := c.setBaseURL(baseURL); err != nil {
 		return nil, err
@@ -335,6 +339,12 @@ func WithRetryWaitMax(retryWaitMax time.Duration) ClientOption {
 func WithRetryMax(retryMax int) ClientOption {
 	return func(opts *clientOptions) {
 		opts.retryMax = retryMax
+	}
+}
+
+func WithPolarisConnection(usePolaris bool) ClientOption {
+	return func(opts *clientOptions) {
+		opts.polarisConnection = usePolaris
 	}
 }
 

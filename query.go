@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	NativeQueryEndpoint = "druid/v2"
-	SQLQueryEndpoint    = "druid/v2/sql"
+	NativeQueryEndpoint     = "druid/v2"
+	SQLQueryEndpoint        = "druid/v2/sql"
+	PolarisSQLQueryEndpoint = "v1/query/sql"
 )
 
 type QueryService struct {
@@ -20,7 +21,11 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ..
 	var path string
 	switch qry.Type() {
 	case "sql":
-		path = SQLQueryEndpoint
+		if q.client.polarisConnection {
+			path = PolarisSQLQueryEndpoint
+		} else {
+			path = SQLQueryEndpoint
+		}
 	default:
 		path = NativeQueryEndpoint
 	}
