@@ -110,8 +110,10 @@ func Load(data []byte) (builder.Aggregator, error) {
 		a = NewThetaSketch()
 	case "expression":
 		a = NewExpression()
+	case "":
+		return nil, errors.New("missing aggregation type")
 	default:
-		return nil, errors.New("unsupported aggregation type")
+		a = builder.NewSpec(t.Typ)
 	}
 	return a, json.Unmarshal(data, &a)
 }
