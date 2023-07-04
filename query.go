@@ -1,6 +1,8 @@
 package druid
 
 import (
+	"net/http"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/query"
 )
@@ -14,7 +16,7 @@ type QueryService struct {
 	client *Client
 }
 
-func (q *QueryService) Execute(qry builder.Query, result interface{}) (*Response, error) {
+func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ...http.Header) (*Response, error) {
 	var path string
 	switch qry.Type() {
 	case "sql":
@@ -25,6 +27,13 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}) (*Response
 	r, err := q.client.NewRequest("POST", path, qry)
 	if err != nil {
 		return nil, err
+	}
+	if len(headers) >= 1 {
+		for k, v := range headers[0] {
+			for _, vv := range v {
+				r.Header.Set(k, vv)
+			}
+		}
 	}
 	resp, err := q.client.Do(r, result)
 	if err != nil {
