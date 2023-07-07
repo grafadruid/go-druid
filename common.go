@@ -2,6 +2,7 @@ package druid
 
 const (
 	StatusEndpoint         = "status"
+	PolarisStatusEndpoint         = "v1/apikeyinfo"
 	HealthEndpoint         = "status/health"
 	PropertiesEndpoint     = "status/properties"
 	SelfDiscoveredEndpoint = "status/selfDiscovered/status"
@@ -34,7 +35,13 @@ type CommonService struct {
 
 func (c *CommonService) Status() (*Status, *Response, error) {
 	var s *Status
-	response, err := c.client.ExecuteRequest("GET", StatusEndpoint, nil, &s)
+	var path string
+	if c.client.polarisConnection {
+		path = PolarisStatusEndpoint
+	} else {
+		path = StatusEndpoint
+	}
+	response, err := c.client.ExecuteRequest("GET", path, nil, &s)
 	if err != nil {
 		return nil, response, err
 	}
