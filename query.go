@@ -49,3 +49,17 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ..
 func (q *QueryService) Load(data []byte) (builder.Query, error) {
 	return query.Load(data)
 }
+
+// TODO: (Add support for SQL query type, currently only REST path supported. )
+func (q *QueryService) ExecuteRaw(requestBody []byte, result interface{}) (*Response, error) {
+	path := NativeQueryEndpoint
+	r, err := q.client.NewRequestOnMarshalledRequest("POST", path, requestBody)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := q.client.Do(r, result)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

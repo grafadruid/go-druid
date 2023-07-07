@@ -1,6 +1,7 @@
 package druid
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
@@ -155,6 +156,34 @@ func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehtt
 		r.SetBasicAuth(c.username, c.password)
 	}
 
+	return r, nil
+}
+
+func (c *Client) NewRequestOnMarshalledRequest(method, path string, jsonData []byte) (*retryablehttp.Request, error) {
+	u := *c.baseURL
+	unescaped, err := url.PathUnescape(path)
+	if err != nil {
+		return nil, err
+	}
+
+	u.RawPath = c.baseURL.Path + path
+	u.Path = c.baseURL.Path + unescaped
+
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("Accept", "application/json")
+
+	if method == "POST" || method == "PUT" {
+		reqHeaders.Set("Content-Type", "application/json")
+	}
+
+	r, err := retryablehttp.NewRequest(method, u.String(), bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, err
+	}
+	r.Header = reqHeaders
+	if c.basicAuth {
+		r.SetBasicAuth(c.username, c.password)
+	}
 	return r, nil
 }
 
