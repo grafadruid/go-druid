@@ -2,9 +2,10 @@ package virtualcolumn
 
 import (
 	"encoding/json"
-	"github.com/grafadruid/go-druid/builder/types"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/adjoeio/go-druid/builder/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewExpression(t *testing.T) {

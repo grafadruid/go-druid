@@ -1,6 +1,6 @@
 package virtualcolumn
 
-import "github.com/grafadruid/go-druid/builder/types"
+import "github.com/adjoeio/go-druid/builder/types"
 
 type Expression struct {
 	Base

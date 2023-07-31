@@ -3,8 +3,8 @@ package druid
 import (
 	"net/http"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/query"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/query"
 )
 
 const (
@@ -42,10 +42,9 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ..
 	return resp, nil
 }
 
-//func (q *QueryService) Cancel(query builder.Query) () {}
+// func (q *QueryService) Cancel(query builder.Query) () {}
 
-//func (q *QueryService) Candidates(query builder.Query, result interface{}) (*Response, error) {}
-
+// func (q *QueryService) Candidates(query builder.Query, result interface{}) (*Response, error) {}
 func (q *QueryService) Load(data []byte) (builder.Query, error) {
 	return query.Load(data)
 }

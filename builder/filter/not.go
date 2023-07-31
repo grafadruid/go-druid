@@ -3,7 +3,7 @@ package filter
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder"
 )
 
 type Not struct {

@@ -5,17 +5,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
-	"github.com/grafadruid/go-druid"
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/aggregation"
-	"github.com/grafadruid/go-druid/builder/datasource"
-	"github.com/grafadruid/go-druid/builder/granularity"
-	"github.com/grafadruid/go-druid/builder/intervals"
-	"github.com/grafadruid/go-druid/builder/postaggregation"
-	"github.com/grafadruid/go-druid/builder/query"
 	"log"
 	"time"
+
+	"github.com/adjoeio/go-druid"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/aggregation"
+	"github.com/adjoeio/go-druid/builder/datasource"
+	"github.com/adjoeio/go-druid/builder/granularity"
+	"github.com/adjoeio/go-druid/builder/intervals"
+	"github.com/adjoeio/go-druid/builder/postaggregation"
+	"github.com/adjoeio/go-druid/builder/query"
+	"github.com/davecgh/go-spew/spew"
 )
 
 func getConnection() *druid.Client {
@@ -51,7 +52,7 @@ func tdigestSketchQuantilesPostAggUsingBuilder() {
 	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
 	a := []builder.Aggregator{atds}
 
-	//TDigest Post Aggregation Quantiles
+	// TDigest Post Aggregation Quantiles
 	qf := postaggregation.NewQuantilesFromTDigestSketchField().
 		SetType("fieldAccess").
 		SetFieldName("merged_sketch")
@@ -86,7 +87,7 @@ func tdigestSketchQuantilePostAggUsingBuilder() {
 	atds := aggregation.NewTDigestSketch().SetName("merged_sketch").SetFieldName("valuesTDS")
 	a := []builder.Aggregator{atds}
 
-	//TDigest Post Aggregation Quantile
+	// TDigest Post Aggregation Quantile
 	qf := postaggregation.NewQuantileFromTDigestSketchField().
 		SetType("fieldAccess").
 		SetFieldName("merged_sketch")

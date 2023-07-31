@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/aggregation"
-	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/granularity"
-	"github.com/grafadruid/go-druid/builder/postaggregation"
-	"github.com/grafadruid/go-druid/builder/virtualcolumn"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/aggregation"
+	"github.com/adjoeio/go-druid/builder/filter"
+	"github.com/adjoeio/go-druid/builder/granularity"
+	"github.com/adjoeio/go-druid/builder/postaggregation"
+	"github.com/adjoeio/go-druid/builder/virtualcolumn"
 )
 
 type Timeseries struct {

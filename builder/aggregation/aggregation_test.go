@@ -1,10 +1,10 @@
 package aggregation
 
 import (
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/filter"
 	"testing"
 
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/filter"
 	"github.com/stretchr/testify/assert"
 )
 

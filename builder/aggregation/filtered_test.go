@@ -2,10 +2,11 @@ package aggregation
 
 import (
 	"encoding/json"
-	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/types"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/adjoeio/go-druid/builder/filter"
+	"github.com/adjoeio/go-druid/builder/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadFilteredAggregator(t *testing.T) {

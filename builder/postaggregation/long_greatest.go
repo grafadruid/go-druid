@@ -3,7 +3,7 @@ package postaggregation
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder"
 )
 
 type LongGreatest struct {

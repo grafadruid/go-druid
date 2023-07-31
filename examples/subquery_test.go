@@ -2,19 +2,20 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/aggregation"
-	datasource2 "github.com/grafadruid/go-druid/builder/datasource"
-	"github.com/grafadruid/go-druid/builder/dimension"
-	"github.com/grafadruid/go-druid/builder/extractionfn"
-	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/granularity"
-	"github.com/grafadruid/go-druid/builder/intervals"
-	"github.com/grafadruid/go-druid/builder/query"
-	"github.com/grafadruid/go-druid/builder/topnmetric"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/aggregation"
+	datasource2 "github.com/adjoeio/go-druid/builder/datasource"
+	"github.com/adjoeio/go-druid/builder/dimension"
+	"github.com/adjoeio/go-druid/builder/extractionfn"
+	"github.com/adjoeio/go-druid/builder/filter"
+	"github.com/adjoeio/go-druid/builder/granularity"
+	"github.com/adjoeio/go-druid/builder/intervals"
+	"github.com/adjoeio/go-druid/builder/query"
+	"github.com/adjoeio/go-druid/builder/topnmetric"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSubQueryScan(t *testing.T) {
@@ -105,10 +106,12 @@ func TestSubQueryScan(t *testing.T) {
 	datasource := datasource2.NewQuery().SetQuery(datasourceSubQuery)
 	scan := query.NewScan()
 	queryTest := scan.SetOrder(query.None).SetLimit(10).SetIntervals(interval).SetFilter(a).
-		SetColumns([]string{"__time", "channel", "cityName", "comment", "count", "countryIsoCode",
+		SetColumns([]string{
+			"__time", "channel", "cityName", "comment", "count", "countryIsoCode",
 			"diffUrl", "flags", "isAnonymous", "isMinor", "isNew", "isRobot", "isUnpatrolled",
 			"metroCode", "namespace", "page", "regionIsoCode", "regionName", "sum_added",
-			"sum_commentLength", "sum_deleted", "sum_delta", "sum_deltaBucket", "user"}).
+			"sum_commentLength", "sum_deleted", "sum_delta", "sum_deltaBucket", "user",
+		}).
 		SetBatchSize(20480).
 		SetDataSource(datasource)
 
@@ -189,8 +192,10 @@ func TestSubQueryTimeseries(t *testing.T) {
 		SetDimension(dimension.NewDefault().SetDimension("string_value")).
 		SetDataSource(datasource2.NewTable().SetName("dc_94b4f5fdfde940979b79c50539d8322a_b42fde98efed4e638a0016b34b3c10cf_dataset_pre")).
 		SetAggregations([]builder.Aggregator{aggregation.NewLongSum().SetName("count").SetFieldName("count")}).
-		SetFilter(filter.NewAnd().SetFields([]builder.Filter{filter.NewSelector().SetDimension("_split_name_").SetValue("train"),
-			filter.NewSelector().SetDimension("column_name").SetValue("addressState")}))
+		SetFilter(filter.NewAnd().SetFields([]builder.Filter{
+			filter.NewSelector().SetDimension("_split_name_").SetValue("train"),
+			filter.NewSelector().SetDimension("column_name").SetValue("addressState"),
+		}))
 	subQuery := datasource2.NewQuery().SetQuery(topN)
 	queryTest := query.NewTimeseries().SetGranularity(granularity.NewSimple().SetGranularity(granularity.Day)).
 		SetIntervals(interval).SetDataSource(subQuery)
@@ -199,7 +204,6 @@ func TestSubQueryTimeseries(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.JSONEq(t, expected, string(queryTestJSON))
-
 }
 
 func TestDiffBuilderAndString(t *testing.T) {

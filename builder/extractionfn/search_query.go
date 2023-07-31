@@ -3,8 +3,8 @@ package extractionfn
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/searchqueryspec"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/searchqueryspec"
 )
 
 type SearchQuery struct {

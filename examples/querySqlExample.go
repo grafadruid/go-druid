@@ -4,10 +4,11 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
-	"github.com/grafadruid/go-druid"
-	"github.com/grafadruid/go-druid/builder/query"
 	"log"
+
+	"github.com/adjoeio/go-druid"
+	"github.com/adjoeio/go-druid/builder/query"
+	"github.com/davecgh/go-spew/spew"
 )
 
 func main() {

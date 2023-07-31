@@ -1,24 +1,24 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
-	"github.com/grafadruid/go-druid"
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/aggregation"
-	datasource2 "github.com/grafadruid/go-druid/builder/datasource"
-	"github.com/grafadruid/go-druid/builder/dimension"
-	"github.com/grafadruid/go-druid/builder/extractionfn"
-	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/granularity"
-	"github.com/grafadruid/go-druid/builder/intervals"
-	"github.com/grafadruid/go-druid/builder/query"
-	"github.com/grafadruid/go-druid/builder/topnmetric"
 	"log"
 	"time"
+
+	"github.com/adjoeio/go-druid"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/aggregation"
+	datasource2 "github.com/adjoeio/go-druid/builder/datasource"
+	"github.com/adjoeio/go-druid/builder/dimension"
+	"github.com/adjoeio/go-druid/builder/extractionfn"
+	"github.com/adjoeio/go-druid/builder/filter"
+	"github.com/adjoeio/go-druid/builder/granularity"
+	"github.com/adjoeio/go-druid/builder/intervals"
+	"github.com/adjoeio/go-druid/builder/query"
+	"github.com/adjoeio/go-druid/builder/topnmetric"
+	"github.com/davecgh/go-spew/spew"
 )
 
 func main() {
-
 	d, err := druid.NewClient("http://localhost:8888")
 	if err != nil {
 		log.Fatal(err)
@@ -37,7 +37,6 @@ func main() {
 		log.Fatal(err)
 	}
 	spew.Dump(results)
-
 }
 
 // MakeScanSubQuery Result is nil
@@ -64,10 +63,12 @@ func MakeScanSubQuery() *query.Scan {
 	datasource := datasource2.NewQuery().SetQuery(datasourceSubQuery)
 	scan := query.NewScan()
 	queryTest := scan.SetLimit(10).SetIntervals(interval).SetFilter(a).
-		SetColumns([]string{"__time", "channel", "cityName", "comment", "count", "countryIsoCode",
+		SetColumns([]string{
+			"__time", "channel", "cityName", "comment", "count", "countryIsoCode",
 			"diffUrl", "flags", "isAnonymous", "isMinor", "isNew", "isRobot", "isUnpatrolled",
 			"metroCode", "namespace", "page", "regionIsoCode", "regionName", "sum_added",
-			"sum_commentLength", "sum_deleted", "sum_delta", "sum_deltaBucket", "user"}).
+			"sum_commentLength", "sum_deleted", "sum_delta", "sum_deltaBucket", "user",
+		}).
 		SetBatchSize(20480).
 		SetDataSource(datasource).SetOrder(query.None)
 	return queryTest
@@ -90,8 +91,10 @@ func MakeTimeSeriesSubQuery() *query.Timeseries {
 		SetDimension(dimension.NewDefault().SetDimension("string_value")).
 		SetDataSource(datasource2.NewTable().SetName("dc_94b4f5fdfde940979b79c50539d8322a_b42fde98efed4e638a0016b34b3c10cf_dataset_pre")).
 		SetAggregations([]builder.Aggregator{aggregation.NewLongSum().SetName("count").SetFieldName("count")}).
-		SetFilter(filter.NewAnd().SetFields([]builder.Filter{filter.NewSelector().SetDimension("_split_name_").SetValue("train"),
-			filter.NewSelector().SetDimension("column_name").SetValue("addressState")}))
+		SetFilter(filter.NewAnd().SetFields([]builder.Filter{
+			filter.NewSelector().SetDimension("_split_name_").SetValue("train"),
+			filter.NewSelector().SetDimension("column_name").SetValue("addressState"),
+		}))
 	subQuery := datasource2.NewQuery().SetQuery(topN)
 	queryTest := query.NewTimeseries().SetGranularity(granularity.NewSimple().SetGranularity(granularity.Day)).
 		SetIntervals(interval).SetDataSource(subQuery)

@@ -1,7 +1,7 @@
 package query
 
 import (
-	"github.com/grafadruid/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder"
 )
 
 type DataSourceMetadata struct {

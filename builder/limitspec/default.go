@@ -1,7 +1,7 @@
 package limitspec
 
 import (
-	"github.com/grafadruid/go-druid/builder/types"
+	"github.com/adjoeio/go-druid/builder/types"
 )
 
 type Direction string

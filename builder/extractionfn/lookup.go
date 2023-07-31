@@ -3,8 +3,8 @@ package extractionfn
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/lookup"
+	"github.com/adjoeio/go-druid/builder"
+	"github.com/adjoeio/go-druid/builder/lookup"
 )
 
 type Lookup struct {
@@ -46,6 +46,7 @@ func (l *Lookup) SetOptimize(optimize bool) *Lookup {
 	l.Optimize = &optimize
 	return l
 }
+
 func (l *Lookup) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base
