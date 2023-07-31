@@ -212,7 +212,7 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 		return true, nil
 	}
 
-	if resp.StatusCode == http.StatusOK {
+	if resp.StatusCode < http.StatusMultipleChoices {
 		return false, nil
 	}
 
