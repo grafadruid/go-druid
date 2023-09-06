@@ -29,7 +29,15 @@ func Load(data []byte) (builder.DataSource, error) {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
-		return nil, err
+		// the datasource may be a string which is supported by Druid
+		var tstr string
+		if err := json.Unmarshal(data, &tstr); err != nil {
+			return nil, err
+		}
+		// We will just make it table which is the most common type according to the Druid docs
+		d = NewTable()
+		d.(*Table).SetName(tstr)
+		return d, nil
 	}
 	switch t.Typ {
 	case "globalTable":

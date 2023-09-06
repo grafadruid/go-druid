@@ -2,7 +2,6 @@ package intervals
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
 )
@@ -25,17 +24,19 @@ func Load(data []byte) (builder.Intervals, error) {
 	if string(data) == "null" {
 		return i, nil
 	}
-	var t struct {
-		Typ builder.ComponentType `json:"type,omitempty"`
-	}
-	if err := json.Unmarshal(data, &t); err != nil {
+	// "intervals" in the spec is just an string array
+	var intv []string
+	if err := json.Unmarshal(data, &intv); err != nil {
 		return nil, err
 	}
-	switch t.Typ {
-	case "intervals":
-		i = NewIntervals()
-	default:
-		return nil, errors.New("unsupported intervals type")
+	// Now cast the only array item into an actual "interval"
+	interval := Interval(intv[0])
+	// create our "intervals" object with "Typ"
+	i = &Intervals{
+		Base: Base{
+			Typ: "intervals",
+		},
+		Intervals: []*Interval{&interval},
 	}
-	return i, json.Unmarshal(data, &i)
+	return i, nil
 }
