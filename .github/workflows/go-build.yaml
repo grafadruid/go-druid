@@ -1,0 +1,52 @@
+name: Go Build
+
+on:
+  push:
+    branches: [main, "rel-[0-9]+.[0-9]+.[0-9]+"]
+  pull_request:
+    branches: [main, "rel-[0-9]+.[0-9]+.[0-9]+"]
+    paths:
+      - ".github/workflows/go-build.yaml"
+      - "**.go"
+      - "go.mod"
+      - "go.sum"
+      - "gen/**"
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: go.mod
+
+      - id: go-cache-paths
+        run: |
+          echo "::set-output name=go-build::$(go env GOCACHE)"
+          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
+      - name: Go Mod Cache
+        id: go-mod-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-gomod-gomod-${{ hashFiles('**/go.sum') }}
+
+      - name: Make assets
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: build
+
+      - name: Test
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: test
+

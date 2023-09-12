@@ -1,0 +1,32 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "fix(security): ⬆️ "
+    open-pull-requests-limit: 0 # Only automate security updates for go.mod.
+    labels:
+    - "area/core"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "ci: ⬆️ "
+    labels:
+    - "area/build"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "build(docker): ⬆️ "
+    labels:
+    - "area/package"
