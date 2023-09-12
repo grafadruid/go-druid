@@ -52,9 +52,7 @@ jobs:
         uses: magefile/mage-action@v3
         with:
           version: latest
-          args: |
-            - vet
-            - fmt
+          args: '["vet", "fmt"]'
 
 
   check-go-mod:
