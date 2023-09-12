@@ -38,11 +38,8 @@ jobs:
           path: ${{ steps.go-cache-paths.outputs.go-mod }}
           key: ${{ runner.os }}-gomod-gomod-${{ hashFiles('**/go.sum') }}
 
-      - name: Make assets
-        uses: magefile/mage-action@v3
-        with:
-          version: latest
-          args: build
+      - name: Build
+        run: go build -v ./...
 
       - name: Test
         uses: magefile/mage-action@v3

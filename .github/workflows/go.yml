@@ -1,0 +1,109 @@
+name: Go
+
+env:
+  BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/go.yml"
+      - "**.go"
+      - "/revive.toml"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v4
+        with:
+          cache: false
+          go-version-file: go.mod
+
+      - id: go-cache-paths
+        run: |
+          echo "go-build=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+
+      - name: Go Build Cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-gobuild-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-gobuild-build-
+
+      - name: Go Mod Cache
+        id: go-mod-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-gomod-build-${{ hashFiles('**/go.sum') }}
+
+      - name: Lint
+        id: lint
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: lint
+
+
+  check-go-mod:
+    name: Check go.mod tidiness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v4
+        with:
+          cache: false
+          go-version-file: go.mod
+
+      - id: go-cache-paths
+        run: |
+          echo "go-build=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+
+      - name: Go Build Cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-gobuild-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-gobuild-build-
+
+      - name: Go Mod Cache
+        id: go-mod-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-gomod-build-${{ hashFiles('**/go.sum') }}
+
+
+      - run: go mod tidy
+
+      - name: Has Changes
+        id: has_changes
+        run: |
+          [[ -z $(git status -s go.mod) ]] && [[ -z $(git status -s go.sum) ]] \
+          && echo "::set-output name=hasChanges::${{ toJSON(false) }}" \
+          || echo "::set-output name=hasChanges::${{ toJSON(true) }}"
+      - name: Print Diff
+        if: ${{ fromJSON(steps.has_changes.outputs.hasChanges) }}
+        run: |
+          git diff
+      - name: Report and fail
+        if: ${{ fromJSON(steps.has_changes.outputs.hasChanges) }}
+        run: |
+          echo "::error title=go.mod is not tidy::Please tidy locally and commit."
+          exit 1
