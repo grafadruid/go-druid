@@ -47,12 +47,20 @@ jobs:
           path: ${{ steps.go-cache-paths.outputs.go-mod }}
           key: ${{ runner.os }}-gomod-build-${{ hashFiles('**/go.sum') }}
 
-      - name: Lint
-        id: lint
+      - name: Run vet linter
+        id: vet
         uses: magefile/mage-action@v3
         with:
           version: latest
-          args: '["vet", "fmt"]'
+          args: vet
+
+      - name: Run gofmt linter
+        id: fmt
+        uses: magefile/mage-action@v3
+        with:
+          version: latest
+          args: fmt
+
 
 
   check-go-mod:
