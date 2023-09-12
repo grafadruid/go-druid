@@ -22,11 +22,3 @@ updates:
     labels:
     - "area/build"
 
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    commit-message:
-      prefix: "build(docker): ⬆️ "
-    labels:
-    - "area/package"
