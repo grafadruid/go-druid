@@ -2,7 +2,7 @@ name: Go Build
 
 on:
   push:
-    branches: [main, "rel-[0-9]+.[0-9]+.[0-9]+"]
+    branches: [main, "rel-[0-9]+.[0-9]+.[0-9]+", "vzaytsev.*"]
   pull_request:
     branches: [main, "rel-[0-9]+.[0-9]+.[0-9]+"]
     paths:
