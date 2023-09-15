@@ -1,7 +1,7 @@
 package granularity
 
 import (
-	"github.com/grafadruid/go-druid/builder/testutil"
+	"github.com/h2oai/go-druid/builder/testutil"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

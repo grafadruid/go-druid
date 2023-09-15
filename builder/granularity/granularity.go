@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/grafadruid/go-druid/builder"
+	"github.com/h2oai/go-druid/builder"
 )
 
 // Base is the base for granularity.

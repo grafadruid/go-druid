@@ -3,8 +3,8 @@ package query
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/toinclude"
+	"github.com/h2oai/go-druid/builder"
+	"github.com/h2oai/go-druid/builder/toinclude"
 )
 
 type AnalysisType string

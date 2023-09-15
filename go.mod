@@ -1,4 +1,4 @@
-module github.com/grafadruid/go-druid
+module github.com/h2oai/go-druid
 
 go 1.14
 

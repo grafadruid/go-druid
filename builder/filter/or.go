@@ -2,7 +2,8 @@ package filter
 
 import (
 	"encoding/json"
-	"github.com/grafadruid/go-druid/builder"
+
+	"github.com/h2oai/go-druid/builder"
 )
 
 type Or struct {

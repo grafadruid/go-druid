@@ -3,8 +3,9 @@ package druid
 import (
 	"net/http"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/query"
+	"github.com/h2oai/go-druid/builder/query"
+
+	"github.com/h2oai/go-druid/builder"
 )
 
 const (

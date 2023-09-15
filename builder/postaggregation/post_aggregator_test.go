@@ -1,9 +1,11 @@
 package postaggregation
 
 import (
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/h2oai/go-druid/builder"
 )
 
 func TestLoadInvalidJSON(t *testing.T) {

@@ -3,8 +3,8 @@ package filter
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/extractionfn"
+	"github.com/h2oai/go-druid/builder"
+	"github.com/h2oai/go-druid/builder/extractionfn"
 )
 
 type In struct {

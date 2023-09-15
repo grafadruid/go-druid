@@ -3,9 +3,9 @@ package query
 import (
 	"encoding/json"
 
-	"github.com/grafadruid/go-druid/builder"
-	"github.com/grafadruid/go-druid/builder/filter"
-	"github.com/grafadruid/go-druid/builder/virtualcolumn"
+	"github.com/h2oai/go-druid/builder"
+	"github.com/h2oai/go-druid/builder/filter"
+	"github.com/h2oai/go-druid/builder/virtualcolumn"
 )
 
 type Order string
@@ -33,17 +33,18 @@ type Scan struct {
 
 // NewScan returns *builder.Scan which can be used to build a scan query.
 // Eg,
-//		table := datasource.NewTable().SetName("table-name")
 //
-//		now := time.Now()
-//		i := intervals.NewInterval().SetInterval(now.Add(-60*time.Minute), now)
-//		is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
+//	table := datasource.NewTable().SetName("table-name")
 //
-//		filter1 := filter.NewSelector().SetDimension("key1").SetValue("val1")
-//		filter2 := filter.NewSelector().SetDimension("key2").SetValue("val2")
-//		filters := filter.NewAnd().SetFields([]builder.Filter{filter1, filter2})
+//	now := time.Now()
+//	i := intervals.NewInterval().SetInterval(now.Add(-60*time.Minute), now)
+//	is := intervals.NewIntervals().SetIntervals([]*intervals.Interval{i})
 //
-//		ts := query.NewScan().SetDataSource(table).SetIntervals(is).SetFilter(filters).SetResultFormat("compactedList").SetLimit(10)
+//	filter1 := filter.NewSelector().SetDimension("key1").SetValue("val1")
+//	filter2 := filter.NewSelector().SetDimension("key2").SetValue("val2")
+//	filters := filter.NewAnd().SetFields([]builder.Filter{filter1, filter2})
+//
+//	ts := query.NewScan().SetDataSource(table).SetIntervals(is).SetFilter(filters).SetResultFormat("compactedList").SetLimit(10)
 func NewScan() *Scan {
 	s := &Scan{}
 	s.Base.SetQueryType("scan")

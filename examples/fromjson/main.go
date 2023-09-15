@@ -8,8 +8,9 @@ import (
 	"log"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/grafadruid/go-druid"
-	"github.com/grafadruid/go-druid/builder"
+
+	"github.com/h2oai/go-druid"
+	"github.com/h2oai/go-druid/builder"
 )
 
 func loadAndExecute(d *druid.Client, qry []byte) {

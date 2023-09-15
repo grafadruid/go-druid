@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/grafadruid/go-druid/builder"
+	"github.com/h2oai/go-druid/builder"
 )
 
 type Base struct {

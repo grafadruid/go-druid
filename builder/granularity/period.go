@@ -3,7 +3,7 @@ package granularity
 import (
 	"time"
 
-	"github.com/grafadruid/go-druid/builder/types"
+	"github.com/h2oai/go-druid/builder/types"
 )
 
 // Period granularity is specified as arbitrary period combinations of years, months, weeks, hours, minutes and seconds

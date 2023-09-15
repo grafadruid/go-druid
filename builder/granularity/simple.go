@@ -1,6 +1,6 @@
 package granularity
 
-import "github.com/grafadruid/go-druid/builder"
+import "github.com/h2oai/go-druid/builder"
 
 // Simple granularities are specified as a string and bucket timestamps by their UTC time.
 // https://druid.apache.org/docs/latest/querying/granularities.html#simple-granularities

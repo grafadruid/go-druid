@@ -77,7 +77,7 @@ func Fmt() error {
 	return nil
 }
 
-//  Vet run go vet linter
+// Vet run go vet linter
 func Vet() error {
 	if err := sh.Run(goexe, "vet", "./..."); err != nil {
 		return fmt.Errorf("error running go vet: %v", err)
@@ -153,7 +153,7 @@ func Build() error {
 }
 
 var (
-	pkgPrefixLen = len("github.com/grafadruid/go-druid")
+	pkgPrefixLen = len("github.com/h2oai/go-druid")
 	pkgs         []string
 	pkgsInit     sync.Once
 )
