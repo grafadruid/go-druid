@@ -191,7 +191,7 @@ func buildTags() string {
 }
 
 func isGoLatest() bool {
-	return strings.Contains(runtime.Version(), "1.14")
+	return strings.Contains(runtime.Version(), "1.21")
 }
 
 func runCmd(env map[string]string, cmd string, args ...interface{}) error {

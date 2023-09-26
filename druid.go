@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -25,6 +24,7 @@ const (
 	middleManagerPathPrefix      = "druid/worker/v1/"
 	peonPathPrefix               = "druid/worker/v1/chat/"
 	historicalPathPrefix         = "druid/historical/v1/"
+	supervisorPathPrefix         = "druid/indexer/v1/supervisor"
 	defaultRetryWaitMin          = 100 * time.Millisecond
 	defaultRetryWaitMax          = 3 * time.Second
 	defaultRetryMax              = 5
@@ -216,7 +216,7 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 		return false, nil
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
@@ -238,6 +238,12 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 		goto ABORT
 	case "Unknown exception":
 		goto ABORT
+	case "Request body content type is not in JSON format":
+		goto ABORT
+	case "Invalid supervisor ID":
+		goto ABORT
+	case "Invalid supervisor ID or supervisor not running":
+		goto ABORT
 	default:
 		return true, fmt.Errorf("error response from Druid: %+v", errResp)
 	}
@@ -253,7 +259,7 @@ func defaultErrorHandler(resp *http.Response, err error, numTries int) (*http.Re
 	// Drain and close the response body so the connection can be reused:
 	// https://pkg.go.dev/github.com/hashicorp/go-retryablehttp#ErrorHandler
 	defer resp.Body.Close()
-	io.Copy(ioutil.Discard, io.LimitReader(resp.Body, respReadLimit))
+	io.Copy(io.Discard, io.LimitReader(resp.Body, respReadLimit))
 
 	return resp, fmt.Errorf("Failed after %d attempt(s). Last error: %w", numTries, err)
 }
@@ -276,6 +282,10 @@ func (c *Client) Common() *CommonService {
 
 func (c *Client) Query() *QueryService {
 	return &QueryService{client: c}
+}
+
+func (c *Client) Supervisor() *SupervisorService {
+	return &SupervisorService{client: c}
 }
 
 func WithBasicAuth(username, password string) ClientOption {
@@ -348,7 +358,7 @@ func (r *Response) ExtractError() error {
 		return nil
 	}
 	errorResponse := &errResponse{Response: r.Response}
-	data, err := ioutil.ReadAll(r.Body)
+	data, err := io.ReadAll(r.Body)
 	if err == nil && data != nil {
 		errorResponse.Body = data
 		var raw interface{}
