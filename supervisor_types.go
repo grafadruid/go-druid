@@ -116,18 +116,32 @@ type Transform struct {
 	Expr string `json:"expression"`
 }
 
+// SpatialDimension represents single spatial dimension datum.
+// https://druid.apache.org/docs/latest/querying/geo/#spatial-indexing
+type SpatialDimension struct {
+	DimName     string   `json:"dimName"`
+	Dimenstions []string `json:"dims,omitempty"`
+}
+
 // TransformSet is a unique set of transforms applied to the input.
 type TransformSet []Transform
 
 // DimensionSet is a unique set of druid datasource dimensions(labels).
 type DimensionSet []string
 
+// SpatialDimensionSet is a unique set of druid datasource spatial dimensions.
+type SpatialDimensionSet []SpatialDimension
+
 // DimensionsSpec is responsible for configuring Druid's dimensions. They're a
 // set of columns in Druid's data model that can be used for grouping, filtering
 // or applying aggregations.
 // https://druid.apache.org/docs/latest/ingestion/ingestion-spec#dimensionsspec
 type DimensionsSpec struct {
-	Dimensions DimensionSet `json:"dimensions"`
+	Dimensions           DimensionSet        `json:"dimensions,omitempty"`
+	DimansionExclusions  DimensionSet        `json:"dimansionExclusions,omitempty"`
+	SpatialDimensions    SpatialDimensionSet `json:"spatialDimensions,omitempty"`
+	IncludeAllDimensions bool                `json:"includeAllDimensions,omitempty"`
+	UseSchemaDiscovery   bool                `json:"useSchemaDiscovery,omitempty"`
 }
 
 // GranularitySpec allows for configuring operations such as data segment
@@ -207,7 +221,7 @@ type MetadataStorageUpdaterJobSpec struct {
 // IOConfig influences how data is read into Druid from a source system.
 // https://druid.apache.org/docs/latest/ingestion/ingestion-spec/#ioconfig
 type IOConfig struct {
-	Type string `json:"type"`
+	Type string `json:"type,omitempty"`
 
 	// IndexIOConfig / RealtimeIOConfig shared field
 	Firehose *Firehose `json:"firehose,omitempty"`
@@ -415,7 +429,7 @@ type IngestionSpecOptions func(*InputIngestionSpec)
 func SetType(stype string) IngestionSpecOptions {
 	return func(spec *InputIngestionSpec) {
 		if stype != "" {
-			spec.IOConfig.Type = stype
+			spec.Type = stype
 		}
 	}
 }
@@ -473,10 +487,41 @@ func SetDimensions(dimensions DimensionSet) IngestionSpecOptions {
 	}
 }
 
+// SetDimensionsAutodiscovery sets druid autodiscovery for datasource dimensions.
+func SetDimensionsAutodiscovery(discover bool) IngestionSpecOptions {
+	return func(spec *InputIngestionSpec) {
+		spec.DataSchema.DimensionsSpec.UseSchemaDiscovery = discover
+	}
+}
+
 // SetUseEarliestOffset configures kafka druid ingestion supervisor to start reading
 // from the earliest or latest offsets in Kafka.
 func SetUseEarliestOffset(useEarliestOffset bool) IngestionSpecOptions {
 	return func(spec *InputIngestionSpec) {
 		spec.IOConfig.UseEarliestOffset = useEarliestOffset
+	}
+}
+
+// SetTimestampColumn sets timestamp column for the druid datasource.
+func SetTimestampColumn(column string) IngestionSpecOptions {
+	return func(spec *InputIngestionSpec) {
+		if column != "" {
+			spec.DataSchema.TimeStampSpec = &TimestampSpec{
+				Column: column,
+				Format: "auto",
+			}
+		}
+	}
+}
+
+// SetGranularitySpec sets granularity spec settings that are applied at druid ingestion partitioning stage.
+func SetGranularitySpec(segmentGranularity, queryGranularity string, rollup bool) IngestionSpecOptions {
+	return func(spec *InputIngestionSpec) {
+		spec.DataSchema.GranularitySpec = &GranularitySpec{
+			Type:               "uniform",
+			SegmentGranularity: segmentGranularity,
+			QueryGranularity:   queryGranularity,
+			Rollup:             rollup,
+		}
 	}
 }
