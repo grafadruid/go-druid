@@ -85,7 +85,6 @@ var jsonBasic = `{
         }
     },
     "ioConfig": {
-        "type": "kafka",
         "topic": "test_topic",
         "consumerProperties": {
             "bootstrap.servers": "test_brokers"
