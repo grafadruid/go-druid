@@ -63,13 +63,7 @@ var jsonBasic = `{
             "format": "auto"
         },
         "transformSpec": {
-            "transforms": [
-                {
-                    "type": "expression",
-                    "name": "payload",
-                    "expression": "parse_json(payload)"
-                }
-            ]
+            "transforms": []
         },
         "dimensionsSpec": {
             "dimensions": [
@@ -89,7 +83,7 @@ var jsonBasic = `{
         "consumerProperties": {
             "bootstrap.servers": "test_brokers"
         },
-        "taskDuration": "PT30M",
+        "taskDuration": "PT1H",
         "useEarliestOffset": false,
         "flattenSpec": {
             "fields": []

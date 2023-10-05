@@ -106,7 +106,7 @@ type FieldList []Field
 type Field struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
-	Expr string `json:"expression"`
+	Expr string `json:"expr"`
 }
 
 // Transform defines a single filed transformation of the TransformSpec.
@@ -371,20 +371,10 @@ func defaultKafkaIngestionSpec() *InputIngestionSpec {
 				Format: "auto",
 			},
 			TransformSpec: &TransformSpec{
-				Transforms: []Transform{
-					{
-						Type: "expression",
-						Name: "payload",
-						Expr: "parse_json(payload)",
-					},
-				},
+				Transforms: []Transform{},
 			},
 			DimensionsSpec: &DimensionsSpec{
-				Dimensions: DimensionSet{
-					"id",
-					"ts",
-					"payload",
-				},
+				Dimensions: DimensionSet{},
 			},
 			GranularitySpec: &GranularitySpec{
 				Type:               "uniform",
@@ -399,7 +389,7 @@ func defaultKafkaIngestionSpec() *InputIngestionSpec {
 			InputFormat: &InputFormat{
 				Type: "json",
 			},
-			TaskDuration: "PT30M",
+			TaskDuration: "PT1H",
 			ConsumerProperties: &ConsumerProperties{
 				BootstrapServers: "",
 			},
