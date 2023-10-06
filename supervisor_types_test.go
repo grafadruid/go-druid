@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestKafkaIngestionSpec(t *testing.T) {
@@ -34,11 +35,11 @@ func TestKafkaIngestionSpec(t *testing.T) {
 		{
 			name: "set labels",
 			options: []IngestionSpecOptions{
-				SetDimensions([]string{"ts", "user_name", "payload"}),
+				SetDimensions([]interface{}{"ts", "user_name", "payload"}),
 			},
 			expected: func() *InputIngestionSpec {
 				out := defaultKafkaIngestionSpec()
-				out.DataSchema.DimensionsSpec.Dimensions = []string{"ts", "user_name", "payload"}
+				out.DataSchema.DimensionsSpec.Dimensions = []interface{}{"ts", "user_name", "payload"}
 				return out
 			}(),
 		},
@@ -100,20 +101,85 @@ func TestKafkaIngestionSpec_MarshalJSON(t *testing.T) {
 			SetDataSource("test_datasource"),
 			SetTopic("test_topic"),
 			SetBrokers("test_brokers"),
-			SetDimensions([]string{"ts", "user_name", "payload"}),
+			SetDimensions([]interface{}{"ts", "user_name", "payload"}),
 		)
 		actual, err := json.MarshalIndent(spec, "", "    ")
 		if err != nil {
 			t.Fatalf("unexpected error while marshalling: %v", err)
 		}
 		expected := []byte(jsonBasic)
-		assert.Equal(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
+		require.Equal(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
 
 		var checkSpec *InputIngestionSpec
 		err = json.Unmarshal(actual, &checkSpec)
 		if err != nil {
 			t.Fatalf("unexpected error while unmarshalling: %v", err)
 		}
-		assert.Equal(t, spec, checkSpec)
+		require.Equal(t, spec, checkSpec)
+	})
+}
+
+var jsonWithTypedDimensions = `{
+    "type": "kafka",
+    "dataSchema": {
+        "dataSource": "test_datasource",
+        "timestampSpec": {
+            "column": "ts",
+            "format": "auto"
+        },
+        "transformSpec": {
+            "transforms": []
+        },
+        "dimensionsSpec": {
+            "dimensions": [
+                {
+                    "type": "string",
+                    "name": "ts"
+                },
+                {
+                    "type": "json",
+                    "name": "payload"
+                }
+            ]
+        },
+        "granularitySpec": {
+            "type": "uniform",
+            "segmentGranularity": "DAY",
+            "queryGranularity": "none"
+        }
+    },
+    "ioConfig": {
+        "topic": "test_topic",
+        "consumerProperties": {
+            "bootstrap.servers": "test_brokers"
+        },
+        "taskDuration": "PT1H",
+        "useEarliestOffset": false,
+        "flattenSpec": {
+            "fields": []
+        },
+        "inputFormat": {
+            "type": "json"
+        }
+    }
+}`
+
+func TestIngestionSpecWithTypedDimensions_MarshalJSON(t *testing.T) {
+	t.Run("jsonWithTypedDimensions", func(t *testing.T) {
+		spec := NewIngestionSpec(
+			SetDataSource("test_datasource"),
+			SetTopic("test_topic"),
+			SetBrokers("test_brokers"),
+			SetDimensions([]interface{}{
+				Dimension{Type: "string", Name: "ts"},
+				Dimension{Type: "json", Name: "payload"},
+			}),
+		)
+		actual, err := json.MarshalIndent(spec, "", "    ")
+		if err != nil {
+			t.Fatalf("unexpected error while marshalling: %v", err)
+		}
+		expected := []byte(jsonWithTypedDimensions)
+		require.Equal(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
 	})
 }
