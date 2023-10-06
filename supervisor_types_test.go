@@ -35,11 +35,11 @@ func TestKafkaIngestionSpec(t *testing.T) {
 		{
 			name: "set labels",
 			options: []IngestionSpecOptions{
-				SetDimensions([]interface{}{"ts", "user_name", "payload"}),
+				SetDimensions([]any{"ts", "user_name", "payload"}),
 			},
 			expected: func() *InputIngestionSpec {
 				out := defaultKafkaIngestionSpec()
-				out.DataSchema.DimensionsSpec.Dimensions = []interface{}{"ts", "user_name", "payload"}
+				out.DataSchema.DimensionsSpec.Dimensions = []any{"ts", "user_name", "payload"}
 				return out
 			}(),
 		},
@@ -101,7 +101,7 @@ func TestKafkaIngestionSpec_MarshalJSON(t *testing.T) {
 			SetDataSource("test_datasource"),
 			SetTopic("test_topic"),
 			SetBrokers("test_brokers"),
-			SetDimensions([]interface{}{"ts", "user_name", "payload"}),
+			SetDimensions([]any{"ts", "user_name", "payload"}),
 		)
 		actual, err := json.MarshalIndent(spec, "", "    ")
 		if err != nil {
@@ -170,7 +170,7 @@ func TestIngestionSpecWithTypedDimensions_MarshalJSON(t *testing.T) {
 			SetDataSource("test_datasource"),
 			SetTopic("test_topic"),
 			SetBrokers("test_brokers"),
-			SetDimensions([]interface{}{
+			SetDimensions([]any{
 				Dimension{Type: "string", Name: "ts"},
 				Dimension{Type: "json", Name: "payload"},
 			}),

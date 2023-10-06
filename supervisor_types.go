@@ -1,9 +1,5 @@
 package druid
 
-import (
-	"time"
-)
-
 // InputIngestionSpec is the root-level type defining an ingestion spec used
 // by Apache Druid.
 type InputIngestionSpec struct {
@@ -129,8 +125,9 @@ type SpatialDimension struct {
 type TransformSet []Transform
 
 // DimensionSet is a unique set of druid datasource dimensions(labels).
-type DimensionSet []interface{}
+type DimensionSet []any
 
+// Dimension is a typed definition of a datasource dimension.
 type Dimension struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
@@ -348,7 +345,7 @@ type SupervisorStatusPayload struct {
 // with the response metadata.
 type SupervisorStatus struct {
 	SupervisorId   string                   `json:"id"`
-	GenerationTime time.Time                `json:"generationTime"`
+	GenerationTime string                   `json:"generationTime"`
 	Payload        *SupervisorStatusPayload `json:"payload"`
 }
 
