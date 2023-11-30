@@ -302,6 +302,19 @@ type HttpInputSourceConfig struct {
 	AllowedProtocols []string `json:" allowedProtocols,omitempty"`
 }
 
+// ConnectorConfig is connection configuration for Database
+type ConnectorConfig struct {
+	ConnectURI string `json:"connectURI"`
+	User       string `json:"user,omitempty"`
+	Password   string `json:"password,omitempty"`
+}
+
+// Database configuration for InputSource "sql"
+type Database struct {
+	Type            string           `json:"type"`
+	ConnectorConfig *ConnectorConfig `json:"connectorConfig"`
+}
+
 // InputSource  is a specification of the storage system where input data is stored.
 type InputSource struct {
 	Type string `json:"type"`
@@ -322,6 +335,10 @@ type InputSource struct {
 
 	// CombiningInputSource fields
 	Delegates []InputSource `json:"delegates,omitempty"`
+
+	// SqlInputSource
+	SQLs     []string  `json:"sqls,omitempty"`
+	Database *Database `json:"database,omitempty"`
 }
 
 // TransformSpec is responsible for transforming druid input data
@@ -428,6 +445,15 @@ func SetType(stype string) IngestionSpecOptions {
 	}
 }
 
+// SetType sets the type of the supervisor (IOConfig).
+func SetIOConfigType(ioctype string) IngestionSpecOptions {
+	return func(spec *InputIngestionSpec) {
+		if ioctype != "" {
+			spec.IOConfig.Type = ioctype
+		}
+	}
+}
+
 // SetTopic sets the Kafka topic to consume data from.
 func SetTopic(topic string) IngestionSpecOptions {
 	return func(spec *InputIngestionSpec) {
@@ -516,6 +542,24 @@ func SetGranularitySpec(segmentGranularity, queryGranularity string, rollup bool
 			SegmentGranularity: segmentGranularity,
 			QueryGranularity:   queryGranularity,
 			Rollup:             rollup,
+		}
+	}
+}
+
+// SetSqlInputSource configures input source dimensions.
+func SetSqlInputSource(dbType, connectURI, user, password string, sqls []string) IngestionSpecOptions {
+	return func(spec *InputIngestionSpec) {
+		spec.IOConfig.InputSource = &InputSource{
+			Type: "sql",
+			SQLs: sqls,
+			Database: &Database{
+				Type: dbType,
+				ConnectorConfig: &ConnectorConfig{
+					ConnectURI: connectURI,
+					User:       user,
+					Password:   password,
+				},
+			},
 		}
 	}
 }

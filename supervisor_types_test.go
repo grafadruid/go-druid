@@ -183,3 +183,88 @@ func TestIngestionSpecWithTypedDimensions_MarshalJSON(t *testing.T) {
 		require.Equal(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
 	})
 }
+
+var jsonWithSqlInputSource = `{
+    "type": "index_parallel",
+    "dataSchema": {
+        "dataSource": "test_datasource",
+        "timestampSpec": {
+            "column": "ts",
+            "format": "auto"
+        },
+        "transformSpec": {
+            "transforms": []
+        },
+        "dimensionsSpec": {
+            "dimensions": [
+                "ts",
+                "user_name",
+                "payload"
+            ]
+        },
+        "granularitySpec": {
+            "type": "uniform",
+            "segmentGranularity": "DAY",
+            "queryGranularity": "none"
+        }
+    },
+    "ioConfig": {
+        "type": "index_parallel",
+        "inputSource": {
+            "type": "sql",
+            "sqls": [
+                "SELECT * FROM table1 WHERE timestamp BETWEEN '2013-01-01 00:00:00' AND '2013-01-01 11:59:59'",
+                "SELECT * FROM table2 WHERE timestamp BETWEEN '2013-01-01 00:00:00' AND '2013-01-01 11:59:59'"
+            ],
+            "database": {
+                "type": "mysql",
+                "connectorConfig": {
+                    "connectURI": "jdbc:mysql://host:port/schema",
+                    "user": "username",
+                    "password": "password"
+                }
+            }
+        },
+        "consumerProperties": {},
+        "taskDuration": "PT1H",
+        "useEarliestOffset": false,
+        "flattenSpec": {
+            "fields": []
+        },
+        "inputFormat": {
+            "type": "json"
+        }
+    }
+}`
+
+func TestIngestionSpecWithSqlInputSource_MarshalJSON(t *testing.T) {
+	t.Run("jsonBasicWithSq", func(t *testing.T) {
+		spec := NewIngestionSpec(
+			SetType("index_parallel"),
+			SetIOConfigType("index_parallel"),
+			SetDataSource("test_datasource"),
+			SetDimensions([]any{"ts", "user_name", "payload"}),
+			SetSqlInputSource("mysql",
+				"jdbc:mysql://host:port/schema",
+				"username",
+				"password",
+				[]string{
+					"SELECT * FROM table1 WHERE timestamp BETWEEN '2013-01-01 00:00:00' AND '2013-01-01 11:59:59'",
+					"SELECT * FROM table2 WHERE timestamp BETWEEN '2013-01-01 00:00:00' AND '2013-01-01 11:59:59'",
+				}),
+		)
+		actual, err := json.MarshalIndent(spec, "", "    ")
+		if err != nil {
+			t.Fatalf("unexpected error while marshalling: %v", err)
+		}
+		expected := []byte(jsonWithSqlInputSource)
+		require.Equal(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
+
+		var checkSpec *InputIngestionSpec
+		err = json.Unmarshal(actual, &checkSpec)
+		if err != nil {
+			t.Fatalf("unexpected error while unmarshalling: %v", err)
+		}
+		require.Equal(t, spec, checkSpec)
+	})
+}
