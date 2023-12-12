@@ -28,12 +28,13 @@ func TestSupervisorService(t *testing.T) {
 
 	// Set up druid service and client.
 	var druidOpts []ClientOption
-	d, err := NewClient("http://localhost:8081", druidOpts...)
+	d, err := NewClient("http://localhost:8888", druidOpts...)
 	assert.NoError(t, err, "error should be nil")
 	var spec = NewIngestionSpec(SetType("kafka"),
-		SetBrokers("telemetry-kafka.skaffold-telemetry-victorzaytsev.svc.cluster.local:9092"),
+		SetBrokers("kafka:9092"),
 		SetTopic("test-topic"),
-		SetDataSource("test-datasource"))
+		SetDataSource("test-datasource"),
+		SetDimensions(DimensionSet{{"dim1"}, {"dim2"}}))
 	assert.NoError(t, err, "error should be nil")
 	assert.NotNil(t, spec, "specification should not be nil")
 
@@ -50,6 +51,27 @@ func TestSupervisorService(t *testing.T) {
 	status, err := d.Supervisor().GetStatus(spec.DataSchema.DataSource)
 	assert.NoError(t, err, "error should be nil")
 	assert.Equal(t, "PENDING", status.Payload.State)
+	assert.False(t, status.Payload.Suspended)
+
+	// suspend and check status
+	suspendedSpec, err := d.Supervisor().Suspend(spec.DataSchema.DataSource)
+	assert.True(t, suspendedSpec.Suspended)
+	assert.NoError(t, err, "error should be nil")
+
+	status, err = d.Supervisor().GetStatus(spec.DataSchema.DataSource)
+	assert.NoError(t, err, "error should be nil")
+	assert.True(t, status.Payload.Suspended)
+
+	// resume and check status
+	_, err = d.Supervisor().Resume(spec.DataSchema.DataSource)
+	assert.NoError(t, err, "error should be nil")
+
+	status, err = d.Supervisor().GetStatus(spec.DataSchema.DataSource)
+	assert.NoError(t, err, "error should be nil")
+	assert.Equal(t, "PENDING", status.Payload.State)
+	assert.False(t, status.Payload.Suspended)
+
+	// terminate
 	id, err = d.Supervisor().Terminate(spec.DataSchema.DataSource)
 	assert.NoError(t, err, "error should be nil")
 	assert.Equal(t, id, spec.DataSchema.DataSource)

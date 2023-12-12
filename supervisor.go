@@ -2,6 +2,7 @@ package druid
 
 import (
 	"errors"
+	"net/http"
 	"strings"
 )
 
@@ -92,8 +93,8 @@ func (s *SupervisorService) GetSpec(supervisorId string) (OutputIngestionSpec, e
 // GetStatus calls druid Supervisor service's Get status API.
 // https://druid.apache.org/docs/latest/api-reference/supervisor-api/#get-supervisor-status
 func (s *SupervisorService) GetStatus(supervisorId string) (SupervisorStatus, error) {
-	r, err := s.client.NewRequest("GET", applySupervisorId(supervisorStatusEndpoint, supervisorId), nil)
 	var result SupervisorStatus
+	r, err := s.client.NewRequest("GET", applySupervisorId(supervisorStatusEndpoint, supervisorId), nil)
 	if err != nil {
 		return result, err
 	}
@@ -119,9 +120,17 @@ func (s *SupervisorService) GetAuditHistoryAll() (map[string]SupervisorAuditHist
 
 // Suspend calls druid Supervisor service's Suspend API.
 // https://druid.apache.org/docs/latest/api-reference/supervisor-api/#suspend-a-running-supervisor
-func (s *SupervisorService) Suspend(string) (OutputIngestionSpec, error) {
-	var res OutputIngestionSpec
-	return res, errors.New("method Suspend not implemented")
+func (s *SupervisorService) Suspend(supervisorID string) (OutputIngestionSpec, error) {
+	var result OutputIngestionSpec
+	r, err := s.client.NewRequest(http.MethodPost, applySupervisorId(supervisorSuspendEndpoint, supervisorID), nil)
+	if err != nil {
+		return result, err
+	}
+	_, err = s.client.Do(r, &result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 // SuspendAll calls druid Supervisor service's SuspendAll API.
@@ -132,9 +141,17 @@ func (s *SupervisorService) SuspendAll() (string, error) {
 
 // Resume calls druid Supervisor service's Resume API.
 // https://druid.apache.org/docs/latest/api-reference/supervisor-api/#resume-a-supervisor
-func (s *SupervisorService) Resume(string) (OutputIngestionSpec, error) {
-	var res OutputIngestionSpec
-	return res, errors.New("method Resume not implemented")
+func (s *SupervisorService) Resume(supervisorID string) (OutputIngestionSpec, error) {
+	var result OutputIngestionSpec
+	r, err := s.client.NewRequest(http.MethodPost, applySupervisorId(supervisorResumeEndpoint, supervisorID), nil /*no data*/)
+	if err != nil {
+		return result, err
+	}
+	_, err = s.client.Do(r, &result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }
 
 // ResumeAll calls druid Supervisor service's ResumeAll API.

@@ -1,5 +1,10 @@
 package druid
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // InputIngestionSpec is the root-level type defining an ingestion spec used
 // by Apache Druid.
 type InputIngestionSpec struct {
@@ -125,7 +130,12 @@ type SpatialDimension struct {
 type TransformSet []Transform
 
 // DimensionSet is a unique set of druid datasource dimensions(labels).
-type DimensionSet []any
+type DimensionSet []DimensionSpec
+
+// DimensionSpec is a single dataset dimension that can be represented by a typed Dimension or a string value.
+type DimensionSpec struct {
+	Value any
+}
 
 // Dimension is a typed definition of a datasource dimension.
 type Dimension struct {
@@ -136,27 +146,41 @@ type Dimension struct {
 // SpatialDimensionSet is a unique set of druid datasource spatial dimensions.
 type SpatialDimensionSet []SpatialDimension
 
+// DimensionExclusionsSet represents set of excluded dimensions.
+type DimensionExclusionsSet []string
+
 // DimensionsSpec is responsible for configuring Druid's dimensions. They're a
 // set of columns in Druid's data model that can be used for grouping, filtering
 // or applying aggregations.
 // https://druid.apache.org/docs/latest/ingestion/ingestion-spec#dimensionsspec
 type DimensionsSpec struct {
-	Dimensions           DimensionSet        `json:"dimensions,omitempty"`
-	DimansionExclusions  DimensionSet        `json:"dimansionExclusions,omitempty"`
-	SpatialDimensions    SpatialDimensionSet `json:"spatialDimensions,omitempty"`
-	IncludeAllDimensions bool                `json:"includeAllDimensions,omitempty"`
-	UseSchemaDiscovery   bool                `json:"useSchemaDiscovery,omitempty"`
+	Dimensions           DimensionSet           `json:"dimensions,omitempty"`
+	DimensionExclusions  DimensionExclusionsSet `json:"dimensionExclusions,omitempty"`
+	SpatialDimensions    SpatialDimensionSet    `json:"spatialDimensions,omitempty"`
+	IncludeAllDimensions bool                   `json:"includeAllDimensions,omitempty"`
+	UseSchemaDiscovery   bool                   `json:"useSchemaDiscovery,omitempty"`
+}
+
+// QueryGranularitySpec is an umbrella type for different representations of query granularity, can be string or
+// QueryGranularity value.
+type QueryGranularitySpec struct {
+	Value any
+}
+
+// QueryGranularity is a typed representation of query granularity.
+type QueryGranularity struct {
+	Type string `json:"type,omitempty"`
 }
 
 // GranularitySpec allows for configuring operations such as data segment
 // partitioning, truncating timestamps, time chunk segmentation or roll-up.
 // https://druid.apache.org/docs/latest/ingestion/ingestion-spec#granularityspec
 type GranularitySpec struct {
-	Type               string   `json:"type"`
-	SegmentGranularity string   `json:"segmentGranularity,omitempty"`
-	QueryGranularity   string   `json:"queryGranularity,omitempty"`
-	Rollup             bool     `json:"rollup,omitempty"`
-	Intervals          []string `json:"intervals,omitempty"`
+	Type               string                `json:"type"`
+	SegmentGranularity string                `json:"segmentGranularity,omitempty"`
+	QueryGranularity   *QueryGranularitySpec `json:"queryGranularity,omitempty"`
+	Rollup             bool                  `json:"rollup,omitempty"`
+	Intervals          []string              `json:"intervals,omitempty"`
 }
 
 // AutoScalerConfig is part of IOConfig that controls ingestion auto-scaling.
@@ -177,7 +201,7 @@ type AutoScalerConfig struct {
 	MinTriggerScaleActionFrequencyMillis int     `json:"minTriggerScaleActionFrequencyMillis"`
 }
 
-// Defines if and when stream Supervisor can become idle.
+// IdleConfig defines if and when stream Supervisor can become idle.
 type IdleConfig struct {
 	Enabled             bool  `json:"enabled"`
 	InactiveAfterMillis int64 `json:"inactiveAfterMillis"`
@@ -356,6 +380,7 @@ type SupervisorStatusPayload struct {
 	Partitions      int    `json:"partitions"`
 	Replicas        int    `json:"replicas"`
 	DurationSeconds int    `json:"durationSeconds"`
+	Suspended       bool   `json:"suspended"`
 }
 
 // SupervisorStatus is a response object containing status of a supervisor alongside
@@ -400,7 +425,7 @@ func defaultKafkaIngestionSpec() *InputIngestionSpec {
 			GranularitySpec: &GranularitySpec{
 				Type:               "uniform",
 				SegmentGranularity: "DAY",
-				QueryGranularity:   "none",
+				QueryGranularity:   &QueryGranularitySpec{"none"},
 				Rollup:             false,
 			},
 		},
@@ -535,7 +560,7 @@ func SetTimestampColumn(column string) IngestionSpecOptions {
 }
 
 // SetGranularitySpec sets granularity spec settings that are applied at druid ingestion partitioning stage.
-func SetGranularitySpec(segmentGranularity, queryGranularity string, rollup bool) IngestionSpecOptions {
+func SetGranularitySpec(segmentGranularity string, queryGranularity *QueryGranularitySpec, rollup bool) IngestionSpecOptions {
 	return func(spec *InputIngestionSpec) {
 		spec.DataSchema.GranularitySpec = &GranularitySpec{
 			Type:               "uniform",
@@ -562,4 +587,42 @@ func SetSQLInputSource(dbType, connectURI, user, password string, sqls []string)
 			},
 		}
 	}
+}
+
+func (g *QueryGranularitySpec) UnmarshalJSON(b []byte) error {
+	var str string
+	if err := json.Unmarshal(b, &str); err == nil {
+		g.Value = str
+		return nil
+	}
+
+	var qg QueryGranularity
+	if err := json.Unmarshal(b, &qg); err == nil {
+		g.Value = qg
+		return nil
+	}
+	return fmt.Errorf("unsupported query granularity: %s", b)
+}
+
+func (g *QueryGranularitySpec) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&g.Value)
+}
+
+func (g *DimensionSpec) UnmarshalJSON(b []byte) error {
+	var str string
+	if err := json.Unmarshal(b, &str); err == nil {
+		g.Value = str
+		return nil
+	}
+
+	var qg Dimension
+	if err := json.Unmarshal(b, &qg); err == nil {
+		g.Value = qg
+		return nil
+	}
+	return fmt.Errorf("unsupported dimension value: %s", b)
+}
+
+func (g *DimensionSpec) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&g.Value)
 }

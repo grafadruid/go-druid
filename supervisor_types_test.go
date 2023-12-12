@@ -35,11 +35,15 @@ func TestKafkaIngestionSpec(t *testing.T) {
 		{
 			name: "set labels",
 			options: []IngestionSpecOptions{
-				SetDimensions([]any{"ts", "user_name", "payload"}),
+				SetDimensions(DimensionSet{
+					{"ts"},
+					{"user_name"},
+					{"payload"},
+				}),
 			},
 			expected: func() *InputIngestionSpec {
 				out := defaultKafkaIngestionSpec()
-				out.DataSchema.DimensionsSpec.Dimensions = []any{"ts", "user_name", "payload"}
+				out.DataSchema.DimensionsSpec.Dimensions = DimensionSet{{"ts"}, {"user_name"}, {"payload"}}
 				return out
 			}(),
 		},
@@ -74,9 +78,9 @@ var jsonBasic = `{
             ]
         },
         "granularitySpec": {
-            "type": "uniform",
+			"type": "uniform",
             "segmentGranularity": "DAY",
-            "queryGranularity": "none"
+            "queryGranularity":  "none"
         }
     },
     "ioConfig": {
@@ -100,7 +104,11 @@ func TestKafkaIngestionSpec_MarshalJSON(t *testing.T) {
 		SetDataSource("test_datasource"),
 		SetTopic("test_topic"),
 		SetBrokers("test_brokers"),
-		SetDimensions([]any{"ts", "user_name", "payload"}),
+		SetDimensions(DimensionSet{
+			{"ts"},
+			{"user_name"},
+			{"payload"},
+		}),
 	)
 	actual, err := json.Marshal(spec)
 	if err != nil {
@@ -141,7 +149,7 @@ var jsonWithTypedDimensions = `{
             ]
         },
         "granularitySpec": {
-            "type": "uniform",
+			"type": "uniform",
             "segmentGranularity": "DAY",
             "queryGranularity": "none"
         }
@@ -167,9 +175,9 @@ func TestIngestionSpecWithTypedDimensions_MarshalJSON(t *testing.T) {
 		SetDataSource("test_datasource"),
 		SetTopic("test_topic"),
 		SetBrokers("test_brokers"),
-		SetDimensions([]any{
-			Dimension{Type: "string", Name: "ts"},
-			Dimension{Type: "json", Name: "payload"},
+		SetDimensions(DimensionSet{
+			{Dimension{Type: "string", Name: "ts"}},
+			{Dimension{Type: "json", Name: "payload"}},
 		}),
 	)
 	actual, err := json.Marshal(spec)
@@ -199,8 +207,8 @@ var jsonWithSqlInputSource = `{
             ]
         },
         "granularitySpec": {
-            "type": "uniform",
-            "segmentGranularity": "DAY",
+			"type": "uniform",
+			"segmentGranularity": "DAY",
             "queryGranularity": "none"
         }
     },
@@ -238,7 +246,7 @@ func TestIngestionSpecWithSqlInputSource_MarshalJSON(t *testing.T) {
 		SetType("index_parallel"),
 		SetIOConfigType("index_parallel"),
 		SetDataSource("test_datasource"),
-		SetDimensions([]any{"ts", "user_name", "payload"}),
+		SetDimensions(DimensionSet{{"ts"}, {"user_name"}, {"payload"}}),
 		SetSQLInputSource("mysql",
 			"jdbc:mysql://host:port/schema",
 			"username",
@@ -253,6 +261,7 @@ func TestIngestionSpecWithSqlInputSource_MarshalJSON(t *testing.T) {
 		t.Fatalf("unexpected error while marshalling: %v", err)
 	}
 	expected := []byte(jsonWithSqlInputSource)
+
 	require.JSONEq(t, string(expected), string(actual), fmt.Sprintf("expected: %s\nactual: %s", string(expected), string(actual)))
 
 	var checkSpec *InputIngestionSpec
