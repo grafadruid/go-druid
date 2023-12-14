@@ -288,6 +288,10 @@ func (c *Client) Supervisor() *SupervisorService {
 	return &SupervisorService{client: c}
 }
 
+func (c *Client) Tasks() *TasksService {
+	return &TasksService{client: c}
+}
+
 func WithBasicAuth(username, password string) ClientOption {
 	return func(opts *clientOptions) {
 		opts.username = username

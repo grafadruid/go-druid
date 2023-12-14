@@ -6,8 +6,11 @@ toolchain go1.21.1
 
 require (
 	github.com/davecgh/go-spew v1.1.1
+	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a
 	github.com/google/go-querystring v1.1.0
+	github.com/google/uuid v1.3.1
 	github.com/hashicorp/go-retryablehttp v0.7.2
+	github.com/jmoiron/sqlx v1.3.5
 	github.com/magefile/mage v1.11.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.24.1
@@ -74,7 +77,6 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
-	github.com/google/uuid v1.3.1 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3 // indirect
