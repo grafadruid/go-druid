@@ -1,5 +1,10 @@
 package druid
 
+import (
+	"fmt"
+	"time"
+)
+
 // TaskStatusResponse is a response object containing status of a task.
 type TaskStatusResponse struct {
 	Task   string     `json:"task"`
@@ -55,17 +60,12 @@ func defaultTaskIngestionSpec() *TaskIngestionSpec {
 				TransformSpec: &TransformSpec{
 					Transforms: []Transform{},
 				},
+				TimeStampSpec: &TimestampSpec{},
 			},
 			IOConfig: &IOConfig{
-				Type: "index_parallel",
-				InputSource: &InputSource{
-					Type:     "sql",
-					Database: &Database{},
-					SQLs:     []string{},
-				},
-				InputFormat: &InputFormat{
-					Type: "json",
-				},
+				Type:        "index_parallel",
+				InputSource: &InputSource{},
+				InputFormat: &InputFormat{},
 			},
 			TuningConfig: &TuningConfig{
 				Type: "index_parallel",
@@ -167,6 +167,40 @@ func SetTaskInlineInputData(data string) TaskIngestionSpecOptions {
 	return func(spec *TaskIngestionSpec) {
 		spec.Spec.IOConfig.InputSource.Type = "inline"
 		spec.Spec.IOConfig.InputSource.Data = data
+	}
+}
+
+// SetTaskDruidInputSource configures druid reindex input source for the task based ingestion.
+func SetTaskDruidInputSource(datasource string, startTime time.Time, endTime time.Time) TaskIngestionSpecOptions {
+	return func(spec *TaskIngestionSpec) {
+		spec.Spec.IOConfig.InputSource = &InputSource{
+			Type:       "druid",
+			Datasource: datasource,
+			Interval: fmt.Sprintf(
+				"%s/%s",
+				startTime.Format("2006-01-02T15:04:05"),
+				endTime.Format("2006-01-02T15:04:05"),
+			),
+		}
+	}
+}
+
+// SetTaskSchemaDiscovery sets auto discovery of dimensions.
+func SetTaskSchemaDiscovery(discovery bool) TaskIngestionSpecOptions {
+	return func(spec *TaskIngestionSpec) {
+		spec.Spec.DataSchema.DimensionsSpec.UseSchemaDiscovery = discovery
+	}
+}
+
+// SetTaskGranularitySpec sets granularity spec settings that are applied at druid ingestion partitioning stage.
+func SetTaskGranularitySpec(segmentGranularity string, queryGranularity *QueryGranularitySpec, rollup bool) TaskIngestionSpecOptions {
+	return func(spec *TaskIngestionSpec) {
+		spec.Spec.DataSchema.GranularitySpec = &GranularitySpec{
+			Type:               "uniform",
+			SegmentGranularity: segmentGranularity,
+			QueryGranularity:   queryGranularity,
+			Rollup:             rollup,
+		}
 	}
 }
 
