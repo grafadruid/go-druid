@@ -2,6 +2,7 @@ package dimension
 
 import (
 	"encoding/json"
+	"github.com/grafadruid/go-druid/builder/extractionfn"
 
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/types"
@@ -46,9 +47,13 @@ func (e *Extraction) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
-	ef, err := Load(tmp.ExtractionFn)
-	if err != nil {
-		return err
+	var ef builder.ExtractionFn
+	if tmp.ExtractionFn != nil {
+		var err error
+		ef, err = extractionfn.Load(tmp.ExtractionFn)
+		if err != nil {
+			return err
+		}
 	}
 	e.Base = tmp.Base
 	e.ExtractionFn = ef
