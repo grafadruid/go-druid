@@ -48,8 +48,20 @@ func Load(data []byte) (builder.Dimension, error) {
 		Typ builder.ComponentType `json:"type,omitempty"`
 	}
 	if err := json.Unmarshal(data, &t); err != nil {
-		return nil, err
+		// the dimension may be a string which is supported by Druid
+		var tstr string
+		if err := json.Unmarshal(data, &tstr); err != nil {
+			return nil, err
+		}
+		// We will just make it a 'default' dimension
+		d = &Base{}
+		d.(*Base).SetType("Default")
+		d.(*Base).SetDimension(tstr)
+		d.(*Base).SetOutputName(tstr)
+		d.(*Base).SetOutputType(types.String)
+		return d, nil
 	}
+
 	switch t.Typ {
 	case "default":
 		d = NewDefault()
