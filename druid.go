@@ -216,6 +216,11 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 		return false, nil
 	}
 
+	switch resp.StatusCode {
+	case http.StatusGatewayTimeout:
+		return true, fmt.Errorf("gateway timeout")
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
