@@ -2,6 +2,7 @@ package dimension
 
 import (
 	"encoding/json"
+
 	"github.com/grafadruid/go-druid/builder/extractionfn"
 
 	"github.com/grafadruid/go-druid/builder"

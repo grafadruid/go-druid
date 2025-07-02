@@ -1,9 +1,10 @@
 package postaggregation
 
 import (
+	"testing"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestLoadAggregation(t *testing.T) {

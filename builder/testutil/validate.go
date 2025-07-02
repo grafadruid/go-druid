@@ -23,5 +23,4 @@ func Compare(t *testing.T, expected []byte, b interface{}, built interface{}) {
 	jbuilt, err := json.Marshal(built)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, jbuilt)
-
 }

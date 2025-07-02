@@ -46,6 +46,7 @@ func (l *Lookup) SetOptimize(optimize bool) *Lookup {
 	l.Optimize = &optimize
 	return l
 }
+
 func (l *Lookup) UnmarshalJSON(data []byte) error {
 	var tmp struct {
 		Base

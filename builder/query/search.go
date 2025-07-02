@@ -2,6 +2,7 @@ package query
 
 import (
 	"encoding/json"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/dimension"
 	"github.com/grafadruid/go-druid/builder/filter"

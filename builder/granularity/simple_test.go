@@ -1,9 +1,10 @@
 package granularity
 
 import (
+	"testing"
+
 	"github.com/grafadruid/go-druid/builder/testutil"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNewSimple(t *testing.T) {
