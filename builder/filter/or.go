@@ -2,6 +2,7 @@ package filter
 
 import (
 	"encoding/json"
+
 	"github.com/grafadruid/go-druid/builder"
 )
 

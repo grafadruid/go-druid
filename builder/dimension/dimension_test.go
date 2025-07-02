@@ -1,9 +1,10 @@
 package dimension
 
 import (
+	"testing"
+
 	"github.com/grafadruid/go-druid/builder"
 	"github.com/grafadruid/go-druid/builder/extractionfn"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )

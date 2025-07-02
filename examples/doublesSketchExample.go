@@ -6,6 +6,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/davecgh/go-spew/spew"
 	"github.com/grafadruid/go-druid"
 	"github.com/grafadruid/go-druid/builder"
@@ -16,8 +19,6 @@ import (
 	"github.com/grafadruid/go-druid/builder/intervals"
 	"github.com/grafadruid/go-druid/builder/postaggregation"
 	"github.com/grafadruid/go-druid/builder/query"
-	"log"
-	"time"
 )
 
 func getConnection() *druid.Client {

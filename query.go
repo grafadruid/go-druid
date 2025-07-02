@@ -42,10 +42,9 @@ func (q *QueryService) Execute(qry builder.Query, result any, headers ...http.He
 	return resp, nil
 }
 
-//func (q *QueryService) Cancel(query builder.Query) () {}
+// func (q *QueryService) Cancel(query builder.Query) () {}
 
-//func (q *QueryService) Candidates(query builder.Query, result any) (*Response, error) {}
-
+// func (q *QueryService) Candidates(query builder.Query, result any) (*Response, error) {}
 func (q *QueryService) Load(data []byte) (builder.Query, error) {
 	return query.Load(data)
 }

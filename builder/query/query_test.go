@@ -2,8 +2,9 @@ package query
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSelectSQL(t *testing.T) {
@@ -79,5 +80,4 @@ func TestAllSetterSQL(t *testing.T) {
 	expressionJSON, err := json.Marshal(query)
 	assert.Nil(t, err)
 	assert.JSONEq(t, expected, string(expressionJSON))
-
 }

@@ -46,5 +46,4 @@ func TestQuantilesDoublesSketchToRank(t *testing.T) {
 				quantilesDoublesSketchToRank,
 				postAgg)
 		})
-
 }

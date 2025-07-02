@@ -22,11 +22,13 @@ type Status struct {
 		DirectMemory int `json:"directMemory"`
 	} `json:"memory"`
 }
-type Health bool
-type Properties map[string]string
-type SelfDiscovered struct {
-	SelfDiscovered bool `json:"selfDiscovered"`
-}
+type (
+	Health         bool
+	Properties     map[string]string
+	SelfDiscovered struct {
+		SelfDiscovered bool `json:"selfDiscovered"`
+	}
+)
 
 type CommonService struct {
 	client *Client

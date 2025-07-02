@@ -18,7 +18,7 @@ func TestLoadUnsupportedType(t *testing.T) {
 	assert.Error(err, "unsupported limitspec type")
 
 	// set up good test case data
-	var limitOrderByColumn = OrderByColumnSpec{
+	limitOrderByColumn := OrderByColumnSpec{
 		Dimension:      "counter",
 		Direction:      "descending",
 		DimensionOrder: "numeric",
@@ -34,5 +34,4 @@ func TestLoadUnsupportedType(t *testing.T) {
 	assert.Nil(err)
 	assert.NotNil(f)
 	assert.Equal(testLimitSpec, f)
-
 }
