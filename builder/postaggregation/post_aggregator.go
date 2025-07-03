@@ -76,6 +76,8 @@ func Load(data []byte) (builder.PostAggregator, error) {
 		p = NewQuantilesDoublesSketchToCDF()
 	case "quantilesDoublesSketchToString":
 		p = NewQuantilesDoublesSketchToString()
+	case "thetaSketchEstimate":
+		p = NewThetaSketchEstimate()
 	case "":
 		return nil, errors.New("missing postaggregation type")
 	default:
