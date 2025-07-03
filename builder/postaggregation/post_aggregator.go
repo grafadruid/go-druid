@@ -5,25 +5,12 @@ import (
 	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
+	"github.com/grafadruid/go-druid/builder/common"
 )
 
+// Base embeds the shared NamedBase to eliminate code duplication
 type Base struct {
-	Typ  builder.ComponentType `json:"type,omitempty"`
-	Name string                `json:"name,omitempty"`
-}
-
-func (b *Base) SetType(typ builder.ComponentType) *Base {
-	b.Typ = typ
-	return b
-}
-
-func (b *Base) SetName(name string) *Base {
-	b.Name = name
-	return b
-}
-
-func (b *Base) Type() builder.ComponentType {
-	return b.Typ
+	common.NamedBase
 }
 
 func Load(data []byte) (builder.PostAggregator, error) {
