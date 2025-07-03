@@ -2,7 +2,8 @@ package aggregation
 
 type DoubleFirst struct {
 	Base
-	FieldName string `json:"fieldName,omitempty"`
+	FieldName  string `json:"fieldName,omitempty"`
+	TimeColumn string `json:"timeColumn,omitempty"`
 }
 
 func NewDoubleFirst() *DoubleFirst {
@@ -18,5 +19,10 @@ func (d *DoubleFirst) SetName(name string) *DoubleFirst {
 
 func (d *DoubleFirst) SetFieldName(fieldName string) *DoubleFirst {
 	d.FieldName = fieldName
+	return d
+}
+
+func (d *DoubleFirst) SetTimeColumn(timeColumn string) *DoubleFirst {
+	d.TimeColumn = timeColumn
 	return d
 }

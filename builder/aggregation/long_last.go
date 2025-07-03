@@ -2,7 +2,8 @@ package aggregation
 
 type LongLast struct {
 	Base
-	FieldName string `json:"fieldName,omitempty"`
+	FieldName  string `json:"fieldName,omitempty"`
+	TimeColumn string `json:"timeColumn,omitempty"`
 }
 
 func NewLongLast() *LongLast {
@@ -18,5 +19,10 @@ func (l *LongLast) SetName(name string) *LongLast {
 
 func (l *LongLast) SetFieldName(fieldName string) *LongLast {
 	l.FieldName = fieldName
+	return l
+}
+
+func (l *LongLast) SetTimeColumn(timeColumn string) *LongLast {
+	l.TimeColumn = timeColumn
 	return l
 }

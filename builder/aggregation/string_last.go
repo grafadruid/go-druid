@@ -4,6 +4,7 @@ type StringLast struct {
 	Base
 	FieldName      string `json:"fieldName,omitempty"`
 	MaxStringBytes int64  `json:"maxStringBytes,omitempty"`
+	TimeColumn     string `json:"timeColumn,omitempty"`
 }
 
 func NewStringLast() *StringLast {
@@ -24,5 +25,10 @@ func (s *StringLast) SetFieldName(fieldName string) *StringLast {
 
 func (s *StringLast) SetMaxStringBytes(maxStringBytes int64) *StringLast {
 	s.MaxStringBytes = maxStringBytes
+	return s
+}
+
+func (s *StringLast) SetTimeColumn(timeColumn string) *StringLast {
+	s.TimeColumn = timeColumn
 	return s
 }

@@ -2,7 +2,8 @@ package aggregation
 
 type DoubleLast struct {
 	Base
-	FieldName string `json:"fieldName,omitempty"`
+	FieldName  string `json:"fieldName,omitempty"`
+	TimeColumn string `json:"timeColumn,omitempty"`
 }
 
 func NewDoubleLast() *DoubleLast {
@@ -19,4 +20,9 @@ func (d *DoubleLast) SetName(name string) *DoubleLast {
 func (d *DoubleLast) SetFieldName(fieldName string) *DoubleLast {
 	d.FieldName = fieldName
 	return d
+}
+
+func (l *DoubleLast) SetTimeColumn(timeColumn string) *DoubleLast {
+	l.TimeColumn = timeColumn
+	return l
 }
