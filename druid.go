@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -113,7 +112,7 @@ func (c *Client) Close() error {
 	return nil
 }
 
-func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehttp.Request, error) {
+func (c *Client) NewRequest(method, path string, opt any) (*retryablehttp.Request, error) {
 	u := *c.baseURL
 	unescaped, err := url.PathUnescape(path)
 	if err != nil {
@@ -126,16 +125,14 @@ func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehtt
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("Accept", "application/json")
 
-	var body interface{}
+	var body any
 	if opt != nil {
-		switch {
-		case method == "POST" || method == "PUT":
+		switch method {
+		case "POST", "PUT":
 			reqHeaders.Set("Content-Type", "application/json")
-			if opt != nil {
-				body, err = json.Marshal(opt)
-				if err != nil {
-					return nil, err
-				}
+			body, err = json.Marshal(opt)
+			if err != nil {
+				return nil, err
 			}
 		default:
 			q, err := querystring.Values(opt)
@@ -158,7 +155,7 @@ func (c *Client) NewRequest(method, path string, opt interface{}) (*retryablehtt
 	return r, nil
 }
 
-func (c *Client) Do(r *retryablehttp.Request, result interface{}) (*Response, error) {
+func (c *Client) Do(r *retryablehttp.Request, result any) (*Response, error) {
 	resp, err := c.http.Do(r)
 	if err != nil {
 		return nil, err
@@ -176,7 +173,7 @@ func (c *Client) Do(r *retryablehttp.Request, result interface{}) (*Response, er
 	return response, nil
 }
 
-func (c *Client) ExecuteRequest(method, path string, opt, result interface{}) (*Response, error) {
+func (c *Client) ExecuteRequest(method, path string, opt, result any) (*Response, error) {
 	req, err := c.NewRequest(method, path, opt)
 	if err != nil {
 		return nil, err
@@ -216,7 +213,7 @@ func defaultRetry(ctx context.Context, resp *http.Response, err error) (bool, er
 		return false, nil
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return true, fmt.Errorf("failed to read the response from Druid: %w", err)
 	}
@@ -253,9 +250,9 @@ func defaultErrorHandler(resp *http.Response, err error, numTries int) (*http.Re
 	// Drain and close the response body so the connection can be reused:
 	// https://pkg.go.dev/github.com/hashicorp/go-retryablehttp#ErrorHandler
 	defer resp.Body.Close()
-	io.Copy(ioutil.Discard, io.LimitReader(resp.Body, respReadLimit))
+	io.Copy(io.Discard, io.LimitReader(resp.Body, respReadLimit))
 
-	return resp, fmt.Errorf("Failed after %d attempt(s). Last error: %w", numTries, err)
+	return resp, fmt.Errorf("failed after %d attempt(s). Last error: %w", numTries, err)
 }
 
 func (c *Client) setBaseURL(urlStr string) error {
@@ -348,10 +345,10 @@ func (r *Response) ExtractError() error {
 		return nil
 	}
 	errorResponse := &errResponse{Response: r.Response}
-	data, err := ioutil.ReadAll(r.Body)
+	data, err := io.ReadAll(r.Body)
 	if err == nil && data != nil {
 		errorResponse.Body = data
-		var raw interface{}
+		var raw any
 		if err := json.Unmarshal(data, &raw); err != nil {
 			errorResponse.Message = r.Status
 		} else {
@@ -378,8 +375,8 @@ func (e *errResponse) Error() string {
 	)
 }
 
-func parseError(raw interface{}) string {
-	if raw, isMapSI := raw.(map[string]interface{}); isMapSI {
+func parseError(raw any) string {
+	if raw, isMapSI := raw.(map[string]any); isMapSI {
 		if errStr, hasErrorStr := raw["error"]; hasErrorStr {
 			return errStr.(string)
 		}

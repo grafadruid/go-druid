@@ -16,7 +16,7 @@ type QueryService struct {
 	client *Client
 }
 
-func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ...http.Header) (*Response, error) {
+func (q *QueryService) Execute(qry builder.Query, result any, headers ...http.Header) (*Response, error) {
 	var path string
 	switch qry.Type() {
 	case "sql":
@@ -44,7 +44,7 @@ func (q *QueryService) Execute(qry builder.Query, result interface{}, headers ..
 
 //func (q *QueryService) Cancel(query builder.Query) () {}
 
-//func (q *QueryService) Candidates(query builder.Query, result interface{}) (*Response, error) {}
+//func (q *QueryService) Candidates(query builder.Query, result any) (*Response, error) {}
 
 func (q *QueryService) Load(data []byte) (builder.Query, error) {
 	return query.Load(data)
