@@ -5,19 +5,12 @@ import (
 	"errors"
 
 	"github.com/grafadruid/go-druid/builder"
+	"github.com/grafadruid/go-druid/builder/common"
 )
 
+// Base embeds the shared TypeOnlyBase to eliminate code duplication
 type Base struct {
-	Typ builder.ComponentType `json:"type,omitempty"`
-}
-
-func (b *Base) SetType(typ builder.ComponentType) *Base {
-	b.Typ = typ
-	return b
-}
-
-func (b *Base) Type() builder.ComponentType {
-	return b.Typ
+	common.TypeOnlyBase
 }
 
 func Load(data []byte) (builder.LimitSpec, error) {
