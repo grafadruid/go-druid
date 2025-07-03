@@ -2,7 +2,8 @@ package aggregation
 
 type FloatFirst struct {
 	Base
-	FieldName string `json:"fieldName,omitempty"`
+	FieldName  string `json:"fieldName,omitempty"`
+	TimeColumn string `json:"timeColumn,omitempty"`
 }
 
 func NewFloatFirst() *FloatFirst {
@@ -18,5 +19,10 @@ func (f *FloatFirst) SetName(name string) *FloatFirst {
 
 func (f *FloatFirst) SetFieldName(fieldName string) *FloatFirst {
 	f.FieldName = fieldName
+	return f
+}
+
+func (f *FloatFirst) SetTimeColumn(timeColumn string) *FloatFirst {
+	f.TimeColumn = timeColumn
 	return f
 }

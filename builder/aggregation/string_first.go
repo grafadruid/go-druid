@@ -4,6 +4,7 @@ type StringFirst struct {
 	Base
 	FieldName      string `json:"fieldName,omitempty"`
 	MaxStringBytes int64  `json:"maxStringBytes,omitempty"`
+	TimeColumn     string `json:"timeColumn,omitempty"`
 }
 
 func NewStringFirst() *StringFirst {
@@ -24,5 +25,10 @@ func (s *StringFirst) SetFieldName(fieldName string) *StringFirst {
 
 func (s *StringFirst) SetMaxStringBytes(maxStringBytes int64) *StringFirst {
 	s.MaxStringBytes = maxStringBytes
+	return s
+}
+
+func (s *StringFirst) SetTimeColumn(timeColumn string) *StringFirst {
+	s.TimeColumn = timeColumn
 	return s
 }

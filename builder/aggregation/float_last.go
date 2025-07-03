@@ -2,7 +2,8 @@ package aggregation
 
 type FloatLast struct {
 	Base
-	FieldName string `json:"fieldName,omitempty"`
+	FieldName  string `json:"fieldName,omitempty"`
+	TimeColumn string `json:"timeColumn,omitempty"`
 }
 
 func NewFloatLast() *FloatLast {
@@ -18,5 +19,10 @@ func (f *FloatLast) SetName(name string) *FloatLast {
 
 func (f *FloatLast) SetFieldName(fieldName string) *FloatLast {
 	f.FieldName = fieldName
+	return f
+}
+
+func (f *FloatLast) SetTimeColumn(timeColumn string) *FloatLast {
+	f.TimeColumn = timeColumn
 	return f
 }
