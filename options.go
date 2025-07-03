@@ -24,61 +24,92 @@ type ClientOption func(*clientOptions)
 
 func WithBasicAuth(username, password string) ClientOption {
 	return func(opts *clientOptions) {
-		opts.username = username
-		opts.password = password
+		if username != "" && password != "" {
+			opts.username = username
+			opts.password = password
+		}
 	}
 }
 
 func WithSkipTLSVerify() ClientOption {
 	return func(opts *clientOptions) {
-		if nil == opts.httpClient.Transport {
+		if opts.httpClient.Transport == nil {
 			opts.httpClient.Transport = &http.Transport{
 				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 			}
+			return
 		}
-		opts.httpClient.Transport.(*http.Transport).TLSClientConfig.InsecureSkipVerify = true
+
+		transport, ok := opts.httpClient.Transport.(*http.Transport)
+		if !ok {
+			// If it's not an *http.Transport, create a new one
+			opts.httpClient.Transport = &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			}
+			return
+		}
+
+		if transport.TLSClientConfig == nil {
+			transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+		} else {
+			transport.TLSClientConfig.InsecureSkipVerify = true
+		}
 	}
 }
 
 func WithCustomBackoff(backoff retryablehttp.Backoff) ClientOption {
 	return func(opts *clientOptions) {
-		opts.backoff = backoff
+		if backoff != nil {
+			opts.backoff = backoff
+		}
 	}
 }
 
 func WithCustomRetry(retry retryablehttp.CheckRetry) ClientOption {
 	return func(opts *clientOptions) {
-		opts.retry = retry
+		if retry != nil {
+			opts.retry = retry
+		}
 	}
 }
 
 func WithCustomErrorHandler(h retryablehttp.ErrorHandler) ClientOption {
 	return func(opts *clientOptions) {
-		opts.errorHandler = h
+		if h != nil {
+			opts.errorHandler = h
+		}
 	}
 }
 
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(opts *clientOptions) {
-		opts.httpClient = httpClient
+		if httpClient != nil {
+			opts.httpClient = httpClient
+		}
 	}
 }
 
 func WithRetryWaitMin(retryWaitMin time.Duration) ClientOption {
 	return func(opts *clientOptions) {
-		opts.retryWaitMin = retryWaitMin
+		if retryWaitMin > 0 {
+			opts.retryWaitMin = retryWaitMin
+		}
 	}
 }
 
 func WithRetryWaitMax(retryWaitMax time.Duration) ClientOption {
 	return func(opts *clientOptions) {
-		opts.retryWaitMax = retryWaitMax
+		if retryWaitMax > 0 {
+			opts.retryWaitMax = retryWaitMax
+		}
 	}
 }
 
 func WithRetryMax(retryMax int) ClientOption {
 	return func(opts *clientOptions) {
-		opts.retryMax = retryMax
+		if retryMax >= 0 {
+			opts.retryMax = retryMax
+		}
 	}
 }
 
